@@ -1,0 +1,31 @@
+\ProvidesPackage{rv-macros}
+
+\RequirePackage{tikz}
+
+\usetikzlibrary{shapes.geometric}
+
+\newcommand{\cat}[1]{\mathcal{#1}}
+
+\newcommand{\Nullary}[2]{
+  \begin{tikzpicture}[baseline=(n.base),inner sep=1ex]
+    \node[circle,draw,inner sep=1pt] (n) at (1,0) {\ensuremath{#1}};
+    \draw (n.east) -- node[pos=0.75,above] {\ensuremath{#2}} (2,0);
+  \end{tikzpicture}
+}
+
+\newcommand{\Unary}[3]{
+  \begin{tikzpicture}[baseline=(u.base),inner sep=1ex]
+    \node[circle,draw,inner sep=1pt] (u) at (1,0) {\ensuremath{#2}};
+    \draw (0,0) -- node[pos=0.25,above] {\ensuremath{#1}} (u.west);
+    \draw (u.east) -- node[pos=0.75,above] {\ensuremath{#3}} (2,0);
+  \end{tikzpicture}
+}
+
+\newcommand{\Binary}[4]{
+  \begin{tikzpicture}[baseline=(b.base),inner sep=1ex]
+    \node[circle,draw,inner sep=1pt] (b) at (1,0) {\ensuremath{#3}};
+    \draw (0,0.35) to[out=0,in=140] node[pos=0.25,above] {\ensuremath{#1}} (b.140);
+    \draw (0,-0.35) to[out=0,in=220] node[pos=0.25,below] {\ensuremath{#2}} (b.220);
+    \draw (b.east) -- node[pos=0.75,above] {\ensuremath{#4}} (2,0);
+  \end{tikzpicture}
+}

@@ -1,0 +1,62 @@
+\documentclass[acmsmall,natbib=false]{acmart}
+\settopmatter{printfolios=false,printccs=false,printacmref=false}
+\setcopyright{none}
+
+\AtBeginDocument{%
+  \providecommand\BibTeX{{Bib\TeX}}}
+
+\RequirePackage[
+  datamodel=acmdatamodel,
+  style=acmauthoryear,
+]{biblatex}
+
+\addbibresource{references.bib}
+
+\usepackage{rv-macros}
+
+\begin{document}
+
+\title{List Objects with Symmetry}
+
+\author{Author}
+\email{email@example.com}
+\affiliation{%
+  \institution{Institution}
+  \country{Country}}
+
+\begin{abstract}
+  Abstract.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+\label{sec:introduction}
+
+Lists are important to functional programming, proof theory, homotopy theory.
+
+They are defined inductively in functional programming languages, as cons-lists.
+
+They are operated on by pattern matching, and it is an easy exercise to show that lists present a monoid structure, and have the universal property of being a free monoid.
+
+List objects can be defined in the general setting of a monoidal category (Kelly, Joyal, Maietti, Saville and Fiore), and in fact, list objects present the free monoid, even in that general setting.
+
+First, we give a string diagrammatic proof of this fact\dots
+
+Second, we consider symmetric list objects in a symmetric monoidal category, meaning lists where adjacent elements can be swapped using the underlying symmetry of the category.
+
+We show that symmetric list objects present the free commutative monoid, and we give a string diagrammatic proof of this fact as well.
+
+This construction of free commutative monoids is a generalisation of the construction of free commutative monoids as higher inductive types in homotopy type theory (Choudhury and Fiore).
+
+\section{List objects}
+\label{sec:list-objects}
+
+Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
+
+A list algebra on an object $L$ is a pair of maps:
+$\Nullary{f}{A}$, $\Unary{A}{f}{B}$, and $\Binary{A}{B}{g}{C}$.
+
+\printbibliography
+
+\end{document}
