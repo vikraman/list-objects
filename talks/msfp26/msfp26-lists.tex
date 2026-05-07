@@ -236,6 +236,50 @@ A \textit{monoid object} in $\cat{C}$ is an object $M$ equipped with a pair of m
 
 
 
+\newpage
+\begin{tikzpicture}
+  \begin{scope}
+    \node[operator] (op1) at (0,0) {$c$};
+    \node[anchor=east,operator] (op2) at ($(op1.220)+(-1,-0.4)$) {$c$};
+    \node[anchor=west] (out) at ($(op1.east)+(1,0)$) {};
+    \node[anchor=east] (in1) at ($(op1.140)+(-1,0.6)$) {};
+    \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
+    \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.2)$) {};
+
+    \draw (op2.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$SL(A)$} (op1.220);
+    \draw let \p1 = (in2.east), \p2 = (in1) in
+      (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (op1.140);
+
+    \draw (op1.east) -- (out.west) node[outputwire,above] {$SL(A)$};
+    \draw (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$A$} (op2.140);
+    \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$SL(A)$} (op2.220);
+  \end{scope}
+
+  \node at (1.75,0) {$=$};
+
+  \begin{scope}[xshift=5cm]
+    \node[operator] (op1) at (0,0) {$c$};
+    \node[anchor=east,operator] (op2) at ($(op1.220)+(-1,-0.4)$) {$c$};
+    \node[anchor=west] (out) at ($(op1.east)+(1,0)$) {};
+    \node[anchor=east] (in1) at ($(op1.140)+(-1,0.6)$) {};
+    \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
+    \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.2)$) {};
+
+    \draw (op2.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$SL(A)$} (op1.220);
+    \draw let \p1 = (in2.east), \p2 = (in1) in
+      (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (op2.140);
+
+    \draw (op1.east) -- (out.west) node[outputwire,above] {$SL(A)$};
+    \draw (in2.east) to[out=0,in=140] node[inputwire,pos=0.1,below,sloped=false] {$A$} (op1.140);
+    \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$SL(A)$} (op2.220);
+  \end{scope}
+\end{tikzpicture}%
+
+
+
+
+
+
 
 \printbibliography
 
