@@ -3,29 +3,65 @@
 \RequirePackage{tikz}
 
 \usetikzlibrary{shapes.geometric}
+\usetikzlibrary{calc}
 
 \newcommand{\cat}[1]{\mathcal{#1}}
+\usetikzlibrary{calc}
 
-\newcommand{\Nullary}[2]{
-  \begin{tikzpicture}[baseline=(n.base),inner sep=1ex]
-    \node[circle,draw,inner sep=1pt] (n) at (1,0) {\ensuremath{#1}};
-    \draw (n.east) -- node[pos=0.75,above] {\ensuremath{#2}} (2,0);
-  \end{tikzpicture}
+\tikzset{
+    operator/.style={
+        draw,
+        ellipse,
+        inner xsep=0pt,
+        inner ysep=2pt,
+        minimum width=3.5ex,
+        minimum height=3.5ex,
+    },
+    inputwire/.style={
+        inner sep=2pt,
+        align=left,
+        pos=0.3,
+    },
+    outputwire/.style={
+        inner sep=2pt,
+        align=right,
+        pos=0.7,
+    },
+    wirelabel/.style={
+        inner sep=2pt,
+    },
 }
 
-\newcommand{\Unary}[3]{
-  \begin{tikzpicture}[baseline=(u.base),inner sep=1ex]
-    \node[circle,draw,inner sep=1pt] (u) at (1,0) {\ensuremath{#2}};
-    \draw (0,0) -- node[pos=0.25,above] {\ensuremath{#1}} (u.west);
-    \draw (u.east) -- node[pos=0.75,above] {\ensuremath{#3}} (2,0);
-  \end{tikzpicture}
+\newcommand{\Nullary}[2]{%
+    \begin{tikzpicture}[baseline=(op.base),inner sep=1ex]
+        \node[operator] (op) at (0,0) {\ensuremath{#1}};
+        \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+        \draw (op.east) -- (out.west) node[outputwire,above] {\ensuremath{#2}};
+    \end{tikzpicture}%
 }
 
-\newcommand{\Binary}[4]{
-  \begin{tikzpicture}[baseline=(b.base),inner sep=1ex]
-    \node[circle,draw,inner sep=1pt] (b) at (1,0) {\ensuremath{#3}};
-    \draw (0,0.35) to[out=0,in=140] node[pos=0.25,above] {\ensuremath{#1}} (b.140);
-    \draw (0,-0.35) to[out=0,in=220] node[pos=0.25,below] {\ensuremath{#2}} (b.220);
-    \draw (b.east) -- node[pos=0.75,above] {\ensuremath{#4}} (2,0);
-  \end{tikzpicture}
+\newcommand{\Unary}[3]{%
+    \begin{tikzpicture}[baseline=(op.base),inner sep=1ex]
+        \node[operator] (op) at (0,0) {\ensuremath{#2}};
+        \node[anchor=east] (in) at ($(op.west)+(-1,0)$) {};
+        \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+        \draw (in.east) -- node[inputwire,above] {\ensuremath{#1}} (op.west);
+        \draw (op.east) -- node[outputwire,above] {\ensuremath{#3}} (out.west);
+    \end{tikzpicture}%
 }
+
+\newcommand{\Binary}[4]{%
+    \begin{tikzpicture}[baseline=(op.base),inner sep=1ex]
+        \node[operator] (op) at (0,0) {\ensuremath{#3}};
+        \node[anchor=east] (in1) at ($(op.140)+(-1,0.4)$) {};
+        \node[anchor=east] (in2) at ($(op.220)+(-1,-0.4)$) {};
+        \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+        \draw (in1.east) to[out=0,in=140] node[inputwire,above,sloped=false] {\ensuremath{#1}} (op.140);
+        \draw (in2.east) to[out=0,in=220] node[inputwire,below,sloped=false] {\ensuremath{#2}} (op.220);
+        \draw (op.east) -- (out.west) node[outputwire,above] {\ensuremath{#4}};
+      \end{tikzpicture}%
+}
+
+
+\newcommand{\nil}{\operatorname{nil}}
+\newcommand{\cons}{\operatorname{cons}}
