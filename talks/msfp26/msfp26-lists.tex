@@ -1,4 +1,5 @@
-\documentclass[acmsmall,natbib=false]{acmart}
+% !TEX root = msfp26-lists.tex
+\documentclass[acmsmall,natbib=false,draft]{acmart}
 \settopmatter{printfolios=false,printccs=false,printacmref=false}
 \setcopyright{none}
 
@@ -12,6 +13,7 @@
 
 \addbibresource{references.bib}
 
+\usepackage{subcaption}
 \usepackage{rv-macros}
 
 \begin{document}
@@ -54,153 +56,183 @@ This construction of free commutative monoids is a generalisation of the constru
 
 Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
 
-A \textit{parametrised list object} $L(A)$ on an object $A$ consists of a pair of maps
-$\Nullary{\nil}{L(A)}$, and $\Binary{A}{L(A)}{\cons}{L(A)}$ such that for every object $L$ equipped with maps $\Unary{P}{n}{L}$, and $\Binary{A}{L}{c}{L}$, there exists a unique \textit{parametrised iterator} map $\Binary{L(A)}{P}{\operatorname{it}(n,c)}{L}$ such that
+\begin{definition}[Parametrised list object]
+  A \textit{parametrised list object} $L(A)$ on an object $A$ consists of a pair of maps:
+  \[
+    \Nullary{\nil}{L(A)} \quad \text{and} \quad \smash{\Binary{A}{L(A)}{\cons}{L(A)}}
+  \]
+  such that for every object $L$ equipped with maps:
+  \[
+    \Unary{P}{n}{L} \quad \text{and} \quad \Binary{A}{L}{c}{L}
+  \]
+  there exists a unique \textit{mediating map (iterator)}
+  \[
+    \Binary{L(A)}{P}{\operatorname{it}(n,c)}{L}
+  \] satisfying
 
-\begin{equation*}
-    \begin{tikzpicture}
+  \begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.39\linewidth}
+      \centering
+      \caption{$\nil$-$\beta$}
+      \begin{tikzpicture}[baseline=(op.base)]
         \begin{scope}
-            \node[operator] (op) at (0,0) {$\operatorname{it}(n,c)$};
-            \node[anchor=east,operator] (in1) at ($(op.140)+(-1,0.4)$) {$\nil$};
-            \node[anchor=east] (in2) at ($(op.220)+(-1,-0.4)$) {};
-            \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
-            \draw (in1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$L(A)$} (op.140);
-            \draw ($(in2.west) - (0.25,0)$) to[out=0,in=220] node[inputwire,below,sloped=false] {$P$} (op.220);
-            \draw (op.east) -- (out.west) node[outputwire,above] {$L$};
+          \node[operator] (op) at (0,0) {$\operatorname{it}(n,c)$};
+          \node[anchor=east,operator] (in1) at ($(op.140)+(-1,0.4)$) {$\nil$};
+          \node[anchor=east] (in2) at ($(op.220)+(-1,-0.4)$) {};
+          \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+          \draw (in1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$L(A)$} (op.140);
+          \draw ($(in2.west) - (0.25,0)$) to[out=0,in=220] node[inputwire,below,sloped=false] {$P$} (op.220);
+          \draw (op.east) -- (out.west) node[outputwire,above] {$L$};
         \end{scope}
-        
-        \node[rotate=90] at (0,-1.5) {$=$};
 
-        \begin{scope}[yshift=-2.5cm]
-            \node[operator] (op) at (0,0) {$n$};
-            \node[anchor=east] (in) at ($(op.west)+(-1,0)$) {};
-            \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
-            \draw (in.east) -- node[inputwire,above] {$P$} (op.west);
-            \draw (op.east) -- node[outputwire,above] {$L$} (out.west);
+        \node at (2,0) {$=$};
+
+        \begin{scope}[xshift=3.5cm]
+          \node[operator] (op) at (0,0) {$n$};
+          \node[anchor=east] (in) at ($(op.west)+(-1,0)$) {};
+          \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+          \draw (in.east) -- node[inputwire,above] {$P$} (op.west);
+          \draw (op.east) -- node[outputwire,above] {$L$} (out.west);
         \end{scope}
-    \end{tikzpicture}
-\end{equation*}
-
-and
-
-\begin{equation*}
-    \begin{tikzpicture}
+      \end{tikzpicture}%
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.59\linewidth}
+      \centering
+      \caption{$\cons$-$\beta$}
+      \begin{tikzpicture}
         \begin{scope}
-            \node[operator] (it) at (0,0) {$\operatorname{it}(n,c)$};
-            \node[anchor=east,operator] (cons) at ($(it.140)+(-1,0.4)$) {$\cons$};
-            \node[anchor=east] (in3) at ($(it.220)+(-1,-0.6)$) {};
-            \node[anchor=west] (out) at ($(it.east)+(1,0)$) {};
-            \node[anchor=east] (in1) at ($(cons.140)+(-1,0.2)$) {};
-            \node[anchor=east] (in2) at ($(cons.220)+(-1,-0.2)$) {};
-            
-            \draw (cons.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$L(A)$} (it.140);
-            \draw let \p1 = (in1.east), \p2 = (in3) in
-                (\x1,\y2) to[out=0,in=220] node[inputwire,pos=0.1,below,sloped=false] {$P$} (it.220);
-            
-            \draw (it.east) -- (out.west) node[outputwire,above] {$L$};
-            \draw (in1.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$A$} (cons.140);
-            \draw (in2.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (cons.220);
-        \end{scope}
-        
-        \node[rotate=90] at (-0.6,-2) {$=$};
+          \node[operator] (it) at (0,0) {$\operatorname{it}(n,c)$};
+          \node[anchor=east,operator] (cons) at ($(it.140)+(-1,0.4)$) {$\cons$};
+          \node[anchor=east] (in3) at ($(it.220)+(-1,-0.6)$) {};
+          \node[anchor=west] (out) at ($(it.east)+(1,0)$) {};
+          \node[anchor=east] (in1) at ($(cons.140)+(-1,0.2)$) {};
+          \node[anchor=east] (in2) at ($(cons.220)+(-1,-0.2)$) {};
 
-        \begin{scope}[yshift=-4cm,xshift=0.2cm]
-            \node[operator] (it) at (0,0) {$c$};
-            \node[anchor=east,operator] (cons) at ($(it.220)+(-1,-0.4)$) {$\operatorname{it}(n,c)$};
-            \node[anchor=east] (in1) at ($(it.140)+(-1,0.8)$) {};
-            \node[anchor=west] (out) at ($(it.east)+(1.3,0)$) {};
-            \node[anchor=east] (in2) at ($(cons.140)+(-1,0.2)$) {};
-            \node[anchor=east] (in3) at ($(cons.220)+(-1,-0.2)$) {};
-            
-            \draw (cons.east) to[out=0,in=220] node[inputwire,pos=0.4,below,sloped=false] {$A$} (it.220);
-            \draw let \p1 = (in2.east), \p2 = (in1) in
-                (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (it.140);
-            
-            \draw (it.east) -- (out.west) node[outputwire,above] {$L$};
-            \draw (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$L(A)$} (cons.140);
-            \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$P$} (cons.220);
-        \end{scope}
-    \end{tikzpicture}
-\end{equation*}
+          \draw (cons.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$L(A)$} (it.140);
+          \draw let \p1 = (in1.east), \p2 = (in3) in
+            (\x1,\y2) to[out=0,in=220] node[inputwire,pos=0.1,below,sloped=false] {$P$} (it.220);
 
+          \draw (it.east) -- (out.west) node[outputwire,above] {$L$};
+          \draw (in1.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$A$} (cons.140);
+          \draw (in2.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (cons.220);
+        \end{scope}
+
+        \node at (2,0) {$=$};
+
+        \begin{scope}[xshift=6cm]
+          \node[operator] (it) at (0,0) {$c$};
+          \node[anchor=east,operator] (cons) at ($(it.220)+(-1,-0.4)$) {$\operatorname{it}(n,c)$};
+          \node[anchor=east] (in1) at ($(it.140)+(-1,0.8)$) {};
+          \node[anchor=west] (out) at ($(it.east)+(1.3,0)$) {};
+          \node[anchor=east] (in2) at ($(cons.140)+(-1,0.2)$) {};
+          \node[anchor=east] (in3) at ($(cons.220)+(-1,-0.2)$) {};
+
+          \draw (cons.east) to[out=0,in=220] node[inputwire,pos=0.4,below,sloped=false] {$A$} (it.220);
+          \draw let \p1 = (in2.east), \p2 = (in1) in
+            (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (it.140);
+
+          \draw (it.east) -- (out.west) node[outputwire,above] {$L$};
+          \draw (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$L(A)$} (cons.140);
+          \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$P$} (cons.220);
+        \end{scope}
+      \end{tikzpicture}%
+    \end{subfigure}
+  \end{figure}
+
+  % \begin{equation}
+  %   \tag{$\nil$-$\beta$}
+
+  % \end{equation}
+
+  % and
+
+  % \begin{equation*}
+
+  % \end{equation*}
+\end{definition}
 
 \newpage
 
 A \textit{monoid object} in $\cat{C}$ is an object $M$ equipped with a pair of maps $\Nullary{\varepsilon}{M}$ and $\Binary{M}{M}{\mu}{M}$ such that:
 
-\begin{equation*}
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.49\linewidth}
+    \centering
     \begin{tikzpicture}
-        \begin{scope}[xshift=0.15cm]
-            \node[operator] (op) at (0,0) {$\mu$};
-            \node[anchor=east,operator] (in1) at ($(op.140)+(-1,0.4)$) {$\varepsilon$};
-            \node[anchor=east] (in2) at ($(op.220)+(-1,-0.4)$) {};
-            \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
-            \draw (in1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$M$} (op.140);
-            \draw ($(in2.west) - (0.1,0)$) to[out=0,in=220] node[inputwire,below,sloped=false] {$M$} (op.220);
-            \draw (op.east) -- (out.west) node[outputwire,above] {$M$};
-        \end{scope}
-        
-        \node[rotate=90] at (0,-1.25) {$=$};
+      \begin{scope}
+        \node[operator] (op) at (0,0) {$\mu$};
+        \node[anchor=east,operator] (in1) at ($(op.140)+(-1,0.4)$) {$\varepsilon$};
+        \node[anchor=east] (in2) at ($(op.220)+(-1,-0.4)$) {};
+        \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+        \draw (in1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$M$} (op.140);
+        \draw ($(in2.west) - (0.1,0)$) to[out=0,in=220] node[inputwire,below,sloped=false] {$M$} (op.220);
+        \draw (op.east) -- (out.west) node[outputwire,above] {$M$};
+      \end{scope}
 
-        \begin{scope}[yshift=-2cm]
-            \draw (-1.5,0) -- node[midway,above] {$M$} (1.5,0);
-        \end{scope}
-        
-        \node[rotate=90] at (0,-2.75) {$=$};
-        
-        \begin{scope}[yshift=-4cm,xshift=0.15cm]
-            \node[operator] (op) at (0,0) {$\mu$};
-            \node[anchor=east] (in1) at ($(op.140)+(-1,0.4)$) {};
-            \node[anchor=east,operator] (in2) at ($(op.220)+(-1,-0.4)$) {$\varepsilon$};
-            \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
-            \draw ($(in1.west) - (0.1,0)$) to[out=0,in=140] node[inputwire,above,sloped=false] {$M$} (op.140);
-            \draw (in2.east) to[out=0,in=220] node[inputwire,below,pos=0.4,sloped=false] {$M$} (op.220);
-            \draw (op.east) -- (out.west) node[outputwire,above] {$M$};
-        \end{scope}
-    \end{tikzpicture}
-\end{equation*}
+      \node at (2,0) {$=$};
 
-and
+      \begin{scope}[xshift=3cm]
+        \draw (-0.5,0) -- node[midway,above] {$M$} (0.5,0);
+      \end{scope}
 
-\begin{equation*}
+      \node at (4,0) {$=$};
+
+      \begin{scope}[xshift=6cm]
+        \node[operator] (op) at (0,0) {$\mu$};
+        \node[anchor=east] (in1) at ($(op.140)+(-1,0.4)$) {};
+        \node[anchor=east,operator] (in2) at ($(op.220)+(-1,-0.4)$) {$\varepsilon$};
+        \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+        \draw ($(in1.west) - (0.1,0)$) to[out=0,in=140] node[inputwire,above,sloped=false] {$M$} (op.140);
+        \draw (in2.east) to[out=0,in=220] node[inputwire,below,pos=0.4,sloped=false] {$M$} (op.220);
+        \draw (op.east) -- (out.west) node[outputwire,above] {$M$};
+      \end{scope}
+    \end{tikzpicture}%
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.49\linewidth}
+    \centering
     \begin{tikzpicture}
-        \begin{scope}
-            \node[operator] (op2) at (0,0) {$\mu$};
-            \node[anchor=east,operator] (op1) at ($(op2.140)+(-1,0.4)$) {$\mu$};
-            \node[anchor=west] (out) at ($(op2.east)+(1,0)$) {};
-            \node[anchor=east] (in1) at ($(op1.140)+(-1,0.2)$) {};
-            \node[anchor=east] (in2) at ($(op1.220)+(-1,-0.2)$) {};
-            \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.6)$) {};
-            
-            \draw (op1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$M$} (op2.140);
-            \draw let \p1 = (in1.east), \p2 = (in3) in
-                (\x1,\y2) to[out=0,in=220] node[inputwire,pos=0.1,below,sloped=false] {$M$} (op2.220);
-            
-            \draw (op2.east) -- (out.west) node[outputwire,above] {$M$};
-            \draw (in1.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$M$} (op1.140);
-            \draw (in2.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$M$} (op1.220);
-        \end{scope}
-        
-        \node[rotate=90] at (-0.6,-1.5) {$=$};
+      \begin{scope}
+        \node[operator] (op2) at (0,0) {$\mu$};
+        \node[anchor=east,operator] (op1) at ($(op2.140)+(-1,0.4)$) {$\mu$};
+        \node[anchor=west] (out) at ($(op2.east)+(1,0)$) {};
+        \node[anchor=east] (in1) at ($(op1.140)+(-1,0.2)$) {};
+        \node[anchor=east] (in2) at ($(op1.220)+(-1,-0.2)$) {};
+        \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.6)$) {};
 
-        \begin{scope}[yshift=-3cm]
-            \node[operator] (op1) at (0,0) {$\mu$};
-            \node[anchor=east,operator] (op2) at ($(op1.220)+(-1,-0.4)$) {$\mu$};
-            \node[anchor=west] (out) at ($(op1.east)+(1,0)$) {};
-            \node[anchor=east] (in1) at ($(op1.140)+(-1,0.6)$) {};
-            \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
-            \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.2)$) {};
-            
-            \draw (op2.east) to[out=0,in=220] node[inputwire,pos=0.4,below,sloped=false] {$M$} (op1.220);
-            \draw let \p1 = (in2.east), \p2 = (in1) in
-                (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$M$} (op1.140);
-            
-            \draw (op1.east) -- (out.west) node[outputwire,above] {$M$};
-            \draw (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$M$} (op2.140);
-            \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$M$} (op2.220);
-        \end{scope}
-    \end{tikzpicture}
-\end{equation*}
+        \draw (op1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$M$} (op2.140);
+        \draw let \p1 = (in1.east), \p2 = (in3) in
+          (\x1,\y2) to[out=0,in=220] node[inputwire,pos=0.1,below,sloped=false] {$M$} (op2.220);
+
+        \draw (op2.east) -- (out.west) node[outputwire,above] {$M$};
+        \draw (in1.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$M$} (op1.140);
+        \draw (in2.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$M$} (op1.220);
+      \end{scope}
+
+      \node at (1.5,0) {$=$};
+
+      \begin{scope}[xshift=4.5cm]
+        \node[operator] (op1) at (0,0) {$\mu$};
+        \node[anchor=east,operator] (op2) at ($(op1.220)+(-1,-0.4)$) {$\mu$};
+        \node[anchor=west] (out) at ($(op1.east)+(1,0)$) {};
+        \node[anchor=east] (in1) at ($(op1.140)+(-1,0.6)$) {};
+        \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
+        \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.2)$) {};
+
+        \draw (op2.east) to[out=0,in=220] node[inputwire,pos=0.4,below,sloped=false] {$M$} (op1.220);
+        \draw let \p1 = (in2.east), \p2 = (in1) in
+          (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$M$} (op1.140);
+
+        \draw (op1.east) -- (out.west) node[outputwire,above] {$M$};
+        \draw (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$M$} (op2.140);
+        \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$M$} (op2.220);
+      \end{scope}
+    \end{tikzpicture}%
+  \end{subfigure}
+\end{figure}
 
 
 
