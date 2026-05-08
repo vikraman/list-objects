@@ -57,17 +57,15 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Lists are a fundamental data structure, important in computer science and mathematics. They are often defined in functional programming languages as cons-lists, constructed inductively from a pair of constructors $\nil:L(A)$ and $\cons:A\times L(A)\to L(A)$, and whose eliminators allow for definitions by recursion.
+Lists are a fundamental data structure, important in computer science and mathematics. They are often defined in functional programming languages as cons-lists, generated inductively from a pair of constructors $\nil:L(A)$ and $\cons:A\times L(A)\to L(A)$, and whose eliminators allow for definitions by recursion.
 
-In category theory, these lists are understood as initial algebras $\mu X.1+A\times X$~{\cite{adamekInitialAlgebrasTerminal2025}. This structure can be axiomatised more generally in the setting of a monoidal category, replacing the cartesian product with a tensor, and removing the need for a coproduct by axiomatising the $\nil$ and $\cons$ maps directly with an iteration mechanism. These list objects generalise the notion of Natural Numbers Objects~\cite{lawvereFUNCTORIALSEMANTICSALGEBRAIC1963} and were introduced in Joyal's arithmetic universes. An internal language for them was studied by Maietti~\cite{maiettiJoyalsArithmeticUniverse2010}, and other variants were explored in~\cite{cockettListarithmeticDistributiveCategories1990} and~\cite{jayFiniteObjectsLocos1997}.
+In category theory, these lists are understood as initial algebras $\mu X.1+A\times X$~\cite{,DBLP:phd/ethos/Hagino87,adamekInitialAlgebrasTerminal2025}. This structure can be axiomatised more generally in the setting of a monoidal category, replacing the cartesian product with a tensor, and removing the need for a coproduct by axiomatising the $\nil$ and $\cons$ maps directly with an iteration mechanism. These list objects generalise the notion of Natural Numbers Objects~\cite{lawvereFUNCTORIALSEMANTICSALGEBRAIC1963} and were introduced in Joyal's arithmetic universes. An internal language for them was studied by Maietti~\cite{maiettiJoyalsArithmeticUniverse2010}, and other variants were explored in~\cite{cockettListarithmeticDistributiveCategories1990} and~\cite{jayFiniteObjectsLocos1997}.
 
 In all of these settings, additional axioms on the underlying category are required to reconstruct traditional list operations from these list objects. However, in the minimal setting of a monoidal category only, this notion of a list object can be strengthened to that of a \textit{parametrised} list object which supports parametrised recursion. It is shown in~\cite{fioreListObjectsAlgebraic2017} that this yields a construction of free monoids (see also~\cite{kellyUnifiedTreatmentTransfinite1980}) in monoidal categories. We give a string diagrammatic proof of this result, showing that if a monoidal category $\cat{C}$ has all parametrised list objects, then the forgetful functor $\mathrm{Mon}(\cat{C})\to\cat{C}$ is monadic.
 
 Finite multisets are another important data structure that are the commutative counterpart to lists; and in fact can be axiomatised with only a simple modification to these list objects. In this talk, we will study the notion of a \textit{symmetric} list object in a symmetric monoidal category. We will identify lists that differ by a transposition of the two frontmost elements using the symmetry of the underlying category. Using this, we show the analogous commutative results that symmetric list objects are free commutative monoids, and that having all symmetric list objects yields a similar monadic adjunction between $\mathrm{CMon}(\cat{C})$ and $\cat{C}$.
 
-In previous work~\cite{choudhuryFreeCommutativeMonoids2023}, these symmetric lists were considered as higher inductive types by adding a swap constructor to the standard list construction to permute the two head elements. In the setting of type theory, the ambient category is cartesian closed, but our setting only requires a symmetric monoidal structure.
-
-
+In type theory, finite multisets have been considered as setoids over lists, where the equivalence relation is bag equivalence~\cite{danielssonBagEquivalenceProofRelevant2012}, or as higher inductive types of lists with an additional swap constructor to permute the two head elements~\cite{choudhuryFreeCommutativeMonoids2023}. There, the ambient category is cartesian closed, but our setting only requires a symmetric monoidal structure.
 
 \section{List objects}
 \label{sec:list-objects}
@@ -259,6 +257,8 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
 
 
 \section{Symmetric List Objects}
+
+Hereafter, we assume $\cat{C}$ is symmetric strict monoidal.
 
 \begin{definition}
   A \textit{parametrised symmetric list object} on $A$ is a list object $L(A)$ satisfying:
