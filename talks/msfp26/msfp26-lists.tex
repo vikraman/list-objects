@@ -20,11 +20,23 @@
 
 \title{List Objects with Symmetry}
 
-\author{Author}
-\email{email@example.com}
+\author{Fiona Blackett}
+\email{fiona.blackett@strath.ac.uk}
 \affiliation{%
-  \institution{Institution}
-  \country{Country}}
+  \institution{University of Strathclyde}
+  \country{UK}}
+
+\author{Vikraman Choudhury}
+\email{me@vikraman.org}
+\affiliation{%
+  \institution{University of Strathclyde}
+  \country{UK}}
+
+\author{Rin Liu}
+\email{rin.liu@strath.ac.uk}
+\affiliation{%
+  \institution{University of Strathclyde}
+  \country{UK}}
 
 \begin{abstract}
   Abstract.
@@ -70,7 +82,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
     \Binary{L(A)}{P}{\operatorname{it}(n,c)}{L}
   \] satisfying
 
-  \begin{figure}
+  \begin{figure}[H]
     \centering
     \begin{subfigure}[t]{0.39\linewidth}
       \centering
@@ -140,146 +152,146 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \end{tikzpicture}%
     \end{subfigure}
   \end{figure}
-
-  % \begin{equation}
-  %   \tag{$\nil$-$\beta$}
-
-  % \end{equation}
-
-  % and
-
-  % \begin{equation*}
-
-  % \end{equation*}
 \end{definition}
 
-\newpage
-
-A \textit{monoid object} in $\cat{C}$ is an object $M$ equipped with a pair of maps $\Nullary{\varepsilon}{M}$ and $\Binary{M}{M}{\mu}{M}$ such that:
-
-\begin{figure}
-  \centering
-  \begin{subfigure}[t]{0.49\linewidth}
+\begin{definition}
+  A \textit{monoid object} in $\cat{C}$ is an object $M$ equipped with a pair of maps:
+  \[
+    \Nullary{\varepsilon}{M} \quad \text{and} \quad \Binary{M}{M}{\mu}{M}
+  \] satisfying:
+  \begin{figure}[H]
     \centering
+    \begin{subfigure}[t]{0.49\linewidth}
+      \centering
+      \begin{tikzpicture}
+        \begin{scope}
+          \node[operator] (op) at (0,0) {$\mu$};
+          \node[anchor=east,operator] (in1) at ($(op.140)+(-1,0.4)$) {$\varepsilon$};
+          \node[anchor=east] (in2) at ($(op.220)+(-1,-0.4)$) {};
+          \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+          \draw (in1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$M$} (op.140);
+          \draw ($(in2.west) - (0.1,0)$) to[out=0,in=220] node[inputwire,below,sloped=false] {$M$} (op.220);
+          \draw (op.east) -- (out.west) node[outputwire,above] {$M$};
+        \end{scope}
+
+        \node at (2,0) {$=$};
+
+        \begin{scope}[xshift=3cm]
+          \draw (-0.5,0) -- node[midway,above] {$M$} (0.5,0);
+        \end{scope}
+
+        \node at (4,0) {$=$};
+
+        \begin{scope}[xshift=6cm]
+          \node[operator] (op) at (0,0) {$\mu$};
+          \node[anchor=east] (in1) at ($(op.140)+(-1,0.4)$) {};
+          \node[anchor=east,operator] (in2) at ($(op.220)+(-1,-0.4)$) {$\varepsilon$};
+          \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+          \draw ($(in1.west) - (0.1,0)$) to[out=0,in=140] node[inputwire,above,sloped=false] {$M$} (op.140);
+          \draw (in2.east) to[out=0,in=220] node[inputwire,below,pos=0.4,sloped=false] {$M$} (op.220);
+          \draw (op.east) -- (out.west) node[outputwire,above] {$M$};
+        \end{scope}
+      \end{tikzpicture}%
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\linewidth}
+      \centering
+      \begin{tikzpicture}
+        \begin{scope}
+          \node[operator] (op2) at (0,0) {$\mu$};
+          \node[anchor=east,operator] (op1) at ($(op2.140)+(-1,0.4)$) {$\mu$};
+          \node[anchor=west] (out) at ($(op2.east)+(1,0)$) {};
+          \node[anchor=east] (in1) at ($(op1.140)+(-1,0.2)$) {};
+          \node[anchor=east] (in2) at ($(op1.220)+(-1,-0.2)$) {};
+          \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.6)$) {};
+
+          \draw (op1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$M$} (op2.140);
+          \draw let \p1 = (in1.east), \p2 = (in3) in
+            (\x1,\y2) to[out=0,in=220] node[inputwire,pos=0.1,below,sloped=false] {$M$} (op2.220);
+
+          \draw (op2.east) -- (out.west) node[outputwire,above] {$M$};
+          \draw (in1.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$M$} (op1.140);
+          \draw (in2.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$M$} (op1.220);
+        \end{scope}
+
+        \node at (1.5,0) {$=$};
+
+        \begin{scope}[xshift=4.5cm]
+          \node[operator] (op1) at (0,0) {$\mu$};
+          \node[anchor=east,operator] (op2) at ($(op1.220)+(-1,-0.4)$) {$\mu$};
+          \node[anchor=west] (out) at ($(op1.east)+(1,0)$) {};
+          \node[anchor=east] (in1) at ($(op1.140)+(-1,0.6)$) {};
+          \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
+          \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.2)$) {};
+
+          \draw (op2.east) to[out=0,in=220] node[inputwire,pos=0.4,below,sloped=false] {$M$} (op1.220);
+          \draw let \p1 = (in2.east), \p2 = (in1) in
+            (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$M$} (op1.140);
+
+          \draw (op1.east) -- (out.west) node[outputwire,above] {$M$};
+          \draw (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$M$} (op2.140);
+          \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$M$} (op2.220);
+        \end{scope}
+      \end{tikzpicture}%
+    \end{subfigure}
+  \end{figure}
+\end{definition}
+
+\begin{theorem}[Lemma~3.5 of Fiore-Saville]
+  If $\cat{C}$ admits parametrised list objects for every $A$,
+  then $\mathsf{Mon}(\cat{C})$ is monadic over $\cat{C}$.
+\end{theorem}
+
+\begin{definition}[Parametrised Symmetric List Object]
+  A \textit{parametrised symmetric list object} $SL(A)$ on $A$ is a list object $L(A)$ satisfying:
+
+  \begin{figure}[H]
+    \centering
+
     \begin{tikzpicture}
       \begin{scope}
-        \node[operator] (op) at (0,0) {$\mu$};
-        \node[anchor=east,operator] (in1) at ($(op.140)+(-1,0.4)$) {$\varepsilon$};
-        \node[anchor=east] (in2) at ($(op.220)+(-1,-0.4)$) {};
-        \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
-        \draw (in1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$M$} (op.140);
-        \draw ($(in2.west) - (0.1,0)$) to[out=0,in=220] node[inputwire,below,sloped=false] {$M$} (op.220);
-        \draw (op.east) -- (out.west) node[outputwire,above] {$M$};
-      \end{scope}
-
-      \node at (2,0) {$=$};
-
-      \begin{scope}[xshift=3cm]
-        \draw (-0.5,0) -- node[midway,above] {$M$} (0.5,0);
-      \end{scope}
-
-      \node at (4,0) {$=$};
-
-      \begin{scope}[xshift=6cm]
-        \node[operator] (op) at (0,0) {$\mu$};
-        \node[anchor=east] (in1) at ($(op.140)+(-1,0.4)$) {};
-        \node[anchor=east,operator] (in2) at ($(op.220)+(-1,-0.4)$) {$\varepsilon$};
-        \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
-        \draw ($(in1.west) - (0.1,0)$) to[out=0,in=140] node[inputwire,above,sloped=false] {$M$} (op.140);
-        \draw (in2.east) to[out=0,in=220] node[inputwire,below,pos=0.4,sloped=false] {$M$} (op.220);
-        \draw (op.east) -- (out.west) node[outputwire,above] {$M$};
-      \end{scope}
-    \end{tikzpicture}%
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{0.49\linewidth}
-    \centering
-    \begin{tikzpicture}
-      \begin{scope}
-        \node[operator] (op2) at (0,0) {$\mu$};
-        \node[anchor=east,operator] (op1) at ($(op2.140)+(-1,0.4)$) {$\mu$};
-        \node[anchor=west] (out) at ($(op2.east)+(1,0)$) {};
-        \node[anchor=east] (in1) at ($(op1.140)+(-1,0.2)$) {};
-        \node[anchor=east] (in2) at ($(op1.220)+(-1,-0.2)$) {};
-        \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.6)$) {};
-
-        \draw (op1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$M$} (op2.140);
-        \draw let \p1 = (in1.east), \p2 = (in3) in
-          (\x1,\y2) to[out=0,in=220] node[inputwire,pos=0.1,below,sloped=false] {$M$} (op2.220);
-
-        \draw (op2.east) -- (out.west) node[outputwire,above] {$M$};
-        \draw (in1.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$M$} (op1.140);
-        \draw (in2.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$M$} (op1.220);
-      \end{scope}
-
-      \node at (1.5,0) {$=$};
-
-      \begin{scope}[xshift=4.5cm]
-        \node[operator] (op1) at (0,0) {$\mu$};
-        \node[anchor=east,operator] (op2) at ($(op1.220)+(-1,-0.4)$) {$\mu$};
+        \node[operator] (op1) at (0,0) {$c$};
+        \node[anchor=east,operator] (op2) at ($(op1.220)+(-1,-0.4)$) {$c$};
         \node[anchor=west] (out) at ($(op1.east)+(1,0)$) {};
         \node[anchor=east] (in1) at ($(op1.140)+(-1,0.6)$) {};
         \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
         \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.2)$) {};
 
-        \draw (op2.east) to[out=0,in=220] node[inputwire,pos=0.4,below,sloped=false] {$M$} (op1.220);
+        \draw (op2.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$SL(A)$} (op1.220);
         \draw let \p1 = (in2.east), \p2 = (in1) in
-          (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$M$} (op1.140);
+          (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (op1.140);
 
-        \draw (op1.east) -- (out.west) node[outputwire,above] {$M$};
-        \draw (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$M$} (op2.140);
-        \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$M$} (op2.220);
+        \draw (op1.east) -- (out.west) node[outputwire,above] {$SL(A)$};
+        \draw (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$A$} (op2.140);
+        \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$SL(A)$} (op2.220);
+      \end{scope}
+
+      \node at (1.75,0) {$=$};
+
+      \begin{scope}[xshift=5cm]
+        \node[operator] (op1) at (0,0) {$c$};
+        \node[anchor=east,operator] (op2) at ($(op1.220)+(-1,-0.4)$) {$c$};
+        \node[anchor=west] (out) at ($(op1.east)+(1,0)$) {};
+        \node[anchor=east] (in1) at ($(op1.140)+(-1,0.6)$) {};
+        \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
+        \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.2)$) {};
+
+        \draw (op2.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$SL(A)$} (op1.220);
+        \draw let \p1 = (in2.east), \p2 = (in1) in
+          (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (op2.140);
+
+        \draw (op1.east) -- (out.west) node[outputwire,above] {$SL(A)$};
+        \draw (in2.east) to[out=0,in=140] node[inputwire,pos=0.1,below,sloped=false] {$A$} (op1.140);
+        \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$SL(A)$} (op2.220);
       \end{scope}
     \end{tikzpicture}%
-  \end{subfigure}
-\end{figure}
+  \end{figure}
+\end{definition}
 
-
-
-\newpage
-\begin{tikzpicture}
-  \begin{scope}
-    \node[operator] (op1) at (0,0) {$c$};
-    \node[anchor=east,operator] (op2) at ($(op1.220)+(-1,-0.4)$) {$c$};
-    \node[anchor=west] (out) at ($(op1.east)+(1,0)$) {};
-    \node[anchor=east] (in1) at ($(op1.140)+(-1,0.6)$) {};
-    \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
-    \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.2)$) {};
-
-    \draw (op2.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$SL(A)$} (op1.220);
-    \draw let \p1 = (in2.east), \p2 = (in1) in
-      (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (op1.140);
-
-    \draw (op1.east) -- (out.west) node[outputwire,above] {$SL(A)$};
-    \draw (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$A$} (op2.140);
-    \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$SL(A)$} (op2.220);
-  \end{scope}
-
-  \node at (1.75,0) {$=$};
-
-  \begin{scope}[xshift=5cm]
-    \node[operator] (op1) at (0,0) {$c$};
-    \node[anchor=east,operator] (op2) at ($(op1.220)+(-1,-0.4)$) {$c$};
-    \node[anchor=west] (out) at ($(op1.east)+(1,0)$) {};
-    \node[anchor=east] (in1) at ($(op1.140)+(-1,0.6)$) {};
-    \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
-    \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.2)$) {};
-
-    \draw (op2.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$SL(A)$} (op1.220);
-    \draw let \p1 = (in2.east), \p2 = (in1) in
-      (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (op2.140);
-
-    \draw (op1.east) -- (out.west) node[outputwire,above] {$SL(A)$};
-    \draw (in2.east) to[out=0,in=140] node[inputwire,pos=0.1,below,sloped=false] {$A$} (op1.140);
-    \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$SL(A)$} (op2.220);
-  \end{scope}
-\end{tikzpicture}%
-
-
-
-
-
-
+\begin{theorem}
+  If $\cat{C}$ admits parametrised symmetric list objects for every $A$,
+  then $\mathsf{CMon}(\cat{C})$ is monadic over $\cat{C}$.
+\end{theorem}
 
 \printbibliography
 
