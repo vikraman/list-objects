@@ -87,9 +87,9 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
           \node[anchor=east,operator] (in1) at ($(op.140)+(-1,0.4)$) {$\nil$};
           \node[anchor=east] (in2) at ($(op.220)+(-1,-0.4)$) {};
           \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
-          \draw (in1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$L(A)$} (op.140);
-          \draw ($(in2.west) - (0.25,0)$) to[out=0,in=220] node[inputwire,below,sloped=false] {$P$} (op.220);
-          \draw (op.east) -- (out.west) node[outputwire,above] {$L$};
+          \draw[blue] (in1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$L(A)$} (op.140);
+          \draw[green] ($(in2.west) - (0.25,0)$) to[out=0,in=220] node[inputwire,below,sloped=false] {$P$} (op.220);
+          \draw[cyan] (op.east) -- (out.west) node[outputwire,above] {$L$};
         \end{scope}
 
         \node at (2,0) {$=$};
@@ -98,8 +98,8 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
           \node[operator] (op) at (0,0) {$n$};
           \node[anchor=east] (in) at ($(op.west)+(-1,0)$) {};
           \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
-          \draw (in.east) -- node[inputwire,above] {$P$} (op.west);
-          \draw (op.east) -- node[outputwire,above] {$L$} (out.west);
+          \draw[green] (in.east) -- node[inputwire,above] {$P$} (op.west);
+          \draw[cyan] (op.east) -- node[outputwire,above] {$L$} (out.west);
         \end{scope}
       \end{tikzpicture}%
       \caption{$\nil$-$\beta$}
@@ -116,13 +116,13 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
           \node[anchor=east] (in1) at ($(cons.140)+(-1,0.2)$) {};
           \node[anchor=east] (in2) at ($(cons.220)+(-1,-0.2)$) {};
 
-          \draw (cons.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$L(A)$} (it.140);
-          \draw let \p1 = (in1.east), \p2 = (in3) in
+          \draw[blue] (cons.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$L(A)$} (it.140);
+          \draw[green] let \p1 = (in1.east), \p2 = (in3) in
             (\x1,\y2) to[out=0,in=220] node[inputwire,pos=0.1,below,sloped=false] {$P$} (it.220);
 
-          \draw (it.east) -- (out.west) node[outputwire,above] {$L$};
-          \draw (in1.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$A$} (cons.140);
-          \draw (in2.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (cons.220);
+          \draw[cyan] (it.east) -- (out.west) node[outputwire,above] {$L$};
+          \draw[magenta] (in1.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$A$} (cons.140);
+          \draw[blue] (in2.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (cons.220);
         \end{scope}
 
         \node at (2,0) {$=$};
@@ -135,13 +135,13 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
           \node[anchor=east] (in2) at ($(cons.140)+(-1,0.2)$) {};
           \node[anchor=east] (in3) at ($(cons.220)+(-1,-0.2)$) {};
 
-          \draw (cons.east) to[out=0,in=220] node[inputwire,pos=0.4,below,sloped=false] {$A$} (it.220);
-          \draw let \p1 = (in2.east), \p2 = (in1) in
+          \draw[magenta] (cons.east) to[out=0,in=220] node[inputwire,pos=0.4,below,sloped=false] {$A$} (it.220);
+          \draw[magenta] let \p1 = (in2.east), \p2 = (in1) in
             (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (it.140);
 
-          \draw (it.east) -- (out.west) node[outputwire,above] {$L$};
-          \draw (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$L(A)$} (cons.140);
-          \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$P$} (cons.220);
+          \draw[cyan] (it.east) -- (out.west) node[outputwire,above] {$L$};
+          \draw[blue] (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$L(A)$} (cons.140);
+          \draw[green] (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$P$} (cons.220);
         \end{scope}
       \end{tikzpicture}%
       \caption{$\cons$-$\beta$}
@@ -263,13 +263,13 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
         \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
         \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.2)$) {};
 
-        \draw (op2.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$L(A)$} (op1.220);
-        \draw let \p1 = (in2.east), \p2 = (in1) in
+        \draw[blue] (op2.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$L(A)$} (op1.220);
+        \draw[magenta] let \p1 = (in2.east), \p2 = (in1) in
           (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (op1.140);
 
-        \draw (op1.east) -- (out.west) node[outputwire,above] {$L(A)$};
-        \draw (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$A$} (op2.140);
-        \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (op2.220);
+        \draw[blue] (op1.east) -- (out.west) node[outputwire,above] {$L(A)$};
+        \draw[magenta] (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$A$} (op2.140);
+        \draw[blue] (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (op2.220);
       \end{scope}
 
       \node at (1.75,0) {$=$};
@@ -282,13 +282,13 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
         \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
         \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.2)$) {};
 
-        \draw (op2.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$L(A)$} (op1.220);
-        \draw let \p1 = (in2.east), \p2 = (in1) in
+        \draw[blue] (op2.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$L(A)$} (op1.220);
+        \draw[magenta] let \p1 = (in2.east), \p2 = (in1) in
           (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (op2.140);
 
-        \draw (op1.east) -- (out.west) node[outputwire,above] {$L(A)$};
-        \draw (in2.east) to[out=0,in=140] node[inputwire,pos=0.1,below,sloped=false] {$A$} (op1.140);
-        \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (op2.220);
+        \draw[blue] (op1.east) -- (out.west) node[outputwire,above] {$L(A)$};
+        \draw[magenta] (in2.east) to[out=0,in=140] node[inputwire,pos=0.1,below,sloped=false] {$A$} (op1.140);
+        \draw[blue] (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (op2.220);
       \end{scope}
     \end{tikzpicture}%
   \end{figure}
