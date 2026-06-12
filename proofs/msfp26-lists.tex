@@ -1,0 +1,516 @@
+% !TEX root = msfp26-lists.tex
+\documentclass[acmsmall,natbib=false,nonacm,review,screen]{acmart}
+\settopmatter{printfolios=false,printccs=false,printacmref=false}
+\setcopyright{none}
+
+\AtBeginDocument{%
+  \providecommand\BibTeX{{Bib\TeX}}}
+
+\RequirePackage[
+  datamodel=acmdatamodel,
+  style=acmauthoryear,
+]{biblatex}
+
+\addbibresource{references.bib}
+
+\usepackage{subcaption}
+\usepackage{rv-macros}
+
+\begin{document}
+
+\title{Symmetric List Objects}
+
+\author{Fiona Blackett}
+\email{fiona.blackett@strath.ac.uk}
+\affiliation{%
+  \institution{University of Strathclyde}
+  \country{UK}}
+
+\author{Vikraman Choudhury}
+\email{me@vikraman.org}
+\affiliation{%
+  \institution{University of Strathclyde}
+  \country{UK}}
+
+\author{Rin Liu}
+\email{rin.liu@strath.ac.uk}
+\affiliation{%
+  \institution{University of Strathclyde}
+  \country{UK}}
+
+\maketitle
+
+\vspace*{-2ex}
+
+\section{Introduction}
+\label{sec:introduction}
+
+
+
+\newpage
+
+
+
+
+
+
+
+\begin{definition}
+  A \textit{monoid object} in $\cat{C}$ is an object $M$ equipped with a pair of maps $\varepsilon:1\to M$ and $\mu:M\otimes M\to M$
+  % \[
+  %   \Nullary{\varepsilon}{M} \quad \text{and} \quad \Binary{M}{M}{\mu}{M}
+  % \]
+  satisfying:
+  \begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.49\linewidth}
+      \centering
+      \begin{tikzpicture}
+        \begin{scope}
+          \node[operator] (op) at (0,0) {$\mu$};
+          \node[anchor=east,operator] (in1) at ($(op.140)+(-1,0.4)$) {$\varepsilon$};
+          \node[anchor=east] (in2) at ($(op.220)+(-1,-0.4)$) {};
+          \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+          \draw (in1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$M$} (op.140);
+          \draw ($(in2.west) - (0.1,0)$) to[out=0,in=220] node[inputwire,below,sloped=false] {$M$} (op.220);
+          \draw (op.east) -- (out.west) node[outputwire,above] {$M$};
+        \end{scope}
+
+        \node at (2,0) {$=$};
+
+        \begin{scope}[xshift=3cm]
+          \draw (-0.5,0) -- node[midway,above] {$M$} (0.5,0);
+        \end{scope}
+
+        \node at (4,0) {$=$};
+
+        \begin{scope}[xshift=6cm]
+          \node[operator] (op) at (0,0) {$\mu$};
+          \node[anchor=east] (in1) at ($(op.140)+(-1,0.4)$) {};
+          \node[anchor=east,operator] (in2) at ($(op.220)+(-1,-0.4)$) {$\varepsilon$};
+          \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+          \draw ($(in1.west) - (0.1,0)$) to[out=0,in=140] node[inputwire,above,sloped=false] {$M$} (op.140);
+          \draw (in2.east) to[out=0,in=220] node[inputwire,below,pos=0.4,sloped=false] {$M$} (op.220);
+          \draw (op.east) -- (out.west) node[outputwire,above] {$M$};
+        \end{scope}
+      \end{tikzpicture}%
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\linewidth}
+      \centering
+      \begin{tikzpicture}
+        \begin{scope}
+          \node[operator] (op2) at (0,0) {$\mu$};
+          \node[anchor=east,operator] (op1) at ($(op2.140)+(-1,0.4)$) {$\mu$};
+          \node[anchor=west] (out) at ($(op2.east)+(1,0)$) {};
+          \node[anchor=east] (in1) at ($(op1.140)+(-1,0.2)$) {};
+          \node[anchor=east] (in2) at ($(op1.220)+(-1,-0.2)$) {};
+          \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.6)$) {};
+
+          \draw (op1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$M$} (op2.140);
+          \draw let \p1 = (in1.east), \p2 = (in3) in
+            (\x1,\y2) to[out=0,in=220] node[inputwire,pos=0.1,below,sloped=false] {$M$} (op2.220);
+
+          \draw (op2.east) -- (out.west) node[outputwire,above] {$M$};
+          \draw (in1.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$M$} (op1.140);
+          \draw (in2.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$M$} (op1.220);
+        \end{scope}
+
+        \node at (1.5,0) {$=$};
+
+        \begin{scope}[xshift=4.5cm]
+          \node[operator] (op1) at (0,0) {$\mu$};
+          \node[anchor=east,operator] (op2) at ($(op1.220)+(-1,-0.4)$) {$\mu$};
+          \node[anchor=west] (out) at ($(op1.east)+(1,0)$) {};
+          \node[anchor=east] (in1) at ($(op1.140)+(-1,0.6)$) {};
+          \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
+          \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.2)$) {};
+
+          \draw (op2.east) to[out=0,in=220] node[inputwire,pos=0.4,below,sloped=false] {$M$} (op1.220);
+          \draw let \p1 = (in2.east), \p2 = (in1) in
+            (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$M$} (op1.140);
+
+          \draw (op1.east) -- (out.west) node[outputwire,above] {$M$};
+          \draw (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$M$} (op2.140);
+          \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$M$} (op2.220);
+        \end{scope}
+      \end{tikzpicture}%
+    \end{subfigure}
+  \end{figure}
+\end{definition}
+
+
+
+
+
+\begin{theorem}
+    The list object $L(A)$ is the free monoid on $A$.
+\end{theorem}
+\begin{proof}
+    Define $\App:=\iter(\id,\cons):L(A)\otimes L(A)\to L(A)$. We claim that $(L(A),\nil,\App)$ is a free monoid structure on $A$. The left unit law holds by $\nil$-$\beta$:
+    \begin{equation*}
+        \begin{tikzpicture}[baseline=(op.base)]
+            \begin{scope}
+                \node[operator] (op) at (0,0) {$\App$};
+                \node[anchor=east,operator] (in1) at ($(op.140)+(-1,0.4)$) {$\nil$};
+                \node[anchor=east] (in2) at ($(op.220)+(-1,-0.4)$) {};
+                \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+                \draw[blue] (in1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$L(A)$} (op.140);
+                \draw[blue] ($(in2.west) - (0.25,0)$) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (op.220);
+                \draw[blue] (op.east) -- (out.west) node[outputwire,above] {$L(A)$};
+            \end{scope}
+
+            \node at (2,0) {$=$};
+
+            \begin{scope}[xshift=4cm]
+                \draw[blue] (-1.25,0) -- node[inputwire,above] {$L(A)$} (0,0);
+                \draw[blue] (0,0) -- node[outputwire,above] {$L(A)$} (1.25,0);
+            \end{scope}
+          \end{tikzpicture}%
+    \end{equation*}
+    For the right unit law, consider the maps $f:=(-)\App\nil:L(A)\to L(A)$ and $g=\id:L(A)\to L(A)$:
+    \[
+        \begin{tikzpicture}[baseline=(op.base)]
+            \begin{scope}
+                \node[operator] (op) at (0,0) {$\App$};
+                \node[anchor=east] (in1) at ($(op.140)+(-1,0.4)$) {};
+                \node[anchor=east,operator] (in2) at ($(op.220)+(-1,-0.4)$) {$\nil$};
+                \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+                \draw[blue] ($(in1.west) - (0.1,0)$) to[out=0,in=140] node[inputwire,above,sloped=false] {$L(A)$} (op.140);
+                \draw[blue] (in2.east) to[out=0,in=220] node[inputwire,below,pos=0.4,sloped=false] {$L(A)$} (op.220);
+                \draw[blue] (op.east) -- (out.west) node[outputwire,above] {$L(A)$};
+            \end{scope}
+            \begin{scope}[xshift=3.5cm]
+                \draw[blue] (-1.25,0) -- node[inputwire,above] {$L(A)$} (0,0);
+                \draw[blue] (0,0) -- node[outputwire,above] {$L(A)$} (1.25,0);
+            \end{scope}
+        \end{tikzpicture}
+    \]
+    We claim that these maps are both the iterator $\iter(\nil,\cons)$. $g$ immediately satisfies both computation rules, so $g=\iter(\nil,\cons)$ by uniqueness of the mediating map. For $f$, we have $\nil$-$\beta$ by applying $\nil$-$\beta$ for $\App$:
+    \begin{equation*}
+        \begin{tikzpicture}[baseline=(op.base)]
+            \begin{scope}
+                \node[operator] (op) at (0,0) {$\App$};
+                \node[anchor=east,operator] (in1) at ($(op.140)+(-1,0.4)$) {$\nil$};
+                \node[anchor=east,operator] (in2) at ($(op.220)+(-1,-0.4)$) {$\nil$};
+                \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+                \draw[blue] (in1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$L(A)$} (op.140);
+                \draw[blue] (in2.east) to[out=0,in=220] node[inputwire,pos=0.4,below,sloped=false] {$L(A)$} (op.220);
+                \draw[blue] (op.east) -- (out.west) node[outputwire,above] {$L(A)$};
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(in1)(op),
+                        draw=red,
+                        very thin,
+                        fill opacity=0.1,
+                        fill=red,
+                        ellipse,
+                        rotate=-20,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,0) {$=$};
+
+            \begin{scope}[xshift=4cm]
+                \node[operator] (op) at (-1,0) {$\nil$};
+                \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+                \draw (op.east) -- node[outputwire,above] {$L(A)$} (out.west);
+            \end{scope}
+        \end{tikzpicture}%
+    \end{equation*}
+
+    and similarly for $\cons$-$\beta$, we can use $\cons$-$\beta$ for $\App$:
+
+    \begin{equation*}
+        \begin{tikzpicture}[baseline=(op.base)]
+            \begin{scope}
+                \node[operator] (op2) at (0,0) {$\App$};
+                \node[anchor=east,operator] (op1) at ($(op2.140)+(-1,0.4)$) {$\cons$};
+                \node[anchor=west] (out) at ($(op2.east)+(1,0)$) {};
+                \node[anchor=east] (in1) at ($(op1.140)+(-1,0.2)$) {};
+                \node[anchor=east] (in2) at ($(op1.220)+(-1,-0.2)$) {};
+                \node[anchor=east,operator] (in3) at ($(op2.220)+(-2.2,-0.8)$) {$\nil$};
+
+                \draw[blue] (in3.east) to[out=0,in=220] node[inputwire,pos=0.2,below] {$L(A)$} (op2.220);
+
+                \draw (op1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$L(A)$} (op2.140);
+
+                \draw (op2.east) -- (out.west) node[outputwire,above] {$L(A)$};
+                \draw (in1.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$L(A)$} (op1.140);
+                \draw (in2.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (op1.220);
+                
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(op1)(op2),
+                        draw=red,
+                        very thin,
+                        fill opacity=0.1,
+                        fill=red,
+                        ellipse,
+                        rotate=-15,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,0) {$=$};
+
+            \begin{scope}[xshift=5.5cm]
+                \node[operator] (op1) at (0,0) {$\cons$};
+                \node[anchor=east,operator] (op2) at ($(op1.220)+(-1,-0.4)$) {$\App$};
+                \node[anchor=west] (out) at ($(op1.east)+(1,0)$) {};
+                \node[anchor=east] (in1) at ($(op1.140)+(-1,0.6)$) {};
+                \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
+                \node[anchor=west,operator] (in3) at ($(op2.220)+(-1,-0.2)$) {$\nil$};
+
+
+                \draw (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {} (op2.220);
+
+                \draw (op2.east) to[out=0,in=220] node[inputwire,pos=0.4,below,sloped=false] {$L(A)$} (op1.220);
+                \draw let \p1 = (in2.east), \p2 = (in1) in
+                    (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$L(A)$} (op1.140);
+
+                \draw (op1.east) -- (out.west) node[outputwire,above] {$L(A)$};
+                \draw (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$L(A)$} (op2.140);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+    
+
+
+
+
+\end{proof}
+
+
+
+
+
+
+
+
+\newpage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{List objects}
+\label{sec:list-objects}
+
+Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
+
+\begin{definition}
+  A \textit{parametrised list object} $L(A)$ on an object $A$ consists of a pair of maps
+  \[
+    \Nullary{\nil}{L(A)} \quad \text{and} \quad \smash{\Binary{A}{L(A)}{\cons}{L(A)}}
+  \]
+  such that for every object $L$ equipped with maps
+  \[
+    \Unary{P}{n}{L} \quad \text{and} \quad \smash{\Binary{A}{L}{c}{L}}
+  \]
+  there exists a unique \textit{mediating map} or \textit{iterator}
+  \[
+    \smash{\Binary{L(A)}{P}{\iter(n,c)}{L}}
+  \]
+  satisfying:
+
+  \begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.39\linewidth}
+      \centering
+      \begin{tikzpicture}[baseline=(op.base)]
+        \begin{scope}
+          \node[operator] (op) at (0,0) {$\iter(n,c)$};
+          \node[anchor=east,operator] (in1) at ($(op.140)+(-1,0.4)$) {$\nil$};
+          \node[anchor=east] (in2) at ($(op.220)+(-1,-0.4)$) {};
+          \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+          \draw[blue] (in1.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$L(A)$} (op.140);
+          \draw[green] ($(in2.west) - (0.25,0)$) to[out=0,in=220] node[inputwire,below,sloped=false] {$P$} (op.220);
+          \draw[cyan] (op.east) -- (out.west) node[outputwire,above] {$L$};
+        \end{scope}
+
+        \node at (2,0) {$=$};
+
+        \begin{scope}[xshift=3.5cm]
+          \node[operator] (op) at (0,0) {$n$};
+          \node[anchor=east] (in) at ($(op.west)+(-1,0)$) {};
+          \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
+          \draw[green] (in.east) -- node[inputwire,above] {$P$} (op.west);
+          \draw[cyan] (op.east) -- node[outputwire,above] {$L$} (out.west);
+        \end{scope}
+      \end{tikzpicture}%
+      \caption{$\nil$-$\beta$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.59\linewidth}
+      \centering
+      \begin{tikzpicture}[baseline=(it.base)]
+        \begin{scope}
+          \node[operator] (it) at (0,0) {$\iter(n,c)$};
+          \node[anchor=east,operator] (cons) at ($(it.140)+(-1,0.4)$) {$\cons$};
+          \node[anchor=east] (in3) at ($(it.220)+(-1,-0.6)$) {};
+          \node[anchor=west] (out) at ($(it.east)+(1,0)$) {};
+          \node[anchor=east] (in1) at ($(cons.140)+(-1,0.2)$) {};
+          \node[anchor=east] (in2) at ($(cons.220)+(-1,-0.2)$) {};
+
+          \draw[blue] (cons.east) to[out=0,in=140] node[inputwire,pos=0.4,above,sloped=false] {$L(A)$} (it.140);
+          \draw[green] let \p1 = (in1.east), \p2 = (in3) in
+            (\x1,\y2) to[out=0,in=220] node[inputwire,pos=0.1,below,sloped=false] {$P$} (it.220);
+
+          \draw[cyan] (it.east) -- (out.west) node[outputwire,above] {$L$};
+          \draw[magenta] (in1.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$A$} (cons.140);
+          \draw[blue] (in2.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (cons.220);
+        \end{scope}
+
+        \node at (2,0) {$=$};
+
+        \begin{scope}[xshift=6cm]
+          \node[operator] (it) at (0,0) {$c$};
+          \node[anchor=east,operator] (cons) at ($(it.220)+(-1,-0.4)$) {$\iter(n,c)$};
+          \node[anchor=east] (in1) at ($(it.140)+(-1,0.8)$) {};
+          \node[anchor=west] (out) at ($(it.east)+(1.3,0)$) {};
+          \node[anchor=east] (in2) at ($(cons.140)+(-1,0.2)$) {};
+          \node[anchor=east] (in3) at ($(cons.220)+(-1,-0.2)$) {};
+
+          \draw[magenta] (cons.east) to[out=0,in=220] node[inputwire,pos=0.4,below,sloped=false] {$A$} (it.220);
+          \draw[magenta] let \p1 = (in2.east), \p2 = (in1) in
+            (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (it.140);
+
+          \draw[cyan] (it.east) -- (out.west) node[outputwire,above] {$L$};
+          \draw[blue] (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$L(A)$} (cons.140);
+          \draw[green] (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$P$} (cons.220);
+        \end{scope}
+      \end{tikzpicture}%
+      \caption{$\cons$-$\beta$}
+    \end{subfigure}
+  \end{figure}
+\end{definition}
+
+
+\begin{theorem}[Lemma~3.4.2 of \cite{fioreListObjectsAlgebraic2017}]
+  If $\cat{C}$ admits parametrised list objects for every $A$,
+  then $\mathsf{Mon}(\cat{C})$ is monadic over $\cat{C}$.
+\end{theorem}
+
+
+
+\begin{theorem}[Lemma~3.4.3 of \cite{fioreListObjectsAlgebraic2017}]
+  If $(\cat{C},\otimes,1)$ is cartesian, then the induced monad $T:\cat{C}\to\cat{C}$ is strong.
+\end{theorem}
+
+
+\section{Symmetric List Objects}
+
+\begin{definition}
+  A \textit{parametrised symmetric list object} on $A$ is a list object $L(A)$ satisfying:
+
+  \begin{figure}[H]
+    \centering
+
+    \begin{tikzpicture}
+      \begin{scope}
+        \node[operator] (op1) at (0,0) {$\cons$};
+        \node[anchor=east,operator] (op2) at ($(op1.220)+(-1,-0.4)$) {$\cons$};
+        \node[anchor=west] (out) at ($(op1.east)+(1,0)$) {};
+        \node[anchor=east] (in1) at ($(op1.140)+(-1,0.6)$) {};
+        \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
+        \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.2)$) {};
+
+        \draw[blue] (op2.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$L(A)$} (op1.220);
+        \draw[magenta] let \p1 = (in2.east), \p2 = (in1) in
+          (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (op1.140);
+
+        \draw[blue] (op1.east) -- (out.west) node[outputwire,above] {$L(A)$};
+        \draw[magenta] (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$A$} (op2.140);
+        \draw[blue] (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (op2.220);
+      \end{scope}
+
+      \node at (1.75,0) {$=$};
+
+      \begin{scope}[xshift=5cm]
+        \node[operator] (op1) at (0,0) {$\cons$};
+        \node[anchor=east,operator] (op2) at ($(op1.220)+(-1,-0.4)$) {$\cons$};
+        \node[anchor=west] (out) at ($(op1.east)+(1,0)$) {};
+        \node[anchor=east] (in1) at ($(op1.140)+(-1,0.6)$) {};
+        \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
+        \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.2)$) {};
+
+        \draw[blue] (op2.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$L(A)$} (op1.220);
+        \draw[magenta] let \p1 = (in2.east), \p2 = (in1) in
+          (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (op2.140);
+
+        \draw[blue] (op1.east) -- (out.west) node[outputwire,above] {$L(A)$};
+        \draw[magenta] (in2.east) to[out=0,in=140] node[inputwire,pos=0.1,below,sloped=false] {$A$} (op1.140);
+        \draw[blue] (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (op2.220);
+      \end{scope}
+    \end{tikzpicture}%
+  \end{figure}
+\end{definition}
+
+
+
+\begin{theorem}
+  The following are equivalent:
+  \begin{enumerate}
+    \item $(L(A),\nil,\cons,\mathrm{iter})$ is a symmetric list object;
+    \item $(L(A),\nil,+\kern-0.4em+)$ is a commutative monoid object;
+    \item There is a joint coequaliser of every permutation of symmetric powers $L(A)^{\otimes n}$
+          \begin{center}
+            \begin{tikzpicture}[scale=1.2]
+              \node (l) at (0,0) {$L(A)^{\otimes n}$};
+              \node (r) at (2,0) {$L(A)^{\otimes n}$};
+              \draw[->,thin] ([yshift=1ex]l.east) -- node[midway,above] {$\sigma$} ([yshift=1ex]r.west);
+              \draw[->,dashed,thin] (l) -- (r);
+              \draw[->,thin] ([yshift=-1ex]l.east) -- ([yshift=-1ex]r.west);
+            \end{tikzpicture}
+          \end{center}
+          for every $n\ge2$.
+  \end{enumerate}
+\end{theorem}
+
+\begin{theorem}
+  If $\cat{C}$ admits parametrised symmetric list objects for every $A$,
+  then the forgetful functor $U:\mathsf{CMon}(\cat{C})\to\cat{C}$ is monadic.
+\end{theorem}
+
+\begin{theorem}
+  If $(\cat{C},\otimes,1)$ is cartesian, then the induced monad $T:\cat{C}\to\cat{C}$ is strong, and further, commutative.
+\end{theorem}
+
+\clearpage
+
+\printbibliography
+
+\end{document}
