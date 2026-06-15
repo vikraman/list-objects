@@ -1,0 +1,12 @@
+\makeatletter \let \proof \axp@oldproof \let \endproof \endaxp@oldproof \let \claimproof \axp@oldclaimproof \let \endclaimproof \endaxp@oldclaimproof \let \section \axp@oldsection 
+\global \def \axp@protectref@iii {\ref {axp@siii}}
+\axp@section {\appendixsectionformat {\protect \axp@protectref@iii }{Symmetric List Objects}}
+\makeatletter 
+\setcounter {axp@equationx}{\c@equation }\setcounter {equation}{0}
+\gdef \axp@nextproofof@type {Theorem}\gdef \axp@nextproofof@label {axp@ri}
+{\pretocmd {\@begintheorem }{\patchcmd {\thmhead }{\@acmplainnotefont }{}{}{}\patchcmd {\thmhead }{\the \thm@notefont }{}{}{}\patchcmd {\thmhead }{(}{}{}{}\patchcmd {\thmhead }{)}{}{}{}}{}{} \begin {axp@theoremrp} [\axp@refstar {axp@ri}]\axp@forward@target {axp@fw@ri}{}\axp@redefinelabels \rpleti \end {axp@theoremrp} }
+\setcounter {equation}{\c@axp@equationx }
+\makeatletter \axp@apxproofstart {axp@oldproof}\makeatother 
+foo
+\makeatletter 
+\end {axp@oldproof}

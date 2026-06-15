@@ -13,6 +13,10 @@
 
 \addbibresource{references.bib}
 
+\usepackage[appendix=append,bibengine=biblatex]{apxproof}
+
+\newtheoremrep{theorem}{Theorem}
+
 \usepackage{subcaption}
 
 \usepackage{xcolor-solarized}
@@ -308,24 +312,18 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal.
 
 
 
-\begin{theorem}
-  The following are equivalent:
+\begin{theoremrep}
+  Let $(L(A),\nil,\cons)$ be a list object on an object $A$. Then, the following are equivalent:
   \begin{enumerate}
     \item $(L(A),\nil,\cons,\mathrm{iter})$ is a symmetric list object;
     \item $(L(A),\nil,+\kern-0.4em+)$ is a commutative monoid object;
-    \item There is a joint coequaliser of every permutation of symmetric powers $L(A)^{\otimes n}$
-          \begin{center}
-            \begin{tikzpicture}[scale=1.2]
-              \node (l) at (0,0) {$L(A)^{\otimes n}$};
-              \node (r) at (2,0) {$L(A)^{\otimes n}$};
-              \draw[->,thin] ([yshift=1ex]l.east) -- node[midway,above] {$\sigma$} ([yshift=1ex]r.west);
-              \draw[->,dashed,thin] (l) -- (r);
-              \draw[->,thin] ([yshift=-1ex]l.east) -- ([yshift=-1ex]r.west);
-            \end{tikzpicture}
-          \end{center}
-          for every $n\ge2$.
+    \item $(L(A),\nil,+\kern-0.4em+)$ is the free commutative monoid object on $A$;
   \end{enumerate}
-\end{theorem}
+\end{theoremrep}
+
+\begin{proof}
+foo
+\end{proof}
 
 \begin{theorem}
   If $\cat{C}$ admits parametrised symmetric list objects for every $A$,
