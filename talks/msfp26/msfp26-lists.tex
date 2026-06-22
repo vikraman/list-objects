@@ -18,6 +18,7 @@
 \newtheoremrep{theorem}{Theorem}
 
 \usepackage{subcaption}
+\usepackage{enumitem}
 
 \usepackage{xcolor-solarized}
 \colorlet{magenta}{solarized-magenta}
@@ -26,6 +27,7 @@
 \colorlet{green}{solarized-green}
 \colorlet{nilbg}{solarized-yellow!25}
 \colorlet{consbg}{solarized-violet!25}
+\colorlet{Appbg}{solarized-blue!25}
 \colorlet{nbg}{solarized-cyan!25}
 \colorlet{cbg}{solarized-red!25}
 \colorlet{itbg}{solarized-blue!25}
@@ -77,7 +79,7 @@ In type theory, finite multisets have been considered as setoids over lists, whe
 Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
 
 \begin{definition}
-  A \textit{parametrised list object} $L(A)$ on an object $A$ consists of a pair of maps $\nil:1\to L(A)$ and $\cons:A\otimes L(A)\to L(A)$
+  A \textit{parametrised list object} (hereafter, just \textit{list object}) $L(A)$ on an object $A$ consists of a pair of maps $\nil:1\to L(A)$ and $\cons:A\otimes L(A)\to L(A)$
   % \[
   %   \Nullary{\nil}{L(A)} \quad \text{and} \quad \smash{\Binary{A}{L(A)}{\cons}{L(A)}}
   % \]
@@ -85,11 +87,11 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
   % \[
   %   \Unary{P}{n}{L} \quad \text{and} \quad \smash{\Binary{A}{L}{c}{L}}
   % \]
-  there exists a unique \textit{mediating map} or \textit{iterator} $\operatorname{it}(n,c):L(A)\otimes P\to L$
+  there exists a unique \textit{mediating map} or \textit{iterator} $\iter(n,c):L(A)\otimes P\to L$
   % \[
-  %   \smash{\Binary{L(A)}{P}{\operatorname{it}(n,c)}{L}}
+  %   \smash{\Binary{L(A)}{P}{\iter(n,c)}{L}}
   % \]
-  satisfying:
+  satisfying computation rules (a) and (b):
 
   \begin{figure}[H]
     \centering
@@ -97,7 +99,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \centering
       \begin{tikzpicture}[baseline=(op.base)]
         \begin{scope}
-          \node[operator,fill=itbg] (op) at (0,0) {$\operatorname{it}(n,c)$};
+          \node[operator,fill=itbg] (op) at (0,0) {$\iter(n,c)$};
           \node[anchor=east,operator,fill=nilbg] (in1) at ($(op.140)+(-1,0.4)$) {$\nil$};
           \node[anchor=east] (in2) at ($(op.220)+(-1,-0.4)$) {};
           \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
@@ -108,7 +110,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
 
         \node at (2,0) {$=$};
 
-        \begin{scope}[xshift=3.5cm]
+        \begin{scope}[xshift=3.65cm]
           \node[operator,fill=nbg] (op) at (0,0) {$n$};
           \node[anchor=east] (in) at ($(op.west)+(-1,0)$) {};
           \node[anchor=west] (out) at ($(op.east)+(1,0)$) {};
@@ -123,7 +125,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \centering
       \begin{tikzpicture}[baseline=(it.base)]
         \begin{scope}
-          \node[operator,fill=itbg] (it) at (0,0) {$\operatorname{it}(n,c)$};
+          \node[operator,fill=itbg] (it) at (0,0) {$\iter(n,c)$};
           \node[anchor=east,operator,fill=consbg] (cons) at ($(it.140)+(-1,0.4)$) {$\cons$};
           \node[anchor=east] (in3) at ($(it.220)+(-1,-0.6)$) {};
           \node[anchor=west] (out) at ($(it.east)+(1,0)$) {};
@@ -141,9 +143,9 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
 
         \node at (2,0) {$=$};
 
-        \begin{scope}[xshift=6cm]
+        \begin{scope}[xshift=5.7cm]
           \node[operator,fill=cbg] (it) at (0,0) {$c$};
-          \node[anchor=east,operator,fill=itbg] (cons) at ($(it.220)+(-1,-0.4)$) {$\operatorname{it}(n,c)$};
+          \node[anchor=east,operator,fill=itbg] (cons) at ($(it.220)+(-1,-0.4)$) {$\iter(n,c)$};
           \node[anchor=east] (in1) at ($(it.140)+(-1,0.8)$) {};
           \node[anchor=west] (out) at ($(it.east)+(1.3,0)$) {};
           \node[anchor=east] (in2) at ($(cons.140)+(-1,0.2)$) {};
@@ -247,6 +249,1565 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
 %   \end{figure}
 % \end{definition}
 
+\begin{theoremrep}
+    The list object $L(A)$ is the free monoid on $A$.
+\end{theoremrep}
+\begin{proof}
+    Define $\App:=\iter(\id,\cons):L(A)\otimes L(A)\to L(A)$. We claim that $(L(A),\nil,\App)$ is a free monoid structure on $A$.
+    % We verify ($i$) left unit, ($ii$) right unit, ($iii$) associativity, and ($iv$) unique extensions.
+
+    The left unit law directly holds by $\App$-$\nil$-$\beta$:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}
+                \node[operator] (app) at (0,0) {$\App$};
+                \node[anchor=east,operator] (nil) at ($(app.140)+(-1,0.4)$) {$\nil$};
+
+                \node (in) at ($(app.220)+(-1.5,-0.4)$) {};
+                \node (out) at ($(app.east)+(1,0)$) {};
+
+                \draw[blue] (nil.east) to[out=0,in=140] (app.140);
+                \draw[blue] (in) to[out=0,in=220]  (app.220);
+                \draw[blue] (app.east) -- (out);
+            \end{scope}
+
+            \node at (2,0) {$=$};
+
+            \begin{scope}[xshift=4cm]
+                \draw[blue] (-1.25,0) -- (1.25,0);
+            \end{scope}
+        \end{tikzpicture}%
+    \end{equation*}
+    For the right unit law, consider the following maps $f,g:L(A)\to L(A)$ below:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}
+                \node[operator] (app) at (0,0) {$\App$};
+                \node[anchor=east,operator] (nil) at ($(app.220)+(-1,-0.4)$) {$\nil$};
+
+                \node (in) at ($(app.140)+(-1.5,0.4)$) {};
+                \node (out) at ($(app.east)+(1,0)$) {};
+
+                \draw[blue] (in) to[out=0,in=140] node[inputwire,sloped=false] {$L(A)$} (app.140);
+                \draw[blue] (nil.east) to[out=0,in=220] node[inputwire,below,pos=0.4,sloped=false] {$L(A)$} (app.220);
+                \draw[blue] (app.east) -- (out) node[outputwire] {$L(A)$};
+            \end{scope}
+
+            \begin{scope}[xshift=4.5cm]
+                \draw[blue] (-1.25,0) -- node[inputwire] {$L(A)$} (0,0);
+                \draw[blue] (0,0) -- node[outputwire] {$L(A)$} (1.25,0);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+    We claim that these maps are both the iterator $\iter(\nil,\cons)$. By the uniqueness of the mediating map, it suffices to show that the two maps satisfy the required computation rules.
+    
+    The identity map trivially satisfies both rules, so we have $g=\iter(\nil,\cons)$. We have $f$-$\nil$-$\beta$ by applying $\App$-$\nil$-$\beta$:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}[xshift=-4.5cm]
+                \node[operator,inner sep=1pt] (f) at (0,0) {$f$};
+                \node[operator] (nil) at (-1.5,0) {$\nil$};
+
+                \node (out) at ($(f.east)+(1,0)$) {};
+
+                \draw[blue] (nil) -- node[inputwire] {} (f);
+                \draw[blue] (f) -- node[inputwire] {} (out);
+            \end{scope}
+            
+            \node at (-2.5,0) {$=$};
+
+            \begin{scope}
+                \node[operator] (op) at (0,0) {$\App$};
+                \node[anchor=east,operator] (in1) at ($(op.140)+(-1,0.4)$) {$\nil$};
+                \node[anchor=east,operator] (in2) at ($(op.220)+(-1,-0.4)$) {$\nil$};
+                \node (out) at ($(op.east)+(1,0)$) {};
+                \draw[blue] (in1.east) to[out=0,in=140] (op.140);
+                \draw[blue] (in2.east) to[out=0,in=220] (op.220);
+                \draw[blue] (op.east) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(in1)(op),
+                        diff,
+                        rotate=-20,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,0) {$=$};
+
+            \begin{scope}[xshift=4.5cm]
+                \node[operator] (op) at (0,0) {$\id$};
+                \node[anchor=east,operator] (in2) at ($(op.220)+(-1,-0.4)$) {$\nil$};
+                \node (out) at ($(op.east)+(1,0)$) {};
+                \draw[blue] (in2.east) to[out=0,in=220] (op.220);
+                \draw[blue] (op.east) -- (out);
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(op),
+                        result,
+                        inner sep=1.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (6.5,0) {$=$};
+
+            \begin{scope}[xshift=8.5cm]
+                \node[operator] (op) at (-1,0) {$\nil$};
+                \node (out) at ($(op.east)+(1,0)$) {};
+                \draw[blue] (op.east) -- (out);
+            \end{scope}
+        \end{tikzpicture}%
+    \end{equation*}
+    and similarly, $f$-$\cons$-$\beta$ follows from $\App$-$\cons$-$\beta$:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}[xshift=-5.5cm]
+                \node[operator,inner sep=1pt] (f) at (0,0) {$f$};
+                \node[operator] (cons) at (-1.5,0) {$\cons$};
+
+                \node (in1) at ($(cons.140)+(-1,0.2)$) {};
+                \node (in2) at ($(cons.220)+(-1,-0.2)$) {};
+                \node (out) at ($(f.east)+(0.8,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140] (cons.140);
+                \draw[blue] (in2) to[out=0,in=220]  (cons.220);
+                \draw[blue] (cons) -- node[above] {$L(A)$} (f);
+                \draw[blue] (f) -- (out);
+            \end{scope}
+            
+            \node at (-3.8,0) {$=$};
+
+            \begin{scope}
+                \node[operator] (app) at (0,0) {$\App$};
+                \node[anchor=east,operator] (cons) at ($(app.140)+(-1,0.4)$) {$\cons$};
+                \node[anchor=east,operator] (nil) at ($(app.220)+(-2.2,-0.8)$) {$\nil$};
+                
+                \node (in1) at ($(cons.140)+(-1,0.2)$) {};
+                \node (in2) at ($(cons.220)+(-1,-0.2)$) {};
+                \node (out) at ($(app.east)+(0.8,0)$) {};
+
+                \draw[magenta] (in1.east) to[out=0,in=140] (cons.140);
+                \draw[blue] (in2.east) to[out=0,in=220] (cons.220);
+                \draw[blue] (cons.east) to[out=0,in=140] (app.140);
+                \draw[blue] (nil.east) to[out=0,in=220] (app.220);
+                \draw[blue] (app.east) -- (out);
+                
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(cons)(app),
+                        diff,
+                        rotate=-20,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (1.8,0) {$=$};
+
+            \begin{scope}[xshift=5.5cm]
+                \node[operator] (cons) at (0,0) {$\cons$};
+                \node[anchor=east,operator] (app) at ($(cons.220)+(-1,-0.4)$) {$\App$};
+                \node[anchor=east,operator] (nil) at ($(app.220)+(-0.6,-0.2)$) {$\nil$};
+
+                \node (in2) at ($(app.140)+(-1.2,0.2)$) {};
+                \node (in1) at ($(in2 |- cons.140)+(0,0.6)$) {};
+                \node (out) at ($(cons.east)+(0.8,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140](cons.140);
+                \draw[blue] (in2) to[out=0,in=140] (app.140);
+                \draw[blue] (nil) to[out=0,in=220] (app.220);
+                \draw[blue] (app) to[out=0,in=220] (cons.220);
+                \draw[blue] (cons) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(cons)(app),
+                        result,
+                        rotate=20,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (7.3,0) {$=$};
+
+            \begin{scope}[xshift=10.2cm]
+                \node[operator] (cons) at (0,0) {$\cons$};
+                \node[operator] (f) at ($(cons.220)+(-1,-0.4)$) {$f$};
+
+                \node (in2) at ($(f.west)+(-0.8,0)$) {};
+                \node (in1) at ($(in2 |- cons.140) + (0,0.4)$) {};
+                \node (out) at ($(cons.east)+(0.8,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140] (cons.140);
+                \draw[blue] (in2) -- (f);
+                \draw[blue] (f) to[out=0,in=220] (cons.220);
+                \draw[blue] (cons) -- (out);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+    and hence $f=\iter(\nil,\cons)=g$.
+    
+    For associativity, let $f,g:L(A)\otimes L(A)\otimes L(A)\to L(A)$ be the two maps below:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}
+                \node[operator,fill=Appbg] (app1) at (0,0) {$\App$};
+                \node[anchor=east,operator,fill=Appbg] (app2) at ($(app1.220)+(-1,-0.4)$) {$\App$};
+
+                \node (in2) at ($(app2.140)+(-1,0.2)$) {};
+                \node (in1) at ($(in2 |- app1.140)+(0,0.6)$) {};
+                \node (in3) at ($(app2.220)+(-1,-0.2)$) {};
+                \node (out) at ($(app1.east)+(1,0)$) {};
+
+                \draw[blue] (in1) to[out=0,in=140] node[inputwire,pos=0.1,sloped=false] {$L(A)$} (app1.140);
+                \draw[blue] (in2) to[out=0,in=140] node[inputwire,sloped=false] {$L(A)$} (app2.140);
+                \draw[blue] (in3) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (app2.220);
+                \draw[blue] (app1) -- (out) node[outputwire] {$L(A)$};
+                \draw[blue] (app2) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$L(A)$} (app1.220);
+                
+                \node (fill) at ($(app1.220)+(+1,-0.4)$) {};
+            \end{scope}
+            \begin{scope}[xshift=7.5cm]
+                \node[operator,fill=Appbg] (app1) at (0,0) {$\App$};
+                \node[anchor=east,operator,fill=Appbg] (app2) at ($(app1.140)+(-1,0.4)$) {$\App$};
+
+                \node (in1) at ($(app2.140)+(-1,0.2)$) {};
+                \node (in2) at ($(app2.220)+(-1,-0.2)$) {};
+                \node (in3) at ($(in1 |- app1.220)+(0,-0.6)$) {};
+                \node (out) at ($(app1.east)+(1,0)$) {};
+
+                \draw[blue] (in1) to[out=0,in=140] node[inputwire,sloped=false] {$L(A)$} (app2.140);
+                \draw[blue] (in2) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (app2.220);
+                \draw[blue] (in3) to[out=0,in=220] node[inputwire,pos=0.1,below,sloped=false] {$L(A)$} (app1.220);
+                \draw[blue] (app1) -- (out) node[outputwire] {$L(A)$};
+                \draw[blue] (app2) to[out=0,in=140] node[inputwire,pos=0.5,yshift=2pt,sloped=false] {$L(A)$} (app1.140);
+
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+    We claim that both maps are equal to $\iter(\App,\cons)$. We have $\nil$-$\beta$ for both since $\App$ computes on $\nil$ in the left argument. In detail, for $f$:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}
+                \node[operator] (app2) at (0,0) {$\App$};
+                \node[anchor=east,operator] (app1) at ($(app2.220)+(-1,-0.4)$) {$\App$};
+                \node[anchor=east,operator] (nil) at ($(app2.140)+(-2.2,0.8)$) {$\nil$};
+                
+                \node (in1) at ($(app1)+(-1.3,-0.4)$) {};
+                \node (in2) at ($(app1)+(-1.3,0.4)$) {};
+                \node (out) at ($(app2.east)+(1,0)$) {};
+
+                \draw[blue] (nil.east) to[out=0,in=140] (app2.140);
+                \draw[blue] (in1.east) to[out=0,in=220] (app1.220);
+                \draw[blue] (in2.east) to[out=0,in=140] (app1.140);
+                \draw[blue] (app1.east) to[out=0,in=220] (app2.220);
+                \draw[blue] (app2.east) -- (out) ;
+                
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(nil)(app2),
+                        diff,
+                        rotate=-20,
+                        inner sep=-6pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,0) {$=$};
+
+            \begin{scope}[xshift=5.5cm]
+                \node[operator] (app2) at (0,0) {$\id$};
+                \node[anchor=east,operator] (app1) at ($(app2.220)+(-1,-0.4)$) {$\App$};
+
+                \node (in1) at ($(app1)+(-1.3,-0.4)$) {};
+                \node (in2) at ($(app1)+(-1.3,0.4)$) {};
+                \node (out) at ($(app2.east)+(1,0)$) {};
+
+                \draw[blue] (in1.east) to[out=0,in=220] (app1.220);
+                \draw[blue] (in2.east) to[out=0,in=140] (app1.140);
+                \draw[blue] (app1.east) to[out=0,in=220] (app2.220);
+                \draw[blue] (app2.east) -- (out);
+                
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(app2),
+                        result,
+                        inner sep=1.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (7.5,0) {$=$};
+
+            \begin{scope}[xshift=9.5cm]
+                \node[operator] (op) at (0,0) {$\App$};
+
+                \node (in1) at ($(op.140)+(-1,0.4)$) {};
+                \node (in2) at ($(op.220)+(-1,-0.4)$) {};
+                \node (out) at ($(op.east)+(1,0)$) {};
+
+                \draw[blue] (in1.east) to[out=0,in=140] (op.140);
+                \draw[blue] (in2.east) to[out=0,in=220] (op.220);
+                \draw[blue] (op.east) -- (out);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+    and for $g$:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}
+                \node[operator,fill=Appbg] (app1) at (0,0) {$\App$};
+                \node[operator,fill=Appbg] (app2) at ($(app1.140)+(-1.2,0.4)$) {$\App$};
+                \node[operator] (nil) at ($(app2.140)+(-1,0.2)$) {$\nil$};
+
+                \node (in1) at ($(app2.220)+(-1,-0.2)$) {};
+                \node (in2) at ($(app1.220)+(-2.5,-0.6)$) {};
+                \node (out) at ($(app1.east)+(1,0)$) {};
+
+                \draw[blue] (nil.east) to[out=0,in=140] (app2.140);
+                \draw[blue] (in1.east) to[out=0,in=220] (app2.220);
+                \draw[blue] (in2) to[out=0,in=220] (app1.220);
+                \draw[blue] (app1.east) -- (out);
+                \draw[blue] (app2.east) to[out=0,in=140] (app1.140);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(nil)(app2),
+                        diff,
+                        rotate=-20,
+                        inner sep=-1.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,0) {$=$};
+
+            \begin{scope}[xshift=5.5cm]
+                
+                \node[operator,fill=Appbg] (app1) at (0,0) {$\App$};
+                \node[operator] (app2) at ($(app1.140)+(-1.2,0.4)$) {$\id$};
+
+                \node (in1) at ($(app2.220)+(-1,-0.2)$) {};
+                \node (in2) at ($(app1.220)+(-2.5,-0.6)$) {};
+                \node (out) at ($(app1.east)+(1,0)$) {};
+
+                \draw[blue] (in1.east) to[out=0,in=220] (app2.220);
+                \draw[blue] (in2) to[out=0,in=220] (app1.220);
+                \draw[blue] (app1.east) -- (out) ;
+                \draw[blue] (app2.east) to[out=0,in=140] (app1.140);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(app2),
+                        result,
+                        inner sep=1.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (7.5,0) {$=$};
+
+            \begin{scope}[xshift=9.5cm]
+                \node[operator] (app) at (0,0) {$\App$};
+
+                \node (in1) at ($(app.140)+(-1,0.4)$) {};
+                \node (in2) at ($(app.220)+(-1,-0.4)$) {};
+                \node (out) at ($(app.east)+(1,0)$) {};
+
+                \draw[blue] (in1.east) to[out=0,in=140] (op.140);
+                \draw[blue] (in2.east) to[out=0,in=220] (op.220);
+                \draw[blue] (app.east) -- (out);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+    Similarly, we have $\cons$-$\beta$ since $\App$ also computes on $\cons$. For $f$:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}
+                \node[operator,fill=Appbg] (op) at (0,0) {$\App$};
+                \node[operator,fill=consbg] (op1) at ($(op.140)+(-1.5,0.6)$) {$\cons$};
+                \node[operator,fill=Appbg] (op2) at ($(op.220)+(-1.5,-0.6)$) {$\App$};
+            
+                \node (in11) at ($(op1)+(-1.3,0.4)$) {};
+                \node (in12) at ($(op1)+(-1.3,-0.4)$) {};
+                \node (in21) at ($(op2)+(-1.3,0.4)$) {};
+                \node (in22) at ($(op2)+(-1.3,-0.4)$) {};
+                \node (out) at ($(op.east)+(1,0)$) {};
+
+                % \draw[blue] (op3.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$L(A)$} (op1.220);
+
+                \draw[magenta] (in11) to[out=0,in=140] node[inputwire,sloped=false] {} (op1.140);
+                \draw[blue] (in12) to[out=0,in=220] node[inputwire,below,sloped=false] {} (op1.220);
+                \draw[blue] (in21) to[out=0,in=140] node[inputwire,sloped=false] {} (op2.140);
+                \draw[blue] (in22) to[out=0,in=220] node[inputwire,below,sloped=false] {} (op2.220);
+
+                \draw[blue] (op1.east) to[out=0,in=140] node[inputwire,below,sloped=false] {} (op.140);
+                \draw[blue] (op2.east) to[out=0,in=220] node[inputwire,below,sloped=false] {} (op.220);
+
+                \draw[blue] (op.east) -- (out) node[outputwire] {};
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(op1)(op),
+                        diff,
+                        rotate=-20,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+            
+            \node at (2,0) {$=$};
+            
+            % \begin{scope}[xshift=5.5cm]
+            %     \node[operator,fill=Appbg] (op) at (0,0) {$\App$};
+            %     \node[operator,fill=consbg] (op1) at ($(op.40)+(1.2,0.6)$) {$\cons$};
+            %     \node[operator,fill=Appbg] (op2) at ($(op.220)+(-1.2,-0.6)$) {$\App$};
+
+            %     \node (in21) at ($(op2)+(-1.3,0.4)$) {};
+            %     \node (in22) at ($(op2)+(-1.3,-0.4)$) {};
+            %     \node (out) at ($(op1.east)+(1,0)$) {};
+
+            %     \draw[magenta] (in21 |- 0,1.2) to[out=0,in=140,in looseness=0.2] node[inputwire,sloped=false] {} (op1.140);
+            %     \draw[blue] (in21 |- 0,0.4) to[out=0,in=140,in looseness=0.4] node[inputwire,below,sloped=false] {} (op.140);
+            %     \draw[blue] (op.east) to[out=0,in=220] node[inputwire,below,sloped=false] {} (op1.220);
+            %     \draw[blue] (in21 |- in21) to[out=0,in=140] node[inputwire,sloped=false] {} (op2.140);
+            %     \draw[blue] (in22 |- in22) to[out=0,in=220] node[inputwire,below,sloped=false] {} (op2.220);
+
+            %     \draw[blue] (op2.east) to[out=0,in=220] node[inputwire,below,sloped=false] {} (op.220);
+
+            %     \draw[blue] (op1.east) -- (out.west) node[outputwire] {};
+            %     \begin{scope}[on background layer]
+            %         \node[
+            %             fit=(op1)(op),
+            %             result,
+            %             rotate=20,
+            %             inner sep=-3pt,
+            %         ] {};
+            %         % \node[
+            %         %     fit=(op2)(op),
+            %         %     rectangle,
+            %         %     rounded corners,
+            %         %     draw=black!50,
+            %         %     inner sep=6pt,
+            %         % ] {};
+            %         % \node at (0.2,-1) {$f$};
+            %     \end{scope}
+            % \end{scope}
+            \begin{scope}[xshift=5.5cm,yshift=-0.3cm]
+                \node[operator,fill=Appbg] (op) at (0,0) {$\App$};
+                \node[operator,fill=consbg] (op1) at ($(op.40)+(1.2,0.3)$) {$\cons$};
+                \node[operator,fill=Appbg] (op2) at ($(op.220)+(-1.2,-0.3)$) {$\App$};
+
+                \node (in21) at ($(op2)+(-1.3,0.4)$) {};
+                \node (in22) at ($(op2)+(-1.3,-0.4)$) {};
+                \node (out) at ($(op1.east)+(1,0)$) {};
+
+                \draw[magenta] (in21 |- 0,1.5) to[out=0,in=140] node[inputwire,sloped=false] {} (op1.140);
+                \draw[blue] (in21 |- 0,0.7) to[out=0,in=140] node[inputwire,below,sloped=false] {} (op.140);
+                \draw[blue] (op.east) to[out=0,in=220] node[inputwire,below,sloped=false] {} (op1.220);
+                \draw[blue] (in21 |- in21) to[out=0,in=140] node[inputwire,sloped=false] {} (op2.140);
+                \draw[blue] (in22 |- in22) to[out=0,in=220] node[inputwire,below,sloped=false] {} (op2.220);
+
+                \draw[blue] (op2.east) to[out=0,in=220] node[inputwire,below,sloped=false] {} (op.220);
+
+                \draw[blue] (op1.east) -- (out.west) node[outputwire] {};
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(op1)(op),
+                        result,
+                        rotate=15,
+                        inner sep=-3pt,
+                    ] {};
+                    % \node[
+                    %     fit=(op2)(op),
+                    %     rectangle,
+                    %     rounded corners,
+                    %     draw=black!50,
+                    %     inner sep=6pt,
+                    % ] {};
+                    % \node at (0.2,-1) {$f$};
+                \end{scope}
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+    and for $g$, we push the $\cons$ through $\App$ with two computations:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}[yshift=0.3cm]
+                \node[operator,fill=Appbg] (op) at (0,0) {$\App$};
+                \node[operator,fill=consbg] (op1) at ($(op.140)+(-1.2,0.3)$) {$\cons$};
+                \node[operator,fill=Appbg] (op2) at ($(op.340)+(1.2,-0.3)$) {$\App$};
+
+                \node (in1) at ($(op1.140)+(-1,0.2)$) {};
+                \node (in2) at ($(op1.220)+(-1,-0.2)$) {};
+                \node (out) at ($(op2.east)+(1,0)$) {};
+
+                \draw[magenta] (in1 |- in1) to[out=0,in=140] node[inputwire] {} (op1.140);
+                \draw[blue] (in2 |- in2) to[out=0,in=220] node[inputwire] {} (op1.220);
+                \draw[blue] (in2 |- 0,-0.7) to[out=0,in=220] node[inputwire] {} (op.220);
+                \draw[blue] (in2 |- 0,-1.5) to[out=0,in=220] node[inputwire] {} (op2.220);
+                
+                \draw[blue] (op1.east) to[out=0,in=140] node[inputwire] {} (op.140);
+                \draw[blue] (op.east) to[out=0,in=140] node[inputwire] {} (op2.140);
+                \draw[blue] (op2.east) -- (out.west) node[outputwire] {};
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(op1)(op),
+                        diff,
+                        rotate=-15,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+                
+            \node at (3,0) {$=$};
+            
+            \begin{scope}[xshift=6.2cm,yshift=0.5cm]
+                \node[operator,fill=consbg] (op) at (0,0) {$\cons$};
+                \node[operator,fill=Appbg] (op1) at ($(op.220)+(-1.2,-0.3)$) {$\App$};
+                \node[operator,fill=Appbg] (op2) at ($(op.340)+(1.2,-0.3)$) {$\App$};
+
+                \node (in1) at ($(op1.140)+(-1,0.2)$) {};
+                \node (in2) at ($(op1.220)+(-1,-0.2)$) {};
+                \node (out) at ($(op2.east)+(1,0)$) {};
+
+                \draw[magenta] (in2 |- 0,0.7) to[out=0,in=140] node[inputwire] {} (op.140);
+                \draw[blue] (in1 |- in1) to[out=0,in=140] node[inputwire] {} (op1.140);
+                \draw[blue] (in2 |- in2) to[out=0,in=220] node[inputwire] {} (op1.220);
+                \draw[blue] (in2 |- 0,-1.7) to[out=0,in=220] node[inputwire] {} (op2.220);
+                
+                \draw[blue] (op1.east) to[out=0,in=220] node[inputwire] {} (op.220);
+                \draw[blue] (op.east) to[out=0,in=140] node[inputwire] {} (op2.140);
+                \draw[blue] (op2.east) -- (out.west) node[outputwire] {};
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(op1)(op),
+                        result,
+                        rotate=15,
+                        inner sep=-3pt,
+                    ] {};
+                    \node[
+                        fit=(op)(op2),
+                        diff,
+                        rotate=-15,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (9.4,0) {$=$};
+
+            \begin{scope}[xshift=12.6cm,yshift=-0.5cm]
+                \node[operator,fill=Appbg] (op) at (0,0) {$\App$};
+                \node[operator,fill=Appbg] (op1) at ($(op.140)+(-1.2,0.3)$) {$\App$};
+                \node[operator,fill=consbg] (op2) at ($(op.40)+(1.2,0.3)$) {$\cons$};
+
+                \node (in1) at ($(op1.140)+(-1,0.2)$) {};
+                \node (in2) at ($(op1.220)+(-1,-0.2)$) {};
+                \node (out) at ($(op2.east)+(1,0)$) {};
+
+                \draw[magenta] (in2 |- 0,1.7) to[out=0,in=140] node[inputwire] {} (op2.140);
+                \draw[blue] (in1 |- in1) to[out=0,in=140] node[inputwire] {} (op1.140);
+                \draw[blue] (in2 |- in2) to[out=0,in=220] node[inputwire] {} (op1.220);
+                \draw[blue] (in2 |- 0,-0.7) to[out=0,in=220] node[inputwire] {} (op.220);
+                
+                \draw[blue] (op1.east) to[out=0,in=140] node[inputwire] {} (op.140);
+                \draw[blue] (op.east) to[out=0,in=220] node[inputwire] {} (op2.220);
+                \draw[blue] (op2.east) -- (out.west) node[outputwire] {};
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(op)(op2),
+                        result,
+                        rotate=20,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+    Hence $f=\iter(\App,\cons)=g$.
+
+    It remains to show the unique extension property. Let $f:A\to B$ be a morphism, with $(B,e,m)$ a monoid object. We define the extension $f^\sharp:L(A)\to B$ as the mediating map $\iter(n,c)$, where $n:1\rightarrow B$ and $c:A\otimes B\rightarrow B$ are:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}
+                \node[operator] (op) at (-1,0) {$e$};
+                \node (out) at ($(op.east)+(1,0)$) {};
+                \draw[green] (op.east) -- node[outputwire] {$B$} (out);
+            \end{scope}
+            \begin{scope}[xshift=6cm]
+                \node[operator] (m) at (0,0) {$m$};
+                \node[operator] (f) at ($(m.140)+(-1.5,0.4)$) {$f$};
+                \node (in1) at ($(f.west)+(-1,0)$) {};
+                \node (in2) at ($(in1 |- m.220) + (0,-0.4)$) {};
+                \node (out) at ($(m.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) -- node[inputwire] {$A$} (f);
+                \draw[green] (f) to[out=0,in=140] node[above] {$B$} (m.140);
+                \draw[green] (in2) to[out=0,in=220,in looseness=0.6] node[inputwire,pos=0.1,below] {$B$} (m.220);
+                \draw[green] (m) -- node[inputwire] {$B$} (out);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+    and the unit map $\eta:A\to L(A)$ as:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \node[operator,fill=consbg] (op) at (0,0) {$\cons$};
+            \node (in1) at ($(op.140)+(-1.5,0.4)$) {};
+            \node[anchor=east,operator] (in2) at ($(op.220)+(-1,-0.4)$) {$\nil$};
+            \node (out) at ($(op.east)+(1,0)$) {};
+            \draw[magenta] (in1) to[out=0,in=140] node[inputwire,sloped=false] {$A$} (op.140);
+            \draw[blue] (in2.east) to[out=0,in=220] node[inputwire,below,pos=0.4,sloped=false] {$L(A)$} (op.220);
+            \draw[blue] (op.east) -- (out) node[outputwire] {$L(A)$};
+        \end{tikzpicture}
+    \end{equation*}
+    Note that $\App$ computes on $\eta$ in the left argument as:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}
+                \node[operator] (app) at (0,0) {$\App$};
+                \node[operator] (eta) at ($(app.140)+(-1.2,0.4)$) {$\eta$};
+                \node (in1) at ($(eta.west)+(-1,0)$) {};
+                \node (in2) at ($(in1 |- app.220) + (0,-0.4)$) {};
+                \node (out) at ($(app.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) -- (eta);
+                \draw[blue] (eta) to[out=0,in=140] (app.140);
+                \draw[blue] (in2) to[out=0,in=220,in looseness=0.6] (app.220);
+                \draw[blue] (app) -- (out);
+            \end{scope}
+            \node at (2,0) {$=$};
+            \begin{scope}[xshift=4.2cm]
+                \node[operator,fill=consbg] (op) at (0,0) {$\cons$};
+                \node (in1) at ($(op.140)+(-1.2,0.4)$) {};
+                \node (in2) at ($(op.220)+(-1.2,-0.4)$) {};
+                \node (out) at ($(op.east)+(1,0)$) {};
+                \draw[magenta] (in1) to[out=0,in=140] (op.140);
+                \draw[blue] (in2.east) to[out=0,in=220] (op.220);
+                \draw[blue] (op.east) -- (out);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+    since $\App$-$\cons$-$\beta$ commutes the $\App$ next to the $\nil$, from which it reduces to the identity by $\App$-$\nil$-$\beta$. (See Lemma \ref{lem:eta-app}.)
+
+    We verify that $f^\sharp\circ\eta=f$:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}
+                \node[operator,inner sep=1pt] (fs) at (0,0) {$f^\sharp$};
+                \node[operator] (eta) at (-1.5,0) {$\eta$};
+
+                \node (in) at ($(eta.west)+(-1,0)$) {};
+                \node (out) at ($(fs.east)+(1,0)$) {};
+
+                \draw[magenta] (in) -- node[inputwire] {} (eta);
+                \draw[blue] (eta) -- node[inputwire] {} (fs);
+                \draw[green] (fs) -- node[inputwire] {} (out);
+            \end{scope}
+            
+            \node at (2,0) {$=$};
+            
+            \begin{scope}[xshift=6cm]
+                \node[operator,inner sep=1pt] (fs) at (0,0) {$f^\sharp$};
+                \node[operator] (cons) at (-1.5,0) {$\cons$};
+
+                \node (in) at ($(cons.140)+(-1.3,0.4)$) {};
+                \node[operator] (nil) at ($(cons.220)+(-1,-0.4)$) {$\nil$};
+                \node (out) at ($(fs.east)+(1,0)$) {};
+
+                \draw[magenta] (in) to[out=0,in=140] node[inputwire] {} (cons.140);
+                \draw[blue] (nil) to[out=0,in=220] node[inputwire] {} (cons.220);
+                \draw[blue] (cons) -- node[inputwire] {} (fs);
+                \draw[green] (fs) -- node[inputwire] {} (out);
+
+                \node[anchor=west] at ($(out)+(0.2,0)$) {$f^\sharp$-$\cons$-$\beta$};
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(cons)(fs),
+                        diff,
+                        minimum height=0.9cm,
+                        inner sep=-4.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+            
+            \node at (2,-2.5) {$=$};
+            
+            \begin{scope}[xshift=6cm,yshift=-2.5cm]
+                \node[operator] (m) at (0,0) {$m$};
+                \node[operator,inner sep=1pt] (fs) at ($(m.220)+(-1.3,-0.4)$) {$f^\sharp$};
+                \node[operator] (f) at ($(m.140)+(-1.3,0.4)$) {$f$};
+                \node[operator] (nil) at (nil |- fs) {$\nil$};
+
+                \node (in) at (in |- f) {};
+                \node (out) at (out |- m) {};
+
+                \draw[magenta] (in) -- (f);
+                \draw[green] (f) to[out=0,in=140] (m.140);
+                \draw[blue] (nil) -- (fs);
+                \draw[green] (fs) to[out=0,in=220] (m.220);
+                \draw[green] (m) -- (out);
+
+                \node[anchor=west] at ($(out)+(0.2,0)$) {$f^\sharp$-$\nil$-$\beta$};
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(nil)(fs),
+                        diff,
+                        minimum height=0.9cm,
+                        inner sep=-4.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,-5) {$=$};
+
+            \begin{scope}[xshift=6cm,yshift=-5cm]
+                \node[operator] (m) at (0,0) {$m$};
+                \node[operator,inner sep=1pt] (e) at ($(m.220)+(-1.3,-0.4)$) {$e$};
+                \node[operator] (f) at ($(m.140)+(-1.3,0.4)$) {$f$};
+
+                \node (in) at (in |- f) {};
+                \node (out) at (out |- m) {};
+
+                \draw[magenta] (in) -- (f);
+                \draw[green] (f) to[out=0,in=140] (m.140);
+                \draw[green] (e) to[out=0,in=220] (m.220);
+                \draw[green] (m) -- (out);
+
+                \node[anchor=west] at ($(out)+(0.2,0)$) {$B$-right unit};
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(e),
+                        result,
+                        inner sep=1.5pt,
+                    ] {};
+                    \node[
+                        fit=(e)(m),
+                        diff,
+                        rotate=20,
+                        inner sep=-1.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,-7.5) {$=$};
+
+            \begin{scope}[xshift=6cm,yshift=-7.75cm]
+                \node[operator] (id) at (0,0) {$\id$};
+                \node[operator] (f) at ($(id.140)+(-1.3,0.4)$) {$f$};
+
+                \node (in) at (in |- f) {};
+                \node (out) at (out |- id) {};
+
+                \draw[magenta] (in) -- (f);
+                \draw[green] (f) to[out=0,in=140] (id.140);
+                \draw[green] (id) -- (out);
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(id),
+                        result,
+                        inner sep=1.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,-9) {$=$};
+
+            \begin{scope}[xshift=6cm,yshift=-9cm]
+                \node[operator] (f) at (-1.55,0) {$f$};
+
+                \node (in) at (in |- f) {};
+                \node (out) at (out |- f) {};
+
+                \draw[magenta] (in) -- (f);
+                \draw[green] (f) -- (out);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+    Next, we check that $f^\sharp$ is a monoid homomorphism.
+    
+    Since $f^\sharp=\iter(e,\ldots)$, $f^\sharp$ computes on $\nil$ to $e$ and hence preserves the monoid identity. For the homomorphism property, let $g,h:L(A)\otimes L(A)\to B$ be the following maps:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}
+                \node[operator,inner sep=1pt] (fs) at (0,0) {$f^\sharp$};
+                \node[operator] (app) at (-1.5,0) {$\App$};
+
+                \node (in1) at ($(app.140)+(-1.3,0.4)$) {};
+                \node (in2) at ($(app.220)+(-1.3,-0.4)$) {};
+                \node (out) at ($(fs.east)+(1,0)$) {};
+
+                \draw[blue] (in1) to[out=0,in=140] node[inputwire] {$L(A)$} (app.140);
+                \draw[blue] (in2) to[out=0,in=220] node[inputwire,below] {$L(A)$} (app.220);
+                \draw[blue] (app) -- node[above] {$L(A)$} (fs);
+                \draw[green] (fs) -- node[outputwire] {$B$} (out);
+            \end{scope}
+            \begin{scope}[xshift=6cm]
+                \node[operator] (m) at (0,0) {$m$};
+                \node[operator,inner sep=1pt] (fs1) at ($(m.140)+(-1.3,0.4)$) {$f^\sharp$};
+                \node[operator,inner sep=1pt] (fs2) at ($(m.220)+(-1.3,-0.4)$) {$f^\sharp$};
+
+                \node (in1) at ($(fs1.west)+(-1,0)$) {};
+                \node (in2) at ($(fs2.west)+(-1,0)$) {};
+                \node (out) at ($(m.east)+(1,0)$) {};
+
+                \draw[blue] (in1) -- node[inputwire] {$L(A)$} (fs1);
+                \draw[blue] (in2) -- node[inputwire,below] {$L(A)$} (fs2);
+                \draw[green] (fs1) to[out=0,in=140] node[inputwire] {$B$} (m.140);
+                \draw[green] (fs2) to[out=0,in=220] node[inputwire,below] {$B$} (m.220);
+                \draw[green] (m) -- node[outputwire] {$B$} (out);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+    We show that these maps are both the iterator $\iter(f^\sharp,c)$, where $c$ is the same list algebra map as in the definition of $f^\sharp$ above. We have $g$-$\nil$-$\beta$ by $\App$-$\nil$-$\beta$, and $h$-$\nil$-$\beta$ by $f^\sharp$-$\nil$-$\beta$ and left unit for $B$:
+    \begin{equation*}
+        \begin{tikzpicture}[baseline=(g)]
+            \begin{scope}
+                \node[operator] (g) at (0,0) {$g$};
+                \node[anchor=east,operator] (nil) at ($(g.140)+(-1,0.4)$) {$\nil$};
+                \node (in) at ($(g.220)+(-1.5,-0.4)$) {};
+                \node (out) at ($(g.east)+(1,0)$) {};
+                \draw[blue] (nil.east) to[out=0,in=140] (g.140);
+                \draw[blue] (in) to[out=0,in=220] (g.220);
+                \draw[green] (g.east) -- (out);
+            \end{scope}
+
+            \node at (2,0) {$=$};
+
+            \begin{scope}[xshift=6cm]
+                \node[operator,inner sep=1pt] (fs) at (0,0) {$f^\sharp$};
+                \node[operator] (app) at (-1.5,0) {$\App$};
+
+                \node[anchor=east,operator] (nil) at ($(app.140)+(-1,0.4)$) {$\nil$};
+                \node (in) at ($(app.220)+(-1.5,-0.4)$) {};
+                \node (out) at ($(fs.east)+(1,0)$) {};
+
+                \draw[blue] (nil) to[out=0,in=140] (app.140);
+                \draw[blue] (in) to[out=0,in=220] (app.220);
+                \draw[blue] (app) -- (fs);
+                \draw[green] (fs) -- (out);
+                
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(nil)(app),
+                        diff,
+                        rotate=-20,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,-2) {$=$};
+
+            \begin{scope}[xshift=6cm,yshift=-2cm]
+                \node[operator,inner sep=1pt] (fs) at (0,0) {$f^\sharp$};
+                \node[operator] (id) at (-1.5,0) {$\id$};
+
+                \node (in) at ($(in |- id.220)+(0,-0.4)$) {};
+                \node (out) at (out |- fs) {};
+
+                \draw[blue] (in) to[out=0,in=220] (id.220);
+                \draw[blue] (id) -- (fs);
+                \draw[green] (fs) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(id),
+                        result,
+                        inner sep=1.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,-4) {$=$};
+
+            \begin{scope}[xshift=6cm,yshift=-4cm]
+                \node[operator,inner sep=1pt] (fs) at (0,0) {$f^\sharp$};
+
+                \node (in) at (in |- fs) {};
+                \node (out) at (out |- fs) {};
+
+                \draw[blue] (in) -- (fs);
+                \draw[green] (fs) -- (out);
+            \end{scope}
+        \end{tikzpicture}
+        \qquad % ===============================================================
+        \begin{tikzpicture}[baseline=(h)]
+            \begin{scope}
+                \node[operator] (h) at (0,0) {$h$};
+                \node[anchor=east,operator] (nil) at ($(h.140)+(-1,0.4)$) {$\nil$};
+                \node (in) at ($(h.220)+(-1.5,-0.4)$) {};
+                \node (out) at ($(h.east)+(1,0)$) {};
+                \draw[blue] (nil.east) to[out=0,in=140] (h.140);
+                \draw[blue] (in) to[out=0,in=220] (h.220);
+                \draw[green] (h.east) -- (out);
+            \end{scope}
+
+            \node at (2,0) {$=$};
+
+            \begin{scope}[xshift=6cm]
+                \node[operator] (m) at (0,0) {$m$};
+                \node[operator,inner sep=1pt] (fs1) at ($(m.140)+(-1.3,0.4)$) {$f^\sharp$};
+                \node[operator,inner sep=1pt] (fs2) at ($(m.220)+(-1.3,-0.4)$) {$f^\sharp$};
+                \node[operator] (nil) at ($(fs1.west)+(-1,0)$) {$\nil$};
+
+                \node (in) at ($(fs2.west)+(-1.3,0)$) {};
+                \node (out) at ($(m.east)+(1,0)$) {};
+
+                \draw[blue] (nil) -- (fs1);
+                \draw[blue] (in) -- (fs2);
+                \draw[green] (fs1) to[out=0,in=140] (m.140);
+                \draw[green] (fs2) to[out=0,in=220] (m.220);
+                \draw[green] (m) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(fs1)(nil),
+                        diff,
+                        minimum height=0.9cm,
+                        inner sep=-4.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,-2.5) {$=$};
+
+            \begin{scope}[xshift=6cm,yshift=-2.5cm]
+                \node[operator] (m) at (0,0) {$m$};
+                \node[operator,inner sep=1pt] (e) at ($(m.140)+(-1.3,0.4)$) {$e$};
+                \node[operator,inner sep=1pt] (fs) at ($(m.220)+(-1.3,-0.4)$) {$f^\sharp$};
+
+                \node (in) at (in |- fs) {};
+                \node (out) at (out |- m) {};
+
+                \draw[blue] (in) -- (fs);
+                \draw[green] (e) to[out=0,in=140] (m.140);
+                \draw[green] (fs) to[out=0,in=220] (m.220);
+                \draw[green] (m) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(e),
+                        result,
+                        inner sep=1.5pt,
+                    ] {};
+                    \node[
+                        fit=(e)(m),
+                        diff,
+                        rotate=-20,
+                        inner sep=-1.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,-4.5) {$=$};
+
+            \begin{scope}[xshift=6cm,yshift=-4.25cm]
+                \node[operator] (id) at (0,0) {$id$};
+                \node[operator,inner sep=1pt] (fs) at ($(id.220)+(-1.3,-0.4)$) {$f^\sharp$};
+
+                \node (in) at (in |- fs) {};
+                \node (out) at (out |- id) {};
+
+                \draw[blue] (in) -- (fs);
+                \draw[green] (fs) to[out=0,in=220] (id.220);
+                \draw[green] (id) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(id),
+                        result,
+                        inner sep=1.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,-5.75) {$=$};
+
+            \begin{scope}[xshift=6cm,yshift=-5.75cm]
+                \node[operator,inner sep=1pt] (fs) at (fs |- 0,0) {$f^\sharp$};
+
+                \node (in) at (in |- fs) {};
+                \node (out) at (out |- fs) {};
+
+                \draw[blue] (in) -- (fs);
+                \draw[green] (fs) -- (out);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+    For $\cons$-$\beta$ we have the computations:
+    \begin{equation*}
+        \begin{tikzpicture}[baseline=(g),scale=0.8]
+            \begin{scope}
+                \node[operator] (g) at (0,0) {$g$};
+                \node[anchor=east,operator,fill=consbg] (cons) at ($(g.140)+(-1,0.4)$) {$\cons$};
+                
+                \node (in1) at ($(cons.140)+(-1,0.2)$) {};
+                \node (in2) at ($(cons.220)+(-1,-0.2)$) {};
+                \node (in3) at ($(in1 |- g.220)+(0,-0.6)$) {};
+                \node (out) at ($(g.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140] (cons.140);
+                \draw[blue] (in2) to[out=0,in=220] (cons.220);
+                \draw[blue] (in3) to[out=0,in=220] (g.220);
+                \draw[blue] (cons) to[out=0,in=140] (g.140);
+                \draw[green] (g) -- (out);
+            \end{scope}
+
+            \node at (1.7,0) {$=$};
+
+            \begin{scope}[xshift=5.1cm]
+                \node[operator,fill=Appbg] (app) at (0,0) {$\App$};
+                \node[anchor=east,operator,fill=Appbg] (cons) at ($(app.140)+(-1,0.4)$) {$\cons$};
+                \node[operator,inner sep=1pt] (fs) at ($(app)+(1.5,0)$) {$f^\sharp$};
+                
+                \node (in1) at ($(cons.140)+(-1,0.2)$) {};
+                \node (in2) at ($(cons.220)+(-1,-0.2)$) {};
+                \node (in3) at ($(in1 |- app.220)+(0,-0.6)$) {};
+                \node (out) at ($(fs.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140] (cons.140);
+                \draw[blue] (in2) to[out=0,in=220] (cons.220);
+                \draw[blue] (in3) to[out=0,in=220] (app.220);
+                \draw[blue] (cons) to[out=0,in=140] (app.140);
+                \draw[blue] (app) -- (fs);
+                \draw[green] (fs) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(cons)(app),
+                        diff,
+                        rotate=-20,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (1.7,-2.5) {$=$};
+
+            \begin{scope}[xshift=5.1cm,yshift=-2.5cm]
+                \node[operator,fill=consbg] (cons) at (0,0) {$\cons$};
+                \node[anchor=east,operator,fill=consbg] (app) at ($(cons.220)+(-1,-0.4)$) {$\App$};
+                \node[operator,inner sep=1pt] (fs) at ($(cons)+(1.5,0)$) {$f^\sharp$};
+
+                \node (in1) at ($(in1 |- cons.140)+(0,0.6)$) {};
+                \node (in2) at ($(in1 |- app.140)+(0,0.2)$) {};
+                \node (in3) at ($(in1 |- app.220)+(0,-0.2)$) {};
+                \node (out) at (out |- fs) {};
+
+                \draw[magenta] (in1) to[out=0,in=140] (cons.140);
+                \draw[blue] (in2) to[out=0,in=140] (app.140);
+                \draw[blue] (in3) to[out=0,in=220] (app.220);
+                \draw[blue] (app) to[out=0,in=220] (cons.220);
+                \draw[blue] (cons) -- (fs);
+                \draw[green] (fs) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(cons)(app),
+                        result,
+                        rotate=20,
+                        inner sep=-3pt,
+                    ] {};
+                    \node[
+                        fit=(cons)(fs),
+                        diff,
+                        minimum height=0.8cm,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (1.7,-5) {$=$};
+
+            \begin{scope}[xshift=5.1cm,yshift=-5cm]
+                \node[operator] (m) at (fs |- 0,0) {$m$};
+                \node[operator,inner sep=1pt] (fs) at ($(cons |- m.220)+(0,-0.4)$) {$f^\sharp$};
+                \node[operator] (f) at ($(cons |- m.140)+(0,0.4)$) {$f$};
+                \node[operator,fill=consbg] (app) at (app |- fs) {$\App$};
+
+                \node (in1) at (in1 |- f) {};
+                \node (in2) at ($(in2 |- app.140)+(0,0.2)$) {};
+                \node (in3) at ($(in3 |- app.220)+(0,-0.2)$) {};
+                \node (out) at (out |- m) {};
+
+                \draw[magenta] (in1) -- (f);
+                \draw[blue] (in2) to[out=0,in=140] (app.140);
+                \draw[blue] (in3) to[out=0,in=220] (app.220);
+                \draw[green] (f) to[out=0,in=140] (m.140);
+                \draw[green] (fs) to[out=0,in=220] (m.220);
+                \draw[green] (m) -- (out);
+                \draw[blue] (app) -- (fs);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(f)(m),
+                        result,
+                        rotate=-25,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (1.7,-7.5) {$=$};
+
+            \begin{scope}[xshift=6.4cm,yshift=-7.5cm]
+                \node[operator] (m) at (m |- 0,0) {$m$};
+                \node[operator] (f) at ($(f |- m.140)+(0,0.4)$) {$f$};
+                \node[operator] (g) at ($(m.220)+(-2,-0.4)$) {$g$};
+
+                \node (in1) at (in1 |- f) {};
+                \node (in2) at ($(in2 |- g.140)+(0,0.2)$) {};
+                \node (in3) at ($(in3 |- g.220)+(0,-0.2)$) {};
+                \node (out) at (out |- m) {};
+
+                \draw[magenta] (in1) -- (f);
+                \draw[blue] (in2) to[out=0,in=140,in looseness=0.7] (g.140);
+                \draw[blue] (in3) to[out=0,in=220,in looseness=0.7] (g.220);
+                \draw[green] (f) to[out=0,in=140] (m.140);
+                \draw[green] (m) -- (out);
+                \draw[green] (g) to[out=0,in=220,in looseness=0.8] (m.220);
+            \end{scope}
+        \end{tikzpicture}
+        \qquad % ===============================================================
+        \begin{tikzpicture}[baseline=(h),scale=0.8]
+            \begin{scope}
+                \node[operator] (h) at (0,0) {$h$};
+                \node[operator,fill=consbg] (cons) at ($(h.140)+(-1.5,0.4)$) {$\cons$};
+                
+                \node (in1) at ($(cons.140)+(-1,0.2)$) {};
+                \node (in2) at ($(cons.220)+(-1,-0.2)$) {};
+                \node (in3) at ($(in1 |- h.220)+(0,-0.6)$) {};
+                \node (out) at ($(h.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140] (cons.140);
+                \draw[blue] (in2) to[out=0,in=220] (cons.220);
+                \draw[blue] (in3) to[out=0,in=220] (h.220);
+                \draw[blue] (cons) to[out=0,in=140] (h.140);
+                \draw[green] (h) -- (out);
+            \end{scope}
+
+            \node at (1.7,0) {$=$};
+
+            \begin{scope}[xshift=6.2cm]
+                \node[operator] (m) at (0,0) {$m$};
+                \node[operator,inner sep=1pt] (fs1) at ($(m.140)+(-1,0.4)$) {$f^\sharp$};
+                \node[operator,fill=consbg] (cons) at ($(fs1) + (-1.5,0)$) {$\cons$};
+                \node[operator,inner sep=1pt] (fs2) at ($(cons |- m.220)+(0,-0.4)$) {$f^\sharp$};
+
+                \node (in1) at ($(cons.140)+(-1,0.2)$) {};
+                \node (in2) at ($(cons.220)+(-1,-0.2)$) {};
+                \node (in3) at (in1 |- fs2) {};
+                \node (out) at ($(m.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140] (cons);
+                \draw[blue] (in2) to[out=0,in=220] (cons);
+                \draw[blue] (in3) -- (fs2);
+                \draw[blue] (cons) -- (fs1);
+                \draw[green] (fs1) to[out=0,in=140] (m.140);
+                \draw[green] (fs2) to[out=0,in=220] (m.220);
+                \draw[green] (m) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(cons)(fs1),
+                        diff,
+                        minimum height=0.8cm,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (1.7,-2.5) {$=$};
+
+            \begin{scope}[xshift=6.2cm,yshift=-2.7cm]
+                \node[operator] (m2) at (0,0) {$m$};
+                \node[operator] (m1) at ($(m2.140)+(-1,0.4)$) {$m$};
+                \node[operator,inner sep=1pt] (fs2) at ($(cons |- m2.220)+(0,-0.4)$) {$f^\sharp$};
+                \node[operator] (f) at ($(cons |- m1.140)+(0,0.2)$) {$f$};
+                \node[operator,inner sep=1pt] (fs1) at ($(cons |- m1.220)+(0,-0.2)$) {$f^\sharp$};
+                
+                \node (in1) at (in1 |- f) {};
+                \node (in2) at (in2 |- fs1) {};
+                \node (in3) at (in1 |- fs2) {};
+                \node (out) at (out |- m2) {};
+
+                \draw[magenta] (in1) -- (f);
+                \draw[blue] (in2) -- (fs1);
+                \draw[blue] (in3) -- (fs2);
+                \draw[green] (f) to[out=0,in=140] (m1.140);
+                \draw[green] (fs1) to[out=0,in=220] (m1.220);
+                \draw[green] (m1) to[out=0,in=140] (m2.140);
+                \draw[green] (fs2) to[out=0,in=220] (m2.220);
+                \draw[green] (m2) -- (out);
+
+                \begin{scope}[on background layer]
+                    \coordinate (F1) at ($(f)+(-0.5,0.7)$);
+                    \coordinate (F2) at ($(fs1)+(-0.5,-0.7)$);
+                    \coordinate (F3) at ($(m1)+(1.3,0)$);
+                    \draw[result,rounded corners=12pt] (F1) -- (F2) [rounded corners=25pt] -- (F3) [rounded corners=12pt] -- cycle;
+                    \node[
+                        fit=(m1)(m2),
+                        diff,
+                        rotate=-25,
+                        inner sep=-2pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (1.7,-5) {$=$};
+
+            \begin{scope}[xshift=6.2cm,yshift=-4.8cm]
+                \node[operator] (m2) at (0,0) {$m$};
+                \node[operator] (m1) at ($(m2.220)+(-1,-0.4)$) {$m$};
+                \node[operator] (f) at ($(f |- m2.140)+(0,0.4)$) {$f$};
+                \node[operator,inner sep=1pt] (fs1) at ($(fs1 |- m1.140)+(0,0.2)$) {$f^\sharp$};
+                \node[operator,inner sep=1pt] (fs2) at ($(fs2 |- m1.220)+(0,-0.2)$) {$f^\sharp$};
+                
+                \node (in1) at (in1 |- f) {};
+                \node (in2) at (in2 |- fs1) {};
+                \node (in3) at (in1 |- fs2) {};
+                \node (out) at (out |- m2) {};
+
+                \draw[magenta] (in1) -- (f);
+                \draw[blue] (in2) -- (fs1);
+                \draw[blue] (in3) -- (fs2);
+                \draw[green] (fs1) to[out=0,in=140] (m1.140);
+                \draw[green] (fs2) to[out=0,in=220] (m1.220);
+                \draw[green] (f) to[out=0,in=140] (m2.140);
+                \draw[green] (m1) to[out=0,in=220] (m2.220);
+                \draw[green] (m2) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(m1)(m2),
+                        diff,
+                        rotate=30,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (1.7,-7.5) {$=$};
+
+            \begin{scope}[xshift=6.2cm,yshift=-7.3cm]
+                \node[operator] (m) at (0,0) {$m$};
+                \node[operator] (f) at ($(f |- m.140)+(0,0.4)$) {$f$};
+                \node[operator] (h) at ($(m.220)+(-1.8,-0.4)$) {$h$};
+
+                \node (in1) at (in1 |- f) {};
+                \node (in2) at ($(in2 |- h.140)+(0,0.2)$) {};
+                \node (in3) at ($(in3 |- h.220)+(0,-0.2)$) {};
+                \node (out) at (out |- m) {};
+
+                \draw[magenta] (in1) -- (f);
+                \draw[blue] (in2) to[out=0,in=140,in looseness=0.7] (h.140);
+                \draw[blue] (in3) to[out=0,in=220,in looseness=0.7] (h.220);
+                \draw[green] (f) to[out=0,in=140,in looseness=0.8] (m.140);
+                \draw[green] (m) -- (out);
+                \draw[green] (h) to[out=0,in=220,in looseness=0.8] (m.220);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+    Finally, we show that the extension $f^\sharp$ is unique. Suppose there is another monoid homomorphism $g:L(A)\to B$ satisfying $g\circ\eta=f$. Then, $g$ satisfies the same computation rules as $f^\sharp$. Indeed, $\nil$-$\beta$ holds since $g$ preserves identities, and $\cons$-$\beta$ holds via the following computation:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}
+                \node[operator,] (g) at (0,0) {$g$};
+                \node[operator] (cons) at (-1.5,0) {$\cons$};
+
+                \node (in1) at ($(cons.140)+(-1.3,0.4)$) {};
+                \node (in2) at ($(cons.220)+(-1.3,-0.4)$) {};
+                \node (out) at ($(g.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140] (cons.140);
+                \draw[blue] (in2) to[out=0,in=220] (cons.220);
+                \draw[blue] (cons) --  (g);
+                \draw[green] (g) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(cons),
+                        diff,
+                        inner sep=1.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,0) {$=$};
+
+            \begin{scope}[xshift=7cm]
+                \node[operator] (g) at (0,0) {$g$};
+                \node[operator] (app) at (-1.5,0) {$\App$};
+                \node[operator] (eta) at ($(app.140)+(-1.2,0.4)$) {$\eta$};
+
+                \node (in1) at ($(eta.west)+(-1,0)$) {};
+                \node (in2) at ($(in1 |- app.220)+(0,-0.4)$) {};
+                \node (out) at ($(g.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) -- (eta);
+                \draw[blue] (in2) to[out=0,in=220,in looseness=0.8] (app.220);
+                \draw[blue] (eta) to[out=0,in=140] (app.140);
+                \draw[blue] (app) -- (g);
+                \draw[green] (g) -- (out);
+                
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(eta)(app),
+                        result,
+                        rotate=-20,
+                        inner sep=-3pt,
+                    ] {};
+                    \node[
+                        fit=(app)(g),
+                        diff,
+                        minimum height=1cm,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,-2.5) {$=$};
+
+            \begin{scope}[xshift=7cm,yshift=-2.5cm]
+                \node[operator] (m) at (0,0) {$m$};
+                \node[operator] (g1) at ($(app |- m.140)+(0,0.4)$) {$g$};
+                \node[operator] (g2) at ($(g1 |- m.220)+(0,-0.4)$) {$g$};
+                \node[operator] (eta) at (eta |- g1) {$\eta$};
+
+                \node (in1) at (in1 |- eta) {};
+                \node (in2) at (in1 |- g2) {};
+                \node (out) at (out |- m) {};
+
+                \draw[magenta] (in1) -- (eta);
+                \draw[blue] (in2) -- (g2);
+                \draw[blue] (eta) -- (g1);
+                \draw[green] (g1) to[out=0,in=140] (m.140);
+                \draw[green] (g2) to[out=0,in=220] (m.220);
+                \draw[green] (m) -- (out);
+                
+                \begin{scope}[on background layer]
+                    \coordinate (F1) at ($(g1)+(-0.5,0.8)$);
+                    \coordinate (F2) at ($(g2)+(-0.5,-0.8)$);
+                    \coordinate (F3) at ($(m)+(1.2,0)$);
+                    \draw[result,rounded corners=20pt] (F1) -- (F2) [rounded corners=25pt] -- (F3) [rounded corners=20pt] -- cycle;
+                    \node[
+                        fit=(eta)(g1),
+                        diff,
+                        minimum height=1cm,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,-5) {$=$};
+
+            \begin{scope}[xshift=7cm,yshift=-5cm]
+                \node[operator] (m) at (0,0) {$m$};
+                \node[operator] (f) at ($(app |- m.140)+(0,0.4)$) {$f$};
+                \node[operator] (g) at ($(eta |- m.220)+(0,-0.4)$) {$g$};
+
+                \node (in1) at (in1 |- f) {};
+                \node (in2) at (in1 |- g) {};
+                \node (out) at (out |- m) {};
+
+                \draw[magenta] (in1) -- (f);
+                \draw[blue] (in2) -- (g);
+                \draw[green] (f) to[out=0,in=140] (m.140);
+                \draw[green] (g) to[out=0,in=220,in looseness=0.8] (m.220);
+                \draw[green] (m) -- (out);
+                
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(f),
+                        result,
+                        inner sep=1.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{toappendix}
+\begin{lemma}\label{lem:eta-app}
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}
+                \node[operator] (app) at (0,0) {$\App$};
+                \node[operator] (eta) at ($(app.140)+(-1.2,0.4)$) {$\eta$};
+                \node (in1) at ($(eta.west)+(-1,0)$) {};
+                \node (in2) at ($(in1 |- app.220) + (0,-0.4)$) {};
+                \node (out) at ($(app.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) -- (eta);
+                \draw[blue] (eta) to[out=0,in=140] (app.140);
+                \draw[blue] (in2) to[out=0,in=220,in looseness=0.6] (app.220);
+                \draw[blue] (app) -- (out);
+            \end{scope}
+            \node at (2,0) {$=$};
+            \begin{scope}[xshift=4.2cm]
+                \node[operator,fill=consbg] (op) at (0,0) {$\cons$};
+                \node (in1) at ($(op.140)+(-1.2,0.4)$) {};
+                \node (in2) at ($(op.220)+(-1.2,-0.4)$) {};
+                \node (out) at ($(op.east)+(1,0)$) {};
+                \draw[magenta] (in1) to[out=0,in=140] (op.140);
+                \draw[blue] (in2.east) to[out=0,in=220] (op.220);
+                \draw[blue] (op.east) -- (out);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+\end{lemma}
+\begin{proof}
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}
+                \node[operator] (app) at (0,0) {$\App$};
+                \node[operator] (eta) at ($(app.140)+(-1.2,0.4)$) {$\eta$};
+                \node (in1) at ($(eta.west)+(-1,0)$) {};
+                \node (in2) at ($(in1 |- app.220) + (0,-0.4)$) {};
+                \node (out) at ($(app.east)+(1,0)$) {};
+                
+                \draw[magenta] (in1) -- (eta);
+                \draw[blue] (eta) to[out=0,in=140] (app.140);
+                \draw[blue] (in2) to[out=0,in=220,in looseness=0.6] (app.220);
+                \draw[blue] (app) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(eta),
+                        diff,
+                        inner sep=3pt
+                    ] {};
+                \end{scope}
+            \end{scope}
+            
+            \node at (2,0) {$=$};
+
+            \begin{scope}[xshift=6cm]
+                \node[operator,fill=Appbg] (app) at (0,0) {$\App$};
+                \node[operator,fill=consbg] (cons) at ($(app.140)+(-1.2,0.4)$) {$\cons$};
+                \node[operator] (nil) at ($(cons.220)+(-1,-0.2)$) {$\nil$};
+
+                \node (in1) at ($(cons.140)+(-1.2,0.2)$) {};
+                \node (in2) at ($(in1 |- app.220)+(0,-0.6)$) {};
+                \node (out) at ($(app.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140] (cons.140);
+                \draw[blue] (nil) to[out=0,in=220] (cons.220);
+                \draw[blue] (in2) to[out=0,in=220,in looseness=0.8] (app.220);
+                \draw[blue] (cons) to[out=0,in=140] (app.140);
+                \draw[blue] (app) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(nil)(cons),
+                        result,
+                        rotate=20,
+                        inner sep=-1.5pt,
+                    ] {};
+                    \node[
+                        fit=(cons)(app),
+                        diff,
+                        rotate=-20,
+                        inner sep=-1.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+            
+            \node at (2,-2.5) {$=$};
+
+            \begin{scope}[xshift=6cm,yshift=-2.5cm]
+                \node[operator,fill=consbg] (cons) at (0,0) {$\cons$};
+                \node[operator,fill=Appbg] (app) at ($(cons.220)+(-1.2,-0.4)$) {$\App$};
+                \node[operator] (nil) at ($(app.140)+(-1,0.2)$) {$\nil$};
+
+                \node (in1) at ($(in1 |- cons.140)+(0,0.6)$) {};
+                \node (in2) at ($(in2 |- app.220)+(0,-0.2)$) {};
+                \node (out) at (out |- cons) {};
+
+                \draw[magenta] (in1) to[out=0,in=140,in looseness=0.8] (cons.140);
+                \draw[blue] (nil) to[out=0,in=140] (app.140);
+                \draw[blue] (in2) to[out=0,in=220] (app.220);
+                \draw[blue] (app) to[out=0,in=220] (cons.220);
+                \draw[blue] (cons) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(app)(cons),
+                        result,
+                        rotate=20,
+                        inner sep=-1.5pt,
+                    ] {};
+                    \node[
+                        fit=(nil)(app),
+                        diff,
+                        rotate=-20,
+                        inner sep=-1.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,-5) {$=$};
+
+            \begin{scope}[xshift=6cm,yshift=-5cm]
+                \node[operator,fill=consbg] (cons) at (0,0) {$\cons$};
+                \node[operator] (id) at ($(cons.220)+(-1.2,-0.4)$) {$\id$};
+
+                \node (in1) at ($(in1 |- cons.140)+(0,0.6)$) {};
+                \node (in2) at ($(in2 |- id.220)+(0,-0.2)$) {};
+                \node (out) at (out |- cons) {};
+
+                \draw[magenta] (in1) to[out=0,in=140,in looseness=0.8] (cons.140);
+                \draw[blue] (in2) to[out=0,in=220] (id.220);
+                \draw[blue] (id) to[out=0,in=220] (cons.220);
+                \draw[blue] (cons) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(id),
+                        result,
+                        inner sep=1.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,-7.5) {$=$};
+
+            \begin{scope}[xshift=6cm,yshift=-7.5cm]
+                \node[operator,fill=consbg] (cons) at (0,0) {$\cons$};
+
+                \node (in1) at ($(in1 |- cons.140)+(0,0.6)$) {};
+                \node (in2) at ($(in2 |- cons.220)+(0,-0.6)$) {};
+                \node (out) at (out |- cons) {};
+
+                \draw[magenta] (in1) to[out=0,in=140,in looseness=0.8] (cons.140);
+                \draw[blue] (in2) to[out=0,in=220,in looseness=0.8] (cons.220);
+                \draw[blue] (cons) -- (out);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+\end{proof}
+\end{toappendix}
+
+
 
 \begin{theorem}[Lemma~3.4.2 of \cite{fioreListObjectsAlgebraic2017}]
   If $\cat{C}$ admits parametrised list objects for every $A$,
@@ -265,64 +1826,706 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
 Hereafter, we assume $\cat{C}$ is symmetric strict monoidal.
 
 \begin{definition}
-  A \textit{parametrised symmetric list object} on $A$ is a list object $L(A)$ satisfying:
+  A \textit{parametrised symmetric list object} or \textit{ilst} on $A$ is a list object $L(A)$ satisfying:
 
   \begin{figure}[H]
     \centering
 
     \begin{tikzpicture}
       \begin{scope}
-        \node[operator,fill=consbg] (op1) at (0,0) {$\cons$};
-        \node[anchor=east,operator,fill=consbg] (op2) at ($(op1.220)+(-1,-0.4)$) {$\cons$};
-        \node[anchor=west] (out) at ($(op1.east)+(1,0)$) {};
-        \node[anchor=east] (in1) at ($(op1.140)+(-1,0.6)$) {};
-        \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
-        \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.2)$) {};
+        \node[operator,fill=consbg] (cons2) at (0,0) {$\cons$};
+        \node[anchor=east,operator,fill=consbg] (cons1) at ($(cons2.220)+(-1,-0.4)$) {$\cons$};
+        \node[anchor=west] (out) at ($(cons2.east)+(1,0)$) {};
+        \node[anchor=east] (in1) at ($(cons2.140)+(-1,0.6)$) {};
+        \node[anchor=east] (in2) at ($(cons1.140)+(-1,0.2)$) {};
+        \node[anchor=east] (in3) at ($(cons1.220)+(-1,-0.2)$) {};
 
-        \draw[blue] (op2.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$L(A)$} (op1.220);
-        \draw[magenta] let \p1 = (in2.east), \p2 = (in1) in
-          (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (op1.140);
+        \draw[blue] (cons1.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$L(A)$} (cons2.220);
+        \draw[magenta] (in2.east |- in1) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (cons2.140);
 
-        \draw[blue] (op1.east) -- (out.west) node[outputwire,above] {$L(A)$};
-        \draw[magenta] (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$A$} (op2.140);
-        \draw[blue] (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (op2.220);
+        \draw[blue] (cons2.east) -- (out.west) node[outputwire,above] {$L(A)$};
+        \draw[magenta] (in2.east) to[out=0,in=140] node[inputwire,above,sloped=false] {$A$} (cons1.140);
+        \draw[blue] (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (cons1.220);
       \end{scope}
 
-      \node at (1.75,0) {$=$};
+      \node at (2,0) {$=$};
 
-      \begin{scope}[xshift=5cm]
-        \node[operator,fill=consbg] (op1) at (0,0) {$\cons$};
-        \node[anchor=east,operator,fill=consbg] (op2) at ($(op1.220)+(-1,-0.4)$) {$\cons$};
-        \node[anchor=west] (out) at ($(op1.east)+(1,0)$) {};
-        \node[anchor=east] (in1) at ($(op1.140)+(-1,0.6)$) {};
-        \node[anchor=east] (in2) at ($(op2.140)+(-1,0.2)$) {};
-        \node[anchor=east] (in3) at ($(op2.220)+(-1,-0.2)$) {};
+      \begin{scope}[xshift=5.6cm]
+        \node[operator,fill=consbg] (cons2) at (0,0) {$\cons$};
+        \node[anchor=east,operator,fill=consbg] (cons1) at ($(cons2.220)+(-1,-0.4)$) {$\cons$};
+        \node[anchor=west] (out) at ($(cons2.east)+(1,0)$) {};
+        \node[anchor=east] (in1) at ($(cons2.140)+(-1,0.6)$) {};
+        \node[anchor=east] (in2) at ($(cons1.140)+(-1,0.2)$) {};
+        \node[anchor=east] (in3) at ($(cons1.220)+(-1,-0.2)$) {};
 
-        \draw[blue] (op2.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$L(A)$} (op1.220);
-        \draw[magenta] let \p1 = (in2.east), \p2 = (in1) in
-          (\x1,\y2) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (op2.140);
+        \draw[blue] (cons1.east) to[out=0,in=220] node[inputwire,pos=0.5,yshift=-2pt,below,sloped=false] {$L(A)$} (cons2.220);
+        \draw[magenta] (in2.east |- in1) to[out=0,in=140] node[inputwire,pos=0.1,above,sloped=false] {$A$} (cons1.140);
 
-        \draw[blue] (op1.east) -- (out.west) node[outputwire,above] {$L(A)$};
-        \draw[magenta] (in2.east) to[out=0,in=140] node[inputwire,pos=0.1,below,sloped=false] {$A$} (op1.140);
-        \draw[blue] (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (op2.220);
+        \draw[blue] (cons2.east) -- (out.west) node[outputwire,above] {$L(A)$};
+        \draw[magenta] (in2.east) to[out=0,in=140] node[inputwire,pos=0.1,below,sloped=false] {$A$} (cons2.140);
+        \draw[blue] (in3.east) to[out=0,in=220] node[inputwire,below,sloped=false] {$L(A)$} (cons1.220);
       \end{scope}
     \end{tikzpicture}%
+    \caption*{ilst axiom}
   \end{figure}
 \end{definition}
+
+
+
+\begin{toappendix}
+
+\begin{lemma}\label{lem:eta-app braided}
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}
+                \node[operator] (app) at (0,0) {$\App$};
+                \node[operator] (eta) at ($(app.220)+(-1.2,-0.4)$) {$\eta$};
+                \node (in2) at ($(eta)+(-1.5,0)$) {};
+                \node (in1) at ($(in2 |- app.140) + (0,0.4)$) {};
+                \node (out) at ($(app.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=180] (eta);
+                \draw[blue] (in2) to[out=0,in=140,out looseness=0.5,in looseness=2] (app.140);
+                \draw[blue] (eta) to[out=0,in=220] (app.220);
+                \draw[blue] (app) -- (out);
+            \end{scope}
+
+            \node at (2,0) {$=$};
+
+            \begin{scope}[xshift=4.2cm]
+                \node[operator,fill=consbg] (cons) at (0,0) {$\cons$};
+                \node (in1) at ($(cons.140)+(-1.2,0.4)$) {};
+                \node (in2) at ($(cons.220)+(-1.2,-0.4)$) {};
+                \node (out) at ($(cons.east)+(1,0)$) {};
+                \draw[magenta] (in1) to[out=0,in=140] (cons.140);
+                \draw[blue] (in2.east) to[out=0,in=220] (cons.220);
+                \draw[blue] (cons.east) -- (out);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+\end{lemma}
+\begin{proof}
+    Let the two maps be $f'$ and $g'$, respectively. We claim that both maps are equal to $\iter(\eta,\cons)\circ\beta$, or equivalently, that $f:=f'\circ\beta$ and $g:=g'\circ\beta$ are the iterator $\iter(\eta,\cons)\circ\beta^2=\iter(\eta,\cons)$.
+    
+    $\nil$-$\beta$:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}[yshift=2cm]
+                \node[operator] (f) at (0,0) {$f$};
+                \node[anchor=east,operator] (nil) at ($(f.140)+(-1,0.4)$) {$\nil$};
+                \node (in) at ($(f.220)+(-1.5,-0.4)$) {};
+                \node (out) at ($(f.east)+(1,0)$) {};
+                \draw[blue] (nil.east) to[out=0,in=140] (f.140);
+                \draw[magenta] (in) to[out=0,in=220] (f.220);
+                \draw[blue] (f.east) -- (out);
+            \end{scope}
+
+            \node at (1.55,2) {$=$};
+
+            \begin{scope}[xshift=4.5cm,yshift=2cm]
+                \node[operator] (app) at (0,0) {$\App$};
+                \node[operator] (eta) at ($(app.220)+(-1.2,-0.4)$) {$\eta$};
+                \node[operator] (nil) at ($(app.140) + (-2.2,0.4)$) {$\nil$};
+                
+                \node (in) at ($(eta.west)+(-0.8,0)$) {};
+                \node (out) at ($(app.east)+(0.8,0)$) {};
+
+                \draw[blue] (nil) to[out=0,in=140,in looseness=0.8] (app.140);
+                \draw[magenta] (in) -- (eta);
+                \draw[blue] (eta) to[out=0,in=220] (app.220);
+                \draw[blue] (app) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(nil)(app),
+                        diff,
+                        rotate=-12.5,
+                        inner sep=-4.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (1.55,0) {$=$};
+
+            \begin{scope}[xshift=4.5cm,yshift=0.25cm]
+                \node[operator] (id) at (0,0) {$\id$};
+                \node[operator] (eta) at ($(id.220)+(-1.2,-0.4)$) {$\eta$};
+
+                \node (in) at ($(eta.west)+(-0.8,0)$) {};
+                \node (out) at ($(id.east)+(0.8,0)$) {};
+
+                \draw[magenta] (in) -- (eta);
+                \draw[blue] (eta) to[out=0,in=220] (id.220);
+                \draw[blue] (id) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(id),
+                        result,
+                        inner sep=1.5pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (1.55,-2) {$=$};
+
+            \begin{scope}[xshift=4.5cm,yshift=-2cm]
+                \node[operator] (eta) at (eta |- 0,0) {$\eta$};
+
+                \node (in) at (in |- eta) {};
+                \node (out) at (out |- eta) {};
+
+                \draw[magenta] (in) -- (eta);
+                \draw[blue] (eta) -- (out);
+            \end{scope}
+        \end{tikzpicture}
+        \qquad
+        \begin{tikzpicture}
+            \begin{scope}[yshift=2cm]
+                \node[operator] (g) at (0,0) {$g$};
+                \node[anchor=east,operator] (nil) at ($(g.140)+(-1,0.4)$) {$\nil$};
+                \node (in) at ($(g.220)+(-1.5,-0.4)$) {};
+                \node (out) at ($(g.east)+(1,0)$) {};
+                \draw[blue] (nil.east) to[out=0,in=140] (g.140);
+                \draw[magenta] (in) to[out=0,in=220] (g.220);
+                \draw[blue] (g.east) -- (out);
+            \end{scope}
+
+            \node at (1.6,2) {$=$};
+
+            \begin{scope}[xshift=4.3cm,yshift=2cm]
+                \node[operator,fill=consbg] (cons) at (0,0) {$\cons$};
+                \node[operator] (nil) at ($(cons.140)+(-2,0.4)$) {$\nil$};
+
+                \node (in) at ($(cons.220)+(-1.9,-0.4)$) {};
+                \node (out) at ($(cons.east)+(0.8,0)$) {};
+                
+                \draw[blue] (nil) to[out=0,in=220,in looseness=2.5] (cons.220);
+                \draw[magenta] (in) to[out=0,in=140,out looseness=1.3,in looseness=2.5] (cons.140);
+                \draw[blue] (cons) -- (out);
+            \end{scope}
+
+            \node at (1.6,0) {$=$};
+
+            \begin{scope}[xshift=4.3cm]
+                \node[operator,fill=consbg] (cons) at (0,0) {$\cons$};
+                \node[operator] (nil) at ($(cons.220)+(-0.8,-0.4)$) {$\nil$};
+
+                \node (in) at ($(cons.220)+(-1.9,-0.4)$) {};
+                \node (out) at ($(cons.east)+(0.8,0)$) {};
+                
+                \draw[blue] (nil) to[out=0,in=220] (cons.220);
+                \draw[magenta] (in) to[out=0,in=140,out looseness=1.3,in looseness=2.5] (cons.140);
+                \draw[blue] (cons) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(nil)(cons),
+                        diff,
+                        rotate=30,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (1.6,-2) {$=$};
+
+            \begin{scope}[xshift=4.3cm,yshift=-2cm]
+                \node[operator] (eta) at ($(nil |- 0,0)+(0.6,0)$) {$\eta$};
+
+                \node (in) at (in |- eta) {};
+                \node (out) at (out |- eta) {};
+
+                \draw[magenta] (in) -- (eta);
+                \draw[blue] (eta) -- (out);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+
+
+
+    $\cons$-$\beta$:
+
+    \begin{equation*}
+        \begin{tikzpicture}[baseline=(base),scale=0.8]
+            \node (base) at (0,0) {};
+            \begin{scope}
+                \node[operator] (f) at (0,0) {$f$};
+                \node[operator,fill=consbg] (cons) at ($(f.140)+(-1.5,0.4)$) {$\cons$};
+
+                \node (in1) at ($(cons.140)+(-1,0.2)$) {};
+                \node (in2) at ($(cons.220)+(-1,-0.2)$) {};
+                \node (in3) at ($(in1 |- f.220)+(0,-0.6)$) {};
+                \node (out) at ($(f.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140] (cons.140);
+                \draw[blue] (in2) to[out=0,in=220] (cons.220);
+                \draw[magenta] (in3) to[out=0,in=220] (f.220);
+                \draw[blue] (cons) to[out=0,in=140] (f.140);
+                \draw[blue] (f) -- (out);
+            \end{scope}
+
+            \node at (1.7,0) {$=$};
+
+            \begin{scope}[xshift=4.9cm]
+                \node[operator] (app) at (0,0) {$\App$};
+                \node[operator,fill=consbg] (cons) at ($(app.140)+(-1.2,0.4)$) {$\cons$};
+                \node[operator] (eta) at ($(app.220)+(-1.2,-0.4)$) {$\eta$};
+
+                \node (in1) at ($(cons.140)+(-1,0.2)$) {};
+                \node (in2) at ($(cons.220)+(-1,-0.2)$) {};
+                \node (in3) at (in1 |- eta) {};
+                \node (out) at ($(app.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140] (cons.140);
+                \draw[blue] (in2) to[out=0,in=220] (cons.220);
+                \draw[magenta] (in3) -- (eta);
+                \draw[blue] (cons) to[out=0,in=140] (app.140);
+                \draw[blue] (eta) to[out=0,in=220] (app.220);
+                \draw[blue] (app) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(cons)(app),
+                        diff,
+                        rotate=-20,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (1.7,-2.5) {$=$};
+
+            \begin{scope}[xshift=4.9cm,yshift=-3cm]
+                \node[operator] (app) at (0,0) {$\App$};
+                \node[operator,fill=consbg] (cons) at ($(app.40)+(1.2,0.4)$) {$\cons$};
+                \node[operator] (eta) at ($(app.220)+(-1.2,-0.4)$) {$\eta$};
+
+                \node (in1) at ($(in1 |- cons.140)+(0,0.6)$) {};
+                \node (in2) at ($(in1 |- app.140)+(0,0.4)$) {};
+                \node (in3) at (in1 |- eta) {};
+                \node (out) at ($(cons.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140,in looseness=0.8] (cons.140);
+                \draw[blue] (in2) to[out=0,in=140,in looseness=0.8] (app.140);
+                \draw[magenta] (in3) -- (eta);
+                \draw[blue] (app) to[out=0,in=220] (cons.220);
+                \draw[blue] (eta) to[out=0,in=220] (app.220);
+                \draw[blue] (cons) -- (out);
+            \end{scope}
+
+            \node at (1.7,-5.5) {$=$};
+
+            \begin{scope}[xshift=4.9cm,yshift=-5.5cm]
+                \node[operator,fill=consbg] (cons) at (cons |- 0,0) {$\cons$};
+                \node[operator] (f) at ($(cons.220)+(-1.7,-0.4)$) {$f$};
+
+                \node (in1) at ($(in1 |- cons.140)+(0,0.6)$) {};
+                \node (in2) at ($(in1 |- f.140)+(0,0.4)$) {};
+                \node (in3) at ($(in1 |- f.220)+(0,-0.4)$) {};
+                \node (out) at ($(cons.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140,in looseness=0.8] (cons.140);
+                \draw[blue] (in2) to[out=0,in=140,in looseness=0.8] (f.140);
+                \draw[magenta] (in3) to[out=0,in=220] (f.220);
+                \draw[blue] (f) to[out=0,in=220] (cons.220);
+                \draw[blue] (cons) -- (out);
+            \end{scope}
+        \end{tikzpicture}
+        \qquad
+        \begin{tikzpicture}[baseline=(base),scale=0.8]
+            \node (base) at (0,0) {};
+            \begin{scope}
+                \node[operator] (g) at (0,0) {$g$};
+                \node[operator,fill=consbg] (cons) at ($(g.140)+(-1.5,0.4)$) {$\cons$};
+
+                \node (in1) at ($(cons.140)+(-1,0.2)$) {};
+                \node (in2) at ($(cons.220)+(-1,-0.2)$) {};
+                \node (in3) at ($(in1 |- g.220)+(0,-0.6)$) {};
+                \node (out) at ($(g.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140] (cons.140);
+                \draw[blue] (in2) to[out=0,in=220] (cons.220);
+                \draw[magenta] (in3) to[out=0,in=220] (g.220);
+                \draw[blue] (cons) to[out=0,in=140] (g.140);
+                \draw[blue] (g) -- (out);
+            \end{scope}
+
+            \node at (1.7,0) {$=$};
+
+            \begin{scope}[xshift=5.1cm]
+                \node[operator,fill=consbg] (cons2) at (0,0) {$\cons$};
+                \node[operator,fill=consbg] (cons1) at ($(cons2.140)+(-1.5,0.4)$) {$\cons$};
+
+                \node (in1) at ($(cons1.140)+(-1,0.2)$) {};
+                \node (in2) at ($(cons1.220)+(-1,-0.2)$) {};
+                \node (in3) at ($(in1 |- cons2.220)+(0,-0.6)$) {};
+                \node (out) at ($(cons2.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140] (cons1.140);
+                \draw[blue] (in2) to[out=0,in=220] (cons1.220);
+                \draw[magenta] (in3) to[out=0,in=140,out looseness=2,in looseness=1.2] (cons2.140);
+                \draw[blue] (cons1) to[out=0,in=220,in looseness=2.5] (cons2.220);
+                \draw[blue] (cons2) -- (out);   
+            \end{scope}
+
+            \node at (1.7,-2.5) {$=$};
+
+            \begin{scope}[xshift=5.1cm,yshift=-2.5cm]
+                \node[operator,fill=consbg] (cons2) at (0,0) {$\cons$};
+                \node[operator,fill=consbg] (cons1) at ($(cons2.220)+(-0.8,-0.4)$) {$\cons$};
+                \node (anchor) at ($(cons2.140)+(-1.2,0.4)$) {};
+
+                \node (in1) at ($(in1 |- anchor)+(0,0.4)$) {};
+                \node (in2) at ($(in1 |- anchor)+(0,-0.4)$) {};
+                \node (in3) at ($(in1 |- cons2.220)+(0,-0.6)$) {};
+                \node (out) at ($(cons2.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140] (cons1.140);
+                \draw[blue] (in2) to[out=0,in=220] (cons1.220);
+                \draw[magenta] (in3) to[out=0,in=140,out looseness=0.8,in looseness=3] (cons2.140);
+                \draw[blue] (cons1) to[out=0,in=220] (cons2.220);
+                \draw[blue] (cons2) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(cons1)(cons2),
+                        diff,
+                        rotate=25,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (1.7,-5) {$=$};
+
+            \begin{scope}[xshift=5.1cm,yshift=-5cm]
+                \node[operator,fill=consbg] (cons2) at (0,0) {$\cons$};
+                \node[operator,fill=consbg] (cons1) at ($(cons2.220)+(-0.8,-0.4)$) {$\cons$};
+                \node (anchor) at ($(cons2.140)+(-1.2,0.4)$) {};
+
+                \node (in1) at ($(in1 |- anchor)+(0,0.2)$) {};
+                \node (in2) at ($(in1 |- cons1.140)+(0,0.4)$) {};
+                \node (in3) at ($(in1 |- cons1.220)+(0,-0.4)$) {};
+                \node (out) at ($(cons2.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140] (cons2.140);
+                \draw[blue] (in2) to[out=0,in=220,in looseness=2.5] (cons1.220);
+                \draw[magenta] (in3) to[out=0,in=140,in looseness=2.5] (cons1.140);
+                \draw[blue] (cons1) to[out=0,in=220] (cons2.220);
+                \draw[blue] (cons2) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node[
+                        fit=(cons1)(cons2),
+                        result,
+                        rotate=25,
+                        inner sep=-3pt,
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (1.7,-8) {$=$};
+
+            \begin{scope}[xshift=5.1cm,yshift=-8cm]
+                \node[operator,fill=consbg] (cons) at (0,0) {$\cons$};
+                \node[operator] (g) at ($(cons.220)+(-1,-0.4)$) {$g$};
+                \node (anchor) at ($(cons.140)+(-1.2,0.4)$) {};
+
+                \node (in1) at ($(in1 |- anchor)+(0,0.2)$) {};
+                \node (in2) at ($(in1 |- g.140)+(0,0.4)$) {};
+                \node (in3) at ($(in1 |- g.220)+(0,-0.4)$) {};
+                \node (out) at ($(cons.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) to[out=0,in=140] (cons.140);
+                \draw[blue] (in2) to[out=0,in=140] (g.140);
+                \draw[magenta] (in3) to[out=0,in=220] (g.220);
+                \draw[blue] (g) to[out=0,in=220] (cons.220);
+                \draw[blue] (cons) -- (out);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+\end{proof}
+
+\end{toappendix}
+
 
 
 
 \begin{theoremrep}
   Let $(L(A),\nil,\cons)$ be a list object on an object $A$. Then, the following are equivalent:
   \begin{enumerate}
-    \item $(L(A),\nil,\cons,\mathrm{iter})$ is a symmetric list object;
-    \item $(L(A),\nil,+\kern-0.4em+)$ is a commutative monoid object;
-    \item $(L(A),\nil,+\kern-0.4em+)$ is the free commutative monoid object on $A$;
+    \item $(L(A),\nil,\cons,\iter)$ is a symmetric list object;
+    \item $(L(A),\nil,\App)$ is a commutative monoid object;
+    \item $(L(A),\nil,\App)$ is the free commutative monoid object on $A$;
   \end{enumerate}
 \end{theoremrep}
 
 \begin{proof}
-foo
+    $(1\Rightarrow2)$ We have already shown that list objects are monoids, so we need only show that $\App$ is commutative:
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}
+                \node[operator,fill=Appbg] (app) at (0,0) {$\App$};
+                
+                \node (in1) at ($(app.140)+(-1.5,0.4)$) {};
+                \node (in2) at ($(app.220)+(-1.5,-0.4)$) {};
+                \node (out) at ($(app.east)+(0.8,0)$) {};
+            
+                \draw[blue] (in1) to[out=0,in=140] (app.140);
+                \draw[blue] (in2) to[out=0,in=220] (app.220);
+                \draw[blue] (app) -- (out);
+            \end{scope}
+
+            \node at (2,0) {$=$};
+
+            \begin{scope}[xshift=5cm]
+                \node[operator,fill=Appbg] (app) at (0,0) {$\App$};
+                
+                \node (in1) at ($(app.140)+(-2,0.4)$) {};
+                \node (in2) at ($(app.220)+(-2,-0.4)$) {};
+                \node (out) at ($(app.east)+(0.8,0)$) {};
+            
+                \draw[blue] (in1) to[out=0,in=220,out looseness=1.3,in looseness=2.5] (app.220);
+                \draw[blue] (in2) to[out=0,in=140,out looseness=1.3,in looseness=2.5] (app.140);
+                \draw[blue] (app) -- (out);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
+
+
+
+
+
+    $(2\Rightarrow1)$ $L(A)$ is a list object by assumption, so it suffices to show the ilst axiom only.
+
+    \begin{equation*}
+        \begin{tikzpicture}
+            \begin{scope}
+                \node[operator,fill=consbg] (cons2) at (0,0) {$\cons$};
+                \node[anchor=east,operator,fill=consbg] (cons1) at ($(cons2.220)+(-1,-0.4)$) {$\cons$};
+                
+                \node (in1) at ($(cons2.140)+(-1,0.6)$) {};
+                \node (in2) at ($(cons1.140)+(-1,0.2)$) {};
+                \node (in3) at ($(cons1.220)+(-1,-0.2)$) {};
+                \node (out) at ($(cons2.east)+(1,0)$) {};
+
+                \draw[blue] (cons1.east) to[out=0,in=220] (cons2.220);
+                \draw[magenta] (in2.east |- in1) to[out=0,in=140] (cons2.140);
+
+                \draw[blue] (cons2.east) -- (out.west);
+                \draw[magenta] (in2.east) to[out=0,in=140] (cons1.140);
+                \draw[blue] (in3.east) to[out=0,in=220] (cons1.220);
+
+                \begin{scope}[on background layer]
+                    \node [
+                        fit=(cons1),
+                        diff,
+                        inner sep=1.5pt
+                    ] {};
+                    \node [
+                        fit=(cons2),
+                        diff,
+                        inner sep=1.5pt
+                    ] {};
+                \end{scope}
+            \end{scope}
+        
+            \node at (2,0) {$=$};
+        
+            \begin{scope}[xshift=7cm]
+                \node[operator,fill=consbg] (app2) at (0,0) {$\App$};
+                \node[operator,fill=consbg] (app1) at ($(app2.220)+(-1.5,-0.4)$) {$\App$};
+                \node[operator] (eta1) at ($(app1.140)+(-1.5,0.4)$) {$\eta$};
+                \node[operator] (eta2) at ($(app2.140)+(-1.5,0.4)$) {$\eta$};
+                
+                \node (in2) at ($(eta1)+(-1,0)$) {};
+                \node (in1) at (in2 |- eta2) {};
+                \node (in3) at ($(app1.220)+(-2.5,-0.4)$) {};
+                \node (out) at ($(app2.east)+(1,0)$) {};
+
+                \draw[magenta] (in1) -- (eta2);
+                \draw[magenta] (in2) -- (eta1);
+                \draw[blue] (in3) to[out=0,in=220] (app1.220);
+                \draw[blue] (eta1) to[out=0,in=140] (app1.140);
+                \draw[blue] (eta2) to[out=0,in=140] (app2.140);
+                \draw[blue] (app1) to[out=0,in=220] (app2.220);
+                \draw[blue] (app2) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node [
+                        fit=(eta1)(app1),
+                        result,
+                        rotate=-20,
+                        inner sep=-3pt
+                    ] {};
+                    \node [
+                        fit=(eta2)(app2),
+                        result,
+                        rotate=-20,
+                        inner sep=-3pt
+                    ] {};
+                    \node [
+                        fit=(app1)(app2),
+                        diff,
+                        rotate=15,
+                        inner sep=-3pt
+                    ] {};
+                \end{scope}
+            \end{scope}
+                
+            \node at (2,-3) {$=$};
+        
+            \begin{scope}[xshift=7cm,yshift=-3cm]
+                \node[operator,fill=consbg] (app2) at (0,0) {$\App$};
+                \node[operator,fill=consbg] (app1) at ($(app2.140)+(-1.5,0.4)$) {$\App$};
+                \node[operator] (eta1) at ($(app1.140)+(-1.5,0.4)$) {$\eta$};
+                \node[operator] (eta2) at ($(app1.220)+(-1.5,-0.4)$) {$\eta$};
+                
+                \node (in1) at (in1 |- eta1) {};
+                \node (in2) at (in2 |- eta2) {};
+                \node (in3) at ($(in3 |- app2.220)+(0,-0.6)$) {};
+                \node (out) at (out |- app2) {};
+
+                \draw[magenta] (in1) -- (eta1);
+                \draw[magenta] (in2) -- (eta2);
+                \draw[blue] (in3) to[out=0,in=220,in looseness=0.8] (app2.220);
+                \draw[blue] (eta1) to[out=0,in=140] (app1.140);
+                \draw[blue] (eta2) to[out=0,in=220] (app1.220);
+                \draw[blue] (app1) to[out=0,in=140] (app2.140);
+                \draw[blue] (app2) -- (out);
+
+                \begin{scope}[on background layer]
+                    \coordinate (F1) at ($(eta1)+(-0.5,0.7)$);
+                    \coordinate (F2) at ($(eta2)+(-0.5,-0.7)$);
+                    \coordinate (F3) at ($(app1)+(1.2,0)$);
+                    \draw[diff,rounded corners=15pt] (F1) -- (F2) [rounded corners=30pt] -- (F3) [rounded corners=15pt] -- cycle;
+                    \node [
+                        fit=(app1)(app2),
+                        result,
+                        rotate=-15,
+                        inner sep=-3pt
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,-6) {$=$};
+        
+            \begin{scope}[xshift=7cm,yshift=-6cm]
+                \node[operator,fill=consbg] (app2) at (0,0) {$\App$};
+                \node[operator,fill=consbg] (app1) at ($(app2.140)+(-1.5,0.4)$) {$\App$};
+                \node[operator] (eta1) at ($(app1.140)+(-1.5,0.4)$) {$\eta$};
+                \node[operator] (eta2) at ($(app1.220)+(-1.5,-0.4)$) {$\eta$};
+                
+                \node (in1) at (in1 |- eta1) {};
+                \node (in2) at (in2 |- eta2) {};
+                \node (in3) at ($(in3 |- app2.220)+(0,-0.6)$) {};
+                \node (out) at (out |- app2) {};
+
+                \draw[magenta] (in1) -- (eta1);
+                \draw[magenta] (in2) -- (eta2);
+                \draw[blue] (in3) to[out=0,in=220,in looseness=0.8] (app2.220);
+                \draw[blue] (eta1) to[out=0,in=220,in looseness=2] (app1.220);
+                \draw[blue] (eta2) to[out=0,in=140,in looseness=2] (app1.140);
+                \draw[blue] (app1) to[out=0,in=140] (app2.140);
+                \draw[blue] (app2) -- (out);
+
+                \begin{scope}[on background layer]
+                    \coordinate (F1) at ($(eta1)+(-0.5,0.7)$);
+                    \coordinate (F2) at ($(eta2)+(-0.5,-0.7)$);
+                    \coordinate (F3) at ($(app1)+(1.2,0)$);
+                    \draw[result,rounded corners=15pt] (F1) -- (F2) [rounded corners=30pt] -- (F3) [rounded corners=15pt] -- cycle;
+                \end{scope}
+            \end{scope}
+
+            \node at (2,-9) {$=$};
+
+            \begin{scope}[xshift=7cm,yshift=-9cm]
+                \node[operator,fill=consbg] (app2) at (0,0) {$\App$};
+                \node[operator,fill=consbg] (app1) at ($(app2.140)+(-1.5,0.4)$) {$\App$};
+                \node[operator] (eta1) at ($(app1.140)+(-1,0.4)$) {$\eta$};
+                \node[operator] (eta2) at ($(app1.220)+(-1,-0.4)$) {$\eta$};
+                
+                \node (in1) at (in1 |- eta1) {};
+                \node (in2) at (in2 |- eta2) {};
+                \node (in3) at ($(in3 |- app2.220)+(0,-0.6)$) {};
+                \node (out) at (out |- app2) {};
+
+                \draw[magenta] (in1) to[out=0,in=180] (eta2);
+                \draw[magenta] (in2) to[out=0,in=180] (eta1);
+                \draw[blue] (in3) to[out=0,in=220,in looseness=0.8] (app2.220);
+                \draw[blue] (eta1) to[out=0,in=140] (app1.140);
+                \draw[blue] (eta2) to[out=0,in=220] (app1.220);
+                \draw[blue] (app1) to[out=0,in=140] (app2.140);
+                \draw[blue] (app2) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node [
+                        fit=(app1)(app2),
+                        diff,
+                        rotate=-15,
+                        inner sep=-3pt
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,-12) {$=$};
+
+            \begin{scope}[xshift=7cm,yshift=-12cm]
+                \node[operator,fill=consbg] (app2) at (0,0) {$\App$};
+                \node[operator,fill=consbg] (app1) at ($(app2.220)+(-1.5,-0.4)$) {$\App$};
+                \node[operator] (eta1) at ($(eta1 |- app2.140)+(0,0.8)$) {$\eta$};
+                \node[operator] (eta2) at ($(eta2 |- app1.140)+(0,0.4)$) {$\eta$};
+                
+                \node (in1) at (in1 |- eta1) {};
+                \node (in2) at (in2 |- eta2) {};
+                \node (in3) at ($(in3 |- app1.220)+(0,-0.4)$) {};
+                \node (out) at (out |- app2) {};
+
+                \draw[magenta] (in1) to[out=0,in=180] (eta2);
+                \draw[magenta] (in2) to[out=0,in=180] (eta1);
+                \draw[blue] (in3) to[out=0,in=220] (app1.220);
+                \draw[blue] (eta1) to[out=0,in=140] (app2.140);
+                \draw[blue] (eta2) to[out=0,in=140] (app1.140);
+                \draw[blue] (app1) to[out=0,in=220] (app2.220);
+                \draw[blue] (app2) -- (out);
+
+                \begin{scope}[on background layer]
+                    \node [
+                        fit=(eta1)(app2),
+                        diff,
+                        rotate=-20,
+                        inner sep=-6pt
+                    ] {};
+                    \node [
+                        fit=(eta2)(app1),
+                        diff,
+                        rotate=-20,
+                        inner sep=-3pt
+                    ] {};
+                \end{scope}
+            \end{scope}
+
+            \node at (2,-15) {$=$};
+
+            \begin{scope}[xshift=5.6cm,yshift=-15cm]
+                \node[operator,fill=consbg] (cons1) at (1,0) {$\cons$};
+                \node[operator,fill=consbg] (cons2) at ($(cons1)+(-1.5,-0.4)$) {$\cons$};
+
+                \node (in1) at ($(in1 |- cons1.140)+(0,0.6)$) {};
+                \node (in2) at ($(in2 |- cons2.140)+(0,0.2)$) {};
+                \node (in3) at ($(in3 |- cons2.220)+(0,-0.4)$) {};
+                \node (out) at (out |- cons1) {};
+
+                \draw[blue] (cons2.east) to[out=0,in=220] (cons1.220);
+                \draw[magenta] (in2.east |- in1) to[out=0,in=140] (cons2.140);
+
+                \draw[blue] (cons1.east) -- (out.west);
+                \draw[magenta] (in2.east) to[out=0,in=140]  (cons1.140);
+                \draw[blue] (in3.east) to[out=0,in=220] (cons2.220);
+            \end{scope}
+        \end{tikzpicture}
+    \end{equation*}
 \end{proof}
 
 \begin{theorem}
