@@ -17,15 +17,16 @@
       ellipse,
       inner xsep=0pt,
       inner ysep=2pt,
-      minimum width=3.5ex,
-      minimum height=3.5ex,
+      minimum width=4ex,
+      minimum height=4ex,
     },
   inputwire/.style={
-      inner sep=2pt,
+      above,
       align=left,
       pos=0.3,
     },
   outputwire/.style={
+      above,
       inner sep=2pt,
       align=right,
       pos=0.7,
@@ -33,6 +34,21 @@
   wirelabel/.style={
       inner sep=2pt,
     },
+  diff/.style={
+      draw=red,
+      very thin,
+      fill opacity=0.1,
+      fill=red,
+      ellipse
+  },
+  result/.style={
+      draw=red,
+      dashed,
+      very thin,
+      fill opacity=0.1,
+      fill=red,
+      ellipse
+  },
 }
 
 \newcommand{\Nullary}[2]{%
