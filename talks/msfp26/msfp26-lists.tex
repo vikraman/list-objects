@@ -2432,9 +2432,11 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoida
         \draw[blue] (in) -- (id);
         \draw[blue] (id) -- (out);
         \begin{scope}[on background layer]
-          fit=(id),
-          result,
-          inner sep=1.5pt,
+          \node[
+            fit=(id),
+            result,
+            inner sep=1.5pt,
+          ] {};
         \end{scope}
       \end{scope}
     \end{tikzpicture}
@@ -2443,8 +2445,7 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoida
   $g$-$\cons$-$\beta$:
   \begin{equation*}
     \begin{tikzpicture}
-      \node (base) at (0,0) {};
-      \begin{scope}
+      \begin{scope}[yshift=-0.2cm]
         \node[operator,fill=gbg] (g) at (0,0) {$g$};
         \node[operator,fill=consbg] (cons) at ($(g.140)+(-1.5,0.4)$) {$\cons$};
 
@@ -2460,9 +2461,9 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoida
         \draw[blue] (g) -- (out);
       \end{scope}
 
-      \node at (1.7,0) {$=$};
+      \node at (1.7,-0.2) {$=$};
 
-      \begin{scope}[xshift=5.1cm]
+      \begin{scope}[xshift=5.1cm,yshift=-0.2cm]
         \node[operator,fill=Appbg] (app) at (0,0) {$\App$};
         \node[operator,fill=consbg] (cons) at ($(app.140)+(-1.5,0.4)$) {$\cons$};
 
@@ -2934,7 +2935,7 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoida
 
   $(3\Rightarrow 2)$ is clear, so it remains to prove the reverse implication.
 
-  $(1\wedge2\Rightarrow 3)$ $(L(A),\nil,\App)$ is a commutative monoid object by assumption, so we need only show freeness. Let $f:A\to B$ be a morphism, with $(B,e,m)$ a commutative monoid object. Since monoid homomorphisms are automatically commutative monoid homomorphisms, we may construct the extension $f^\sharp$ as $\iter(n,c)$, where $n$ and $c$ are:
+  $(1\wedge2\Rightarrow 3)$ $(L(A),\nil,\App)$ is a commutative monoid object by assumption, so we need only show freeness. Let $f:A\to B$ be qa morphism, with $(B,e,m)$ a commutative monoid object. Since monoid homomorphisms are automatically commutative monoid homomorphisms, we may construct the extension $f^\sharp$ as $\iter(n,c)$, where $n$ and $c$ are:
     \begin{equation*}
     \begin{tikzpicture}
       \begin{scope}
