@@ -85,11 +85,11 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Lists are a fundamental data structure, important in computer science and mathematics. They are often defined in functional programming languages as cons-lists, generated inductively from a pair of constructors $\nil:L(A)$ and $\cons:A\to L(A)\to L(A)$, and whose eliminators allow for definitions by recursion.
+Lists are a fundamental data structure, important in computer science and mathematics. They are often defined in functional programming languages as cons-lists, generated inductively from a pair of constructors $\nil:L(A)$ and $\cons:A\to L(A)\to L(A)$, and whose eliminators allow for definitions by recursion and proofs by induction.
 
 In category theory, these lists are understood as initial algebras $\mu X.1+A\times X$~\cite{DBLP:phd/ethos/Hagino87,adamekInitialAlgebrasTerminal2025}. This list structure can be axiomatised more generally in the setting of a monoidal category, replacing the cartesian product with a tensor, and removing the need for a coproduct by axiomatising the $\nil$ and $\cons$ maps directly with an iteration mechanism. These list objects generalise the notion of Natural Numbers Objects~\cite{lawvereFUNCTORIALSEMANTICSALGEBRAIC1963} and were introduced in Joyal's arithmetic universes. An internal language for them was studied by Maietti~\cite{maiettiJoyalsArithmeticUniverse2010}, and other variants were explored in~\cite{cockettListarithmeticDistributiveCategories1990} and~\cite{jayFiniteObjectsLocos1997}.
 
-In all of these settings, additional axioms on the underlying category are required to reconstruct traditional list operations from these list objects. However, in the minimal setting of a monoidal category, this notion of a list object can be strengthened to that of a \textit{parametrised} list object which supports parametrised recursion. It is shown in~\cite{fioreListObjectsAlgebraic2017} that this yields a construction of free monoids (see also~\cite{kellyUnifiedTreatmentTransfinite1980}) in monoidal categories. We give a string diagrammatic proof of this result, showing that if a monoidal category $\cat{C}$ has all parametrised list objects, then the forgetful functor $\mathrm{Mon}(\cat{C})\to\cat{C}$ is monadic.
+In all of these settings, additional axioms on the underlying category are required to reconstruct traditional list operations, such as list append ($\App$), from these list objects. However, in the minimal setting of a monoidal category, this notion of a list object can be strengthened to that of a \textit{parametrised} list object which supports parametrised recursion. It is shown in~\cite{fioreListObjectsAlgebraic2017} that this yields a construction of free monoids (see also~\cite{kellyUnifiedTreatmentTransfinite1980}) in monoidal categories. We give a string diagrammatic proof of this result, showing that if a monoidal category $\cat{C}$ has all parametrised list objects, then the forgetful functor $\mathrm{Mon}(\cat{C})\to\cat{C}$ is monadic.
 
 Finite multisets are another important data structure that are the commutative counterpart to lists; and in fact can be axiomatised with only a simple modification to these list objects. In this talk, we will study the notion of a \textit{symmetric} list object in a symmetric monoidal category. We will identify lists that differ by a transposition of the two frontmost elements using the symmetry of the underlying category. Using this, we show the analogous commutative results that symmetric list objects are free commutative monoids, and that having all symmetric list objects yields a similar monadic adjunction between $\mathrm{CMon}(\cat{C})$ and $\cat{C}$.
 
@@ -1810,11 +1810,11 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
 % \end{proof}
 
 \begin{theoremrep}\label{strong universal property}
-  If $(C,\times,1)$ is cartesian monoidal and $(L(A),\nil,\cons)$ is a list object, then $L(A)$ satisfies the following stronger universal property: for every object $L$ equipped with maps $n:P\to L$ and $c:A\times L\times P\rightarrow L$, then there exists a \textit{doubly parametrised iterator} $\check{\iter}(n,c):L(A)\times P\rightarrow L$, such that the following two computation rules hold:
+  If $(C,\times,1)$ is cartesian monoidal and $L(A)$ is a list object, then $L(A)$ satisfies the following stronger universal property: for every object $L$ equipped with maps $n:P\to L$ and $c:A\times L\times P\rightarrow L$, then there exists a \textit{doubly parametrised iterator} $\checkiter(n,c):L(A)\times P\rightarrow L$, such that the following two computation rules hold:
   \begin{equation*}
     \begin{tikzpicture}[baseline=(it)]
       \begin{scope}
-        \node[operator,fill=itbg] (it) at (0,0) {$\iter(n,c)$};
+        \node[operator,fill=itbg] (it) at (0,0) {$\checkiter(n,c)$};
         \node[anchor=east,operator,fill=nilbg] (in1) at ($(it.140)+(-1,0.4)$) {$\nil$};
         \node (in2) at ($(it.220)+(-1,-0.4)$) {};
         \node (out) at ($(it.east)+(1,0)$) {};
@@ -1838,7 +1838,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
     \begin{tikzpicture}[baseline=(base)]
       \begin{scope}
         \node (base) at (0,0) {};
-        \node[operator,fill=itbg] (it) at (0,0) {$\iter(n,c)$};
+        \node[operator,fill=itbg] (it) at (0,0) {$\checkiter(n,c)$};
         \node[anchor=east,operator,fill=consbg] (cons) at ($(it.140)+(-1,0.4)$) {$\cons$};
         
         \coordinate (in1) at ($(cons.140)+(-1,0.2)$);
@@ -1859,7 +1859,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
 
       \begin{scope}[xshift=6.2cm]
         \node[operator,fill=cbg] (c) at (0,0) {$c$};
-        \node[anchor=east,operator,fill=itbg] (it) at ($(c.220)+(-1,-0.4)$) {$\iter(n,c)$};
+        \node[anchor=east,operator,fill=itbg] (it) at ($(c.220)+(-1,-0.4)$) {$\checkiter(n,c)$};
 
         \coordinate (in2) at ($(it.140)+(-1.5,0.2)$);
         \coordinate (in1) at ($(in2 |- c.140)+(0,0.8)$);
@@ -1882,7 +1882,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
 
 
 \begin{proof}[Proof sketch]
-  Consider the list algebra structure on $K=L\times P$ given by $\bar{n}:P\xrightarrow{\Delta_P}P\times P\xrightarrow{n\times P}L\times P$ $\bar{c}:A\times L\times P\xrightarrow{A\times L\times\Delta_P}A\times L\times P\times P\xrightarrow{c\times P}L\times P$. By the ordinary universal property, we have an iterator $\iter(\bar{n},\bar{c}):L(A)\times P\to L\times P$. Then, $\check{\iter}(n,c)$ is given by $\pi_1\circ\iter(\bar{n},\bar{c})$.
+  Consider the list algebra structure on $K=L\times P$ given by $\check{n}:P\xrightarrow{\Delta_P}P\times P\xrightarrow{n\times P}L\times P$ and $\check{c}:A\times L\times P\xrightarrow{A\times L\times\Delta_P}A\times L\times P\times P\xrightarrow{c\times P}L\times P$. By the ordinary universal property, we have an iterator $\iter(\check{n},\check{c}):L(A)\times P\to L\times P$. Then, $\check{\iter}(n,c)$ is given by $\pi_1\circ\iter(\check{n},\check{c})$.
 \end{proof}
 
 
@@ -1892,7 +1892,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
 \end{theoremrep}
 
 \begin{proof}[Proof sketch]
-  Since the category is symmetric, we only need to define one of the strengths. A construction of the right strength $\tau_{A,B}:L(A)\times B\to L(A\times B)$ is as follows, with coherence proofs omitted for brevity.
+  Since the category is symmetric, we only need to define one of the strengths. A construction of the right strength $\tau_{A,B}:L(A)\times B\to L(A\times B)$ is as follows.
 
   We can equip $L(A\times B)$ with a list algebra structure with the maps $n:=B\xrightarrow{!}1\xrightarrow{\nil}L(A\times B)$ and $c:=A\times L(A\times B)\xrightarrow{\cong} A\times B\times L(A\times B)\xrightarrow{\cons} L(A\times B)$, and from the strong universal property, we obtain a map $\check{\iter}(n,c):L(A)\times B\rightarrow L(A\times B)$. This iterator is the right strength map.
 
@@ -2935,7 +2935,7 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoida
 
   $(3\Rightarrow 2)$ is clear, so it remains to prove the reverse implication.
 
-  $(1\wedge2\Rightarrow 3)$ $(L(A),\nil,\App)$ is a commutative monoid object by assumption, so we need only show freeness. Let $f:A\to B$ be qa morphism, with $(B,e,m)$ a commutative monoid object. Since monoid homomorphisms are automatically commutative monoid homomorphisms, we may construct the extension $f^\sharp$ as $\iter(n,c)$, where $n$ and $c$ are:
+  $(1\wedge2\Rightarrow 3)$ $(L(A),\nil,\App)$ is a commutative monoid object by assumption, so we need only show freeness. Let $f:A\to B$ be a morphism, with $(B,e,m)$ a commutative monoid object. Since monoid homomorphisms are automatically commutative monoid homomorphisms, we may construct the extension $f^\sharp$ as $\iter(n,c)$, where $n$ and $c$ are:
     \begin{equation*}
     \begin{tikzpicture}
       \begin{scope}
