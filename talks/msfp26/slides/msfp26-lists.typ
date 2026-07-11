@@ -1,10 +1,9 @@
-#import "@preview/touying:0.5.5": *
+#import "@preview/touying:0.7.4": *
 #import themes.university: *
-#import "@preview/cetz:0.3.1"
-#import "@preview/fletcher:0.5.3" as fletcher: edge, node
+#import "@preview/cetz:0.5.2"
+#import "@preview/fletcher:0.5.8" as fletcher: edge, node
 #import "@preview/ctheorems:1.1.3": *
 #import "@preview/numbly:0.1.0": numbly
-#import "@preview/curryst:0.4.0": proof-tree, rule
 #import "@preview/pinit:0.2.2": *
 
 #let todo(t) = text(fill: red.darken(20%))[TODO: #t]
