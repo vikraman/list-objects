@@ -20,7 +20,7 @@ jobs:
                   path: talks/msfp26/msfp26-lists.pdf
                   overwrite: true
             - name: Release PDF file
-              uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631
+              uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228
               #uses: softprops/action-gh-release@v2
               with:
                   files: talks/msfp26/msfp26-lists.pdf
