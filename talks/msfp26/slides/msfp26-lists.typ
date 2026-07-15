@@ -132,24 +132,116 @@
 // macros...
 #let nil = math.op("nil")
 #let cons = math.op("cons")
+#let app = {
+    math.plus
+    h(0.2em)
+    math.plus
+}
 
 // begin presentation
 #title-slide()
 
-== Background
+
+
+
+
+== Lists
+
+#grid(
+    columns: (1fr, 1fr),
+    rows: (1fr, 1fr),
+    [
+        In scheme:
+        ```lisp
+        (a b c) ; a list of three elements
+        () ; the empty list
+        (car '(a b c)) ; a
+        (cdr '(a b c)) ; (b c)
+        ```
+    ],
+    [
+        In Haskell:
+        ```haskell
+        data [a] = [] | a : [a]
+        ```
+    ],
+    [
+        In Agda:
+        ```haskell
+        data List (A : Set) : Set where
+          nil : List A
+          cons : A -> List A -> List A
+        ```
+    ],
+    [
+        In Rocq:
+        ```ml
+        Inductive list (A : Type) : Type :=
+          | nil : list A
+          | cons : A -> list A -> list A.
+        ```
+    ]
+)
+
+
+
+== Constructions
+
+In categories with finite products and countable coproducts, we can construct lists as:
+$
+    product.co_(n >= 0) A^n
+$
+Alternatively, if we have a natural numbers object, sigma types, and functions out of $sans("Fin")_n$, we can construct lists as:
+$
+    sum_(n:bb(N)) A^(sans("Fin")_n)
+$
+We can also construct lists as initial algebras of the following functor:
+$
+    F(X) = 1 + A times X
+$
+but this requires an initial object, and for the colimit of the following $omega$-chain to exist:
+$
+    0 -> F(0) -> F F(0) -> F F F(0) -> ...
+$
+
+
+== Natural Numbers Objects
+
+Lawvere #cite(<lawvereElementaryTheoryCategory1964>) introduced natural numbers objects
 
 
 
 
 
 
-Category of endofunctors with composition monoidal product, list objects give the free monad construction.
 
-Modules over a commutative ring, tensor algebras are list objects with monoidal structure given by tensor product of modules.
+== Examples of list objects in nature
 
-James construction on connected spaces = list objects with monoidal structure given by smash product
+- In a category of endofunctors with monoidal structure given by functor composition, list objects are free monad:
+$
+    #nil = ? , quad #cons = ?
+$
+- In the category of modules over a commutative ring $R$ under $R$-tensor products, list objects are tensor algebras:
+$
+    #nil = ? , quad #cons = ?
+$
+- In the category of pointed spaces under smash product, list objects on connected spaces corresponds to the James construction:
+$
+    #nil = ? , quad #cons = ?
+$
 
 
+
+
+==
+
+
+
+
+
+
+
+==
 
 
 
@@ -165,8 +257,11 @@ Lists in realisability categories can be constructed without coproducts
 
 
 #theorem[
-  $(L(A), nil, a)$ is the free monoid on $A$.
+  $(L(A), nil, app)$ is the free monoid on $A$.
 ]
+
+
+
 
 
 
@@ -186,7 +281,6 @@ Lists in realisability categories can be constructed without coproducts
 - Outline strength coherence proofs
 
 
-
 == Symmetric lists
 - ilst axiom
 - Show free commutative monoid
@@ -200,57 +294,8 @@ Lists in realisability categories can be constructed without coproducts
 
 == Counterexamples for any given requirements
 
-== Lists
-
-Linked lists
 
 
 
-In scheme:
-```scheme
-(a b c) ; a list of three elements
-() ; the empty list
-(car '(a b c)) ; a
-(cdr '(a b c)) ; (b c)
-```
 
-In Haskell:
-```haskell
-data [a] = [] | a : [a]
-```
-
-In Agda:
-```agda
-data List (A : Set) : Set where
-  nil : List A
-  cons : A -> List A -> List A
-```
-
-In Rocq:
-```coq
-Inductive list (A : Type) : Type :=
-  | nil : list A
-  | cons : A -> list A -> list A.
-```
-
-#grid(
-  columns: (1fr, 1fr),
-  align: (right, left),
-  $#nil : L(A) quad$, $quad #cons : A times L(A) -> L(A)$,
-)
-
-#align(center + horizon)[
-
-]
-
-== Diagram test
-
-#fletcher-diagram(
-  cell-size: 15mm,
-  $
-    #rect(width: 2em, height: 2em)[
-      #rect(width: 2em, height: 2em)[b]
-      #rect(width: 2em, height: 2em)[c]
-    ]
-  $,
-)
+#bibliography("lists.bib")
