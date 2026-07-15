@@ -28,8 +28,10 @@
 // theme configuration
 #show: university-theme.with(
   aspect-ratio: "16-9",
-  // align: horizon,
-  // config-common(handout: true),
+  align: horizon,
+  config-common(
+    show-bibliography-as-footnote: bibliography(title: none, "lists.bib"),
+  ),
   config-info(
     title: [Symmetric List Objects],
     author: [
@@ -293,9 +295,3 @@ Lists in realisability categories can be constructed without coproducts
 
 
 == Counterexamples for any given requirements
-
-
-
-
-
-#bibliography("lists.bib")
