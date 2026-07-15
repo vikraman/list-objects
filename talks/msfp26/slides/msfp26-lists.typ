@@ -135,11 +135,50 @@
 #title-slide()
 
 == Background
+
+
+
+
+
+
+Category of endofunctors with composition monoidal product, list objects give the free monad construction.
+
+Modules over a commutative ring, tensor algebras are list objects with monoidal structure given by tensor product of modules.
+
+James construction on connected spaces = list objects with monoidal structure given by smash product
+
+
+
+
+
+Lists can be defined in any monoidal category
+
+
+Lists in realisability categories can be constructed without coproducts
+
+
+
+
+
+
+#let nil = math.op("nil")
+#let cons = math.op("cons")
+#let App = math.op("app")
+
+#theorem[
+$(L(A), nil, App)$ is the free monoid on $A$.
+]
+
+
+
 - ...
 - coproduct construction
 - colimit/initial algebra construction
 
+
+
 == List objects
+- Non-parametrised list objects do not coincide with free monoids
 - Parametrised list objects
 - Construct ++
 - Example of using iter to show equality of maps
@@ -147,11 +186,17 @@
 - Construct strength
 - Outline strength coherence proofs
 
+
+
 == Symmetric lists
 - ilst axiom
 - Show free commutative monoid
 - Outline triple equivalence
 
+
+
 == Linear logic stuff
+
+
 
 == Counterexamples for any given requirements
