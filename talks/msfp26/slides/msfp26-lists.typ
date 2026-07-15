@@ -15,20 +15,22 @@
 // theorems configuration by ctheorems
 #show: thmrules.with(qed-symbol: $square$)
 #let theorem = thmbox("theorem", "Theorem", fill: rgb("#eeffee"))
+#let lemma = thmbox("theorem", "Lemma", fill: rgb("#eeffee"))
 #let corollary = thmplain(
   "corollary",
   "Corollary",
   base: "theorem",
   titlefmt: strong,
 )
-#let definition = thmbox("definition", "Definition", inset: (x: 1.2em, top: 1em))
+#let definition = thmbox("definition", "Definition", inset: (x: 1.2em, top: 0em))
 #let example = thmplain("example", "Example").with(numbering: none)
 #let proof = thmproof("proof", "Proof")
+#let proofsketch = thmproof("proof", "Proof sketch")
 
 // theme configuration
 #show: university-theme.with(
   aspect-ratio: "16-9",
-  align: horizon,
+  // align: horizon,
   config-common(
     show-bibliography-as-footnote: bibliography(title: none, "lists.bib"),
   ),
@@ -132,12 +134,14 @@
 )
 
 // macros...
+#let rec = math.op("rec")
 #let nil = math.op("nil")
 #let cons = math.op("cons")
 #let it = math.op("it")
+#let mon = math.op("Mon")
 #let app = {
     math.plus
-    h(-0.6em)
+    h(-0.5em)
     math.plus
 }
 
@@ -212,48 +216,54 @@ $
 
 Lawvere #cite(<lawvereElementaryTheoryCategory1964>) introduced natural numbers objects in his axiomatisation of structural set theory (ETCS).
 
-
-
-
-
 $
-    #fletcher-diagram(
+    #fletcher-diagram(cell-size: 12mm, spacing: 10mm,
         node((0,0), $1$),
         node((2,-1), $N$),
         node((4,-1), $N$),
         node((2,1), $X$),
         node((4,1), $X$),
-        edge((0,0), (2,-1), `0`, "->"),
-        edge((0,0), (2,1), `x`, "->", label-side: right),
-        edge((4,-1), (2,-1), `s`, "->"),
-        edge((2,-1), (2,1), `rec(x,r)`, "-->", label-side: left),
-        edge((4,-1), (4,1), `rec(x,r)`, "-->", label-side: left),
-        edge((4,1), (2,1), `r`, "->", label-side: left),
+
+        edge((0,0), (2,-1), label: $0$, "->"),
+        edge((0,0), (2,1), label: $x$, "->", label-side: right),
+        edge((4,-1), (2,-1), label: $s$, "->"),
+
+        edge((2,-1), (2,1), label: $rec(x,r)$, "-->", label-side: left),
+        edge((4,-1), (4,1), label: $rec(x,r)$, "-->", label-side: left),
+        edge((4,1), (2,1), label: $r$, "->", label-side: left),
     )
 $
 
 == List Objects
 
-We can adapt this universal property to similarly axiomatise list objects in arbitrary monoidal categories, without the need for coproducts:
+We can adapt this universal property to axiomatise list objects in arbitrary monoidal categories:
+
+#v(-0.5em)
 
 #definition[
-    A _list object_ on an object $A$ is an object $L(A)$ equipped with a pair of maps $nil : 1 -> L(A)$ and $cons : A times.o L(A) -> L(A)$, such that for every object $L$ equipped with maps $n : 1 -> L$ and $c : A times.o L -> L$, there exists a unique _mediating map_ or _iterator_ $it (n,c): L(A) times.o P -> L$, such that the following diagram commutes:
+    A _list object_ on an object $A$ is:
+    - an object $L(A)$ with maps $1 ->^nil L(A) <-^cons A times.o L(A)$, such that;
+    - for every $L$ with maps $1 ->^n L <-^c A times.o L$, there exists a unique _mediating map_ or _iterator_
     $
-        #fletcher-diagram(
+        it (n,c): L(A) times.o P -> L
+    $
+    such that the following diagram commutes:
+    $
+        #fletcher-diagram(spacing: 8mm,
             node((0,0), $1$),
             node((2,-1), $L(A)$),
             node((4,-1), $A times.o L(A)$),
             node((2,1), $L$),
             node((4,1), $A times.o L$),
 
-            edge((0,0), (2,-1), `nil`, "->"),
-            edge((4,-1), (2,-1), `cons`, "->"),
+            edge((0,0), (2,-1), label: $nil$, "->"),
+            edge((4,-1), (2,-1), label: $cons$, "->"),
 
-            edge((2,-1), (2,1), `it(n,c)`, "-->", label-side: left),
-            edge((4,-1), (4,1), `it(n,c)`, "-->", label-side: left),
+            edge((2,-1), (2,1), label: $it(n,c)$, "-->", label-side: left),
+            edge((4,-1), (4,1), label: $it(n,c)$, "-->", label-side: left),
 
-            edge((0,0), (2,1), `n`, "->", label-side: right),
-            edge((4,1), (2,1), `c`, "->", label-side: left),
+            edge((0,0), (2,1), label: $n$, "->", label-side: right),
+            edge((4,1), (2,1), label: $c$, "->", label-side: left),
         )
     $
 ]
@@ -309,45 +319,56 @@ These list objects also do not necessarily coincide with free monoids.
 
 - For example, every object of $(sans("Set"), union.sq, emptyset)$ is the free monoid on itself, but list objects are always infinite:
   $
-      mu X.0 union.sq A union.sq X= mu X. A union.sq X
+      mu X.emptyset union.sq A union.sq X quad=quad mu X. A union.sq X
   $
 
 
 
 == Parametrised List Objects
 
-To solve the first problem, we strengthen the universal property as follows.
+To solve the first problem, we strengthen the universal property as follows:
+
 
 #definition[
-    A _parametrised_ list object on an object $A$ is an object $L(A)$ equipped with a pair of maps $nil : 1 -> L(A)$ and $cons : A times.o L(A) -> L(A)$, such that for every object $L$ equipped with maps $n : P -> L$ and $c : A times.o L -> L$, there exists a unique mediating map or iterator $it (n,c): L(A) times.o P-> L$, such that the following diagram commutes:
-    $
-        #fletcher-diagram(spacing: 15mm,
-            node((0,-1), $1 times.o P$),
-            node((0,1), $P$),
-            node((2,-1), $L(A) times.o P$),
-            node((4,-1), $A times.o L(A) times.o P$),
-            node((2,1), $L$),
-            node((4,1), $A times.o L times.o P$),
-
-            edge((0,-1), (2,-1), label: $nil times.o P$, "->"),
-            edge((2,-1), (4,-1), label: $cons times.o P$, "->"),
-
-            edge((0,-1), (0,1), "="),
-            edge((2,-1), (2,1), label: $it(n,c)$, "-->", label-side: left),
-            edge((4,-1), (4,1), label: $it(n,c)$, "-->", label-side: left),
-
-            edge((0,01), (2,1), label: $x$, "->", label-side: right),
-            edge((2,1), (4,1), label: $r$, "->", label-side: right),
-        )
-    $
+    A _parametrised_ list object on an object $A$ is:
+    - an object $L(A)$ with maps $1 -->^(nil) L(A) <--^(cons) A times.o L(A)$, such that;
+    - for any $L$ with maps $P -->^n L <--^c A times.o L$, there exists a unique map
+      $
+          it (n,c): L(A) times.o P-> L
+      $
+      such that the following diagram commutes:
+      $
+          #fletcher-diagram(spacing: 10mm,
+              node((0,-1), $1 times.o P$),
+              node((0,1), $P$),
+              node((2,-1), $L(A) times.o P$),
+              node((4,-1), $A times.o L(A) times.o P$),
+              node((2,1), $L$),
+              node((4,1), $A times.o L times.o P$),
+              edge((0,-1), (2,-1), label: $nil times.o P$, "->"),
+              edge((2,-1), (4,-1), label: $cons times.o P$, "->"),
+              edge((0,-1), (0,1), "="),
+              edge((2,-1), (2,1), label: $it(n,c)$, "-->", label-side: left),
+              edge((4,-1), (4,1), label: $it(n,c)$, "-->", label-side: left),
+              edge((0,01), (2,1), label: $x$, "->", label-side: right),
+              edge((2,1), (4,1), label: $r$, "->", label-side: right),
+          )
+      $
 ]
+
 == Parametrised List Objects
 
-To solve the first problem, we strengthen the universal property as follows.
+To solve the first problem, we strengthen the universal property as follows:
+
 
 #definition[
-    A _parametrised_ list object on an object $A$ is an object $L(A)$ equipped with a pair of maps $nil : 1 -> L(A)$ and $cons : A times.o L(A) -> L(A)$, such that for every object $L$ equipped with maps $n : P -> L$ and $c : A times.o L -> L$, there exists a unique mediating map or iterator $it (n,c): L(A) times.o P-> L$, such that the following computation rules hold:
-
+    A _parametrised_ list object on an object $A$ is:
+    - an object $L(A)$ with maps $1 -->^(nil) L(A) <--^(cons) A times.o L(A)$, such that;
+    - for any $L$ with maps $P -->^n L <--^c A times.o L$, there exists a unique map
+      $
+          it (n,c): L(A) times.o P-> L
+      $
+      such that the following two computation rules hold:
 
     #grid(
         align: (center,center),
@@ -358,31 +379,113 @@ To solve the first problem, we strengthen the universal property as follows.
     )
 ]
 
+
+
+
+
+
 == Using the iterator
 
-We can define $app$ using this stronger universal property:
+We can now use this stronger universal property to define $app$ as an iterator:
 
-- Since $app : L(A) times.o L(A) -> L(A)$, we have $L(A)$ as both the parameter $P$, and the target $L$.
-- We need maps $n : L(A) -> L(A)$ and $c : A times.o L(A) times.o L(A)$.
+- Since $app : L(A) times.o L(A) -> L(A)$, we have $L(A)$ as both the parameter $P$ and the target $L$.
+  We now only need maps $n : L(A) -> L(A)$ and $c : A times.o L(A) times.o L(A)$.
+
+  In Agda:
+
+  ```haskell
+  _++_ : List A -> List A -> List A
+  [] ++ ys          = ys
+  (x :: xs) ++ ys = x :: (xs ++ ys)
+  ```
+  so we pick $n = id$ and $c=cons$:
+  $
+      app = it(id, cons).
+  $
 
 
-==
 
-For the second problem:
+== Using the iterator
+
+Since the iterator is unique, we can also prove that two maps are equal by showing that they satisfy the two computation rules $nil$-$beta$ and $cons$-$beta$, and are hence the same iterator.
+
+#lemma[
+    The following maps $f,g:L(A) -> L(A)$ are equal:
+    #figure(
+        image("diagrams/output-10.svg", width: 45%),
+    )
+]
+
+#proof[
+    We claim that both maps are the iterator $it(nil,cons)$.
+
+    The identity immediately satisfies both rules, so we have $g=it(nil,cons)$.
+
+    #v(2em)
+
+    We have $f$-$nil$-$beta$ by applying $app$-$nil$-$beta$:
+    #align(center,
+        image("diagrams/output-11.svg", width: 80%)
+    )
+    and similarly, $f$-$cons$-$beta$ from $app$-$cons$-$beta$:
+
+    #align(center,
+        image("diagrams/output-12.svg", width: 100%)
+    )
+    and hence $f=it(nil,cons)=g$.
+]
+
+== Free monoids
+
+The stronger univeral property resolves the first limitation, allowing us more flexibility when eliminating from lists.
+
+For the second limitation:
 
 #theorem[
   $(L(A), nil, app)$ is the free monoid on $A$.
 ]
 
-#proof[
+#proofsketch[
+    The left unit law holds immediately by $++$-$nil$-$beta$:
+    #align(center,
+        image("diagrams/output-9.svg", width: 40%)
+    )
+    The previous lemma shows the right unit law, and associativity is proved similarly.
+]
 
+#theorem[
+    If $cal(C)$ admits parametrised list objects for every object, then $mon(cal(C))$ is monadic over $cal(C)$ via the evident forgetful functor.
 ]
 
 
+== Strength
+
+#theorem[
+    If $(cal(C),times,1)$ is cartesian monoidal, and $L(A)$ is a list object, then $L(A)$ satisfies the following stronger universal property:
+
+    - for every $L$ with maps $P ->^n L <-^c A times L times P$, there exists a _doubly parametrised iterator_
+      $
+          it(n,c) : L(A) times P -> L
+      $
+      such that the following computation rules hold:
+
+    $
+        #grid(
+            align: (center,center),
+            columns: (35%, 50%),
+            gutter: 2em,
+            image("diagrams/output-3.svg", width: 100%),
+            image("diagrams/output-4.svg", width: 100%),
+        )
+    $
+]
+
+
+
 == List objects
-- Construct ++
-- Example of using iter to show equality of maps
 - Outline free monoid proof
+
+
 - Construct strength
 - Outline strength coherence proofs
 
