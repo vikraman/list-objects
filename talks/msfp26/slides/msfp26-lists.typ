@@ -138,7 +138,8 @@
 #let nil = math.op("nil")
 #let cons = math.op("cons")
 #let it = math.op("it")
-#let mon = math.op("Mon")
+#let Mon = math.op("Mon")
+#let CMon = math.op("CMon")
 #let app = {
     math.plus
     h(-0.5em)
@@ -215,6 +216,8 @@ $
 == Natural Numbers Objects
 
 Lawvere #cite(<lawvereElementaryTheoryCategory1964>) introduced natural numbers objects in his axiomatisation of structural set theory (ETCS).
+
+This definition makes sense in categories without general products or coproducts
 
 $
     #fletcher-diagram(cell-size: 12mm, spacing: 10mm,
@@ -450,24 +453,24 @@ For the second limitation:
     #align(center,
         image("diagrams/output-9.svg", width: 40%)
     )
-    The previous lemma shows the right unit law, and associativity is proved similarly.
+    and the previous lemma shows the right unit law. Associativity and the unique extension property are proved similarly using iterators.
 ]
 
 #theorem[
-    If $cal(C)$ admits parametrised list objects for every object, then $mon(cal(C))$ is monadic over $cal(C)$ via the evident forgetful functor.
+    If $cal(C)$ admits parametrised list objects for every object, then $Mon(cal(C))$ is monadic over $cal(C)$ via the evident forgetful functor.
 ]
 
 
-== Strength
+== The Cartesian Setting
 
 #theorem[
     If $(cal(C),times,1)$ is cartesian monoidal, and $L(A)$ is a list object, then $L(A)$ satisfies the following stronger universal property:
 
-    - for every $L$ with maps $P ->^n L <-^c A times L times P$, there exists a _doubly parametrised iterator_
-      $
-          it(n,c) : L(A) times P -> L
-      $
-      such that the following computation rules hold:
+    For every $L$ with maps $P ->^n L <-^c A times L times P$, there exists a _doubly parametrised iterator_:
+    $
+        caron(it)(n,c) : L(A) times P -> L
+    $
+    such that the following computation rules hold:
 
     $
         #grid(
@@ -481,21 +484,60 @@ For the second limitation:
 ]
 
 
+#theorem[
+    If $(cal(C),times,1)$ is cartesian monoidal, then the induced monad is strong.
+]
 
-== List objects
-- Outline free monoid proof
+A construction of the right strength $tau_(A,B):L(A) times B -> L(A times B)$ is as follows.
+
+We can equip $L(A times B)$ with a doubly-parametrised list algebra structure using:
+- $n :=  B ->^! 1 ->^nil -> L(A times B)$
+- $c := A times L(A times B) times B ->^tilde.equiv A times B times L(A times B) ->^cons L(A times B)$.
+From the strong universal property, we obtain a map
+$
+    tau_(A,B) := caron(it)(n,c) : L(A) times B -> L(A times B)
+$
 
 
-- Construct strength
-- Outline strength coherence proofs
+== Symmetric Lists
+
+Hereafter, assume the ambient category is symmetric strict monoidal.
+
+#definition[
+    A (_parametrised_) _symmetric list object_ or _ilst_ on $A$ is a list object $L(A)$ with the following additional axiom:
+    #align(center,
+        image("diagrams/output-5.svg", width: 65%)
+    )
+    and satisfying the corresponding universal property.
+]
+
+== Symmetric Lists
+
+#theorem[
+    Let $(L(A), nil, cons)$ be a list object on $A$. Then, the following are equivalent:
+
+    1. $(L(A), nil, cons)$ is a symmetric list object;
+    2. $(L(A), nil, app)$ is a commutative monoid object;
+    3. $(L(A), nil, cons)$ is the free commutative monoid object on $A$.
+]
 
 
-== Symmetric lists
-- ilst axiom
-- Outline triple equivalence
-- Show free commutative monoid
-- Bilinear maps
+== Symmetric Lists
 
+#theorem[
+    If $cal(C)$ admits parametrised list objects for every object, then $CMon(cal(C))$ is monadic over $cal(C)$ via the evident forgetful functor.
+]
+
+#theorem[
+    If $(cal(C),times,1)$ is cartesian monoidal, then the induced monad is strong, and further, commutative.
+]
+
+
+== Bilinear maps
 
 
 == Counterexamples
+
+
+
+#todo[example of category where omega chains don't exist but list objects exist]

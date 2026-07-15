@@ -1894,7 +1894,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
 \begin{proof}[Proof sketch]
   Since the category is symmetric, we only need to define one of the strengths. A construction of the right strength $\tau_{A,B}:L(A)\times B\to L(A\times B)$ is as follows.
 
-  We can equip $L(A\times B)$ with a list algebra structure with the maps $n:=B\xrightarrow{!}1\xrightarrow{\nil}L(A\times B)$ and $c:=A\times L(A\times B)\xrightarrow{\cong} A\times B\times L(A\times B)\xrightarrow{\cons} L(A\times B)$, and from the strong universal property, we obtain a map $\check{\iter}(n,c):L(A)\times B\rightarrow L(A\times B)$. This iterator is the right strength map.
+  We can equip $L(A\times B)$ with a doubly-parametrised list algebra structure with the maps $n:=B\xrightarrow{!}1\xrightarrow{\nil}L(A\times B)$ and $c:=A\times L(A\times B)\times B\xrightarrow{\cong} A\times B\times L(A\times B)\xrightarrow{\cons} L(A\times B)$, and from the strong universal property, we obtain a map $\check{\iter}(n,c):L(A)\times B\rightarrow L(A\times B)$. This iterator is the right strength map.
 
   The required strength coherences then follow from the strong universal property.
 \end{proof}
@@ -2334,7 +2334,7 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoida
   \begin{enumerate}
     \item $(L(A),\nil,\cons)$ is a symmetric list object;
     \item $(L(A),\nil,\App)$ is a commutative monoid object;
-    \item $(L(A),\nil,\App,\eta)$ is the free commutative monoid object on $A$;
+    \item $(L(A),\nil,\App,\eta)$ is the free commutative monoid object on $A$.
   \end{enumerate}
 \end{theoremrep}
 
