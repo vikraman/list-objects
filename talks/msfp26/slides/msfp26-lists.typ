@@ -366,7 +366,6 @@ We can define $app$ using this stronger universal property:
 - We need maps $n : L(A) -> L(A)$ and $c : A times.o L(A) times.o L(A)$.
 
 
-
 ==
 
 For the second problem:
