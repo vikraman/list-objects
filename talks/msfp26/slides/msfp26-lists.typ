@@ -134,9 +134,10 @@
 // macros...
 #let nil = math.op("nil")
 #let cons = math.op("cons")
+#let it = math.op("it")
 #let app = {
     math.plus
-    h(0.2em)
+    h(-0.6em)
     math.plus
 }
 
@@ -209,7 +210,58 @@ $
 
 == Natural Numbers Objects
 
-Lawvere #cite(<lawvereElementaryTheoryCategory1964>) introduced natural numbers objects
+Lawvere #cite(<lawvereElementaryTheoryCategory1964>) introduced natural numbers objects in his axiomatisation of structural set theory (ETCS).
+
+
+
+
+
+$
+    #fletcher-diagram(
+        node((0,0), $1$),
+        node((2,-1), $N$),
+        node((4,-1), $N$),
+        node((2,1), $X$),
+        node((4,1), $X$),
+        edge((0,0), (2,-1), `0`, "->"),
+        edge((0,0), (2,1), `x`, "->", label-side: right),
+        edge((4,-1), (2,-1), `s`, "->"),
+        edge((2,-1), (2,1), `rec(x,r)`, "-->", label-side: left),
+        edge((4,-1), (4,1), `rec(x,r)`, "-->", label-side: left),
+        edge((4,1), (2,1), `r`, "->", label-side: left),
+    )
+$
+
+== List Objects
+
+We can adapt this universal property to similarly axiomatise list objects in arbitrary monoidal categories, without the need for coproducts:
+
+#definition[
+    A _list object_ on an object $A$ is an object $L(A)$ equipped with a pair of maps $nil : 1 -> L(A)$ and $cons : A times.o L(A) -> L(A)$, such that for every object $L$ equipped with maps $n : 1 -> L$ and $c : A times.o L -> L$, there exists a unique _mediating map_ or _iterator_ $it (n,c): L(A) times.o P -> L$, such that the following diagram commutes:
+    $
+        #fletcher-diagram(
+            node((0,0), $1$),
+            node((2,-1), $L(A)$),
+            node((4,-1), $A times.o L(A)$),
+            node((2,1), $L$),
+            node((4,1), $A times.o L$),
+
+            edge((0,0), (2,-1), `nil`, "->"),
+            edge((4,-1), (2,-1), `cons`, "->"),
+
+            edge((2,-1), (2,1), `it(n,c)`, "-->", label-side: left),
+            edge((4,-1), (4,1), `it(n,c)`, "-->", label-side: left),
+
+            edge((0,0), (2,1), `n`, "->", label-side: right),
+            edge((4,1), (2,1), `c`, "->", label-side: left),
+        )
+    $
+]
+
+
+
+
+
 
 
 
@@ -220,62 +272,115 @@ Lawvere #cite(<lawvereElementaryTheoryCategory1964>) introduced natural numbers 
 == Examples of list objects in nature
 
 - In a category of endofunctors with monoidal structure given by functor composition, list objects are free monad:
-$
-    #nil = ? , quad #cons = ?
-$
+  $
+      nil = ? , quad cons = ?, quad it(n,c) = ?
+  $
 - In the category of modules over a commutative ring $R$ under $R$-tensor products, list objects are tensor algebras:
-$
-    #nil = ? , quad #cons = ?
-$
+  $
+      nil = ? , quad cons = ?, quad it(n,c) = ?
+  $
 - In the category of pointed spaces under smash product, list objects on connected spaces corresponds to the James construction:
-$
-    #nil = ? , quad #cons = ?
-$
+  $
+      nil = ? , quad cons = ?, quad it(n,c) = ?
+  $
 
+
+
+
+
+
+
+== Limitations
+
+We can only eliminate out of list objects alone.
+- To define list append:
+  $
+      app : L(A) times.o L(A) -> L(A)
+  $
+  we need to curry the second argument:
+  $
+      app : L(A) -> L(A) ^ (L(A))
+  $
+  but this requires $L(A)$ to be exponentiable.
+
+#v(2em)
+
+These list objects also do not necessarily coincide with free monoids.
+
+- For example, every object of $(sans("Set"), union.sq, emptyset)$ is the free monoid on itself, but list objects are always infinite:
+  $
+      mu X.0 union.sq A union.sq X= mu X. A union.sq X
+  $
+
+
+
+== Parametrised List Objects
+
+To solve the first problem, we strengthen the universal property as follows.
+
+#definition[
+    A _parametrised_ list object on an object $A$ is an object $L(A)$ equipped with a pair of maps $nil : 1 -> L(A)$ and $cons : A times.o L(A) -> L(A)$, such that for every object $L$ equipped with maps $n : P -> L$ and $c : A times.o L -> L$, there exists a unique mediating map or iterator $it (n,c): L(A) times.o P-> L$, such that the following diagram commutes:
+    $
+        #fletcher-diagram(spacing: 15mm,
+            node((0,-1), $1 times.o P$),
+            node((0,1), $P$),
+            node((2,-1), $L(A) times.o P$),
+            node((4,-1), $A times.o L(A) times.o P$),
+            node((2,1), $L$),
+            node((4,1), $A times.o L times.o P$),
+
+            edge((0,-1), (2,-1), label: $nil times.o P$, "->"),
+            edge((2,-1), (4,-1), label: $cons times.o P$, "->"),
+
+            edge((0,-1), (0,1), "="),
+            edge((2,-1), (2,1), label: $it(n,c)$, "-->", label-side: left),
+            edge((4,-1), (4,1), label: $it(n,c)$, "-->", label-side: left),
+
+            edge((0,01), (2,1), label: $x$, "->", label-side: right),
+            edge((2,1), (4,1), label: $r$, "->", label-side: right),
+        )
+    $
+]
+== Parametrised List Objects
+
+To solve the first problem, we strengthen the universal property as follows.
+
+#definition[
+    A _parametrised_ list object on an object $A$ is an object $L(A)$ equipped with a pair of maps $nil : 1 -> L(A)$ and $cons : A times.o L(A) -> L(A)$, such that for every object $L$ equipped with maps $n : P -> L$ and $c : A times.o L -> L$, there exists a unique mediating map or iterator $it (n,c): L(A) times.o P-> L$, such that the following computation rules hold:
+
+
+    #grid(
+        align: (center,center),
+        columns: (35%, 50%),
+        gutter: 2em,
+        image("diagrams/output-1.svg", width: 100%),
+        image("diagrams/output-2.svg", width: 100%),
+    )
+]
+
+== Using the iterator
+
+We can define $app$ using this stronger universal property:
+
+- Since $app : L(A) times.o L(A) -> L(A)$, we have $L(A)$ as both the parameter $P$, and the target $L$.
+- We need maps $n : L(A) -> L(A)$ and $c : A times.o L(A) times.o L(A)$.
 
 
 
 ==
 
-
-
-
-
-
-
-==
-
-
-
-Lists can be defined in any monoidal category
-
-
-Lists in realisability categories can be constructed without coproducts
-
-
-
-
-
-
+For the second problem:
 
 #theorem[
   $(L(A), nil, app)$ is the free monoid on $A$.
 ]
 
+#proof[
 
-
-
-
-
-- ...
-- coproduct construction
-- colimit/initial algebra construction
-
+]
 
 
 == List objects
-- Non-parametrised list objects do not coincide with free monoids
-- Parametrised list objects
 - Construct ++
 - Example of using iter to show equality of maps
 - Outline free monoid proof
@@ -285,13 +390,10 @@ Lists in realisability categories can be constructed without coproducts
 
 == Symmetric lists
 - ilst axiom
-- Show free commutative monoid
 - Outline triple equivalence
+- Show free commutative monoid
+- Bilinear maps
 
 
 
-== Linear logic stuff
-
-
-
-== Counterexamples for any given requirements
+== Counterexamples
