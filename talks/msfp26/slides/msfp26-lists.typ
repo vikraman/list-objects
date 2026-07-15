@@ -130,6 +130,8 @@
 )
 
 // macros...
+#let nil = math.op("nil")
+#let cons = math.op("cons")
 
 // begin presentation
 #title-slide()
@@ -161,12 +163,9 @@ Lists in realisability categories can be constructed without coproducts
 
 
 
-#let nil = math.op("nil")
-#let cons = math.op("cons")
-#let App = math.op("app")
 
 #theorem[
-$(L(A), nil, App)$ is the free monoid on $A$.
+  $(L(A), nil, a)$ is the free monoid on $A$.
 ]
 
 
@@ -200,3 +199,58 @@ $(L(A), nil, App)$ is the free monoid on $A$.
 
 
 == Counterexamples for any given requirements
+
+== Lists
+
+Linked lists
+
+
+
+In scheme:
+```scheme
+(a b c) ; a list of three elements
+() ; the empty list
+(car '(a b c)) ; a
+(cdr '(a b c)) ; (b c)
+```
+
+In Haskell:
+```haskell
+data [a] = [] | a : [a]
+```
+
+In Agda:
+```agda
+data List (A : Set) : Set where
+  nil : List A
+  cons : A -> List A -> List A
+```
+
+In Rocq:
+```coq
+Inductive list (A : Type) : Type :=
+  | nil : list A
+  | cons : A -> list A -> list A.
+```
+
+#grid(
+  columns: (1fr, 1fr),
+  align: (right, left),
+  $#nil : L(A) quad$, $quad #cons : A times L(A) -> L(A)$,
+)
+
+#align(center + horizon)[
+
+]
+
+== Diagram test
+
+#fletcher-diagram(
+  cell-size: 15mm,
+  $
+    #rect(width: 2em, height: 2em)[
+      #rect(width: 2em, height: 2em)[b]
+      #rect(width: 2em, height: 2em)[c]
+    ]
+  $,
+)
