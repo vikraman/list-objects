@@ -14,15 +14,10 @@
 
 // theorems configuration by ctheorems
 #show: thmrules.with(qed-symbol: $square$)
-#let theorem = thmbox("theorem", "Theorem", fill: rgb("#eeffee"))
-#let lemma = thmbox("theorem", "Lemma", fill: rgb("#eeffee"))
-#let corollary = thmplain(
-  "corollary",
-  "Corollary",
-  base: "theorem",
-  titlefmt: strong,
-)
-#let definition = thmbox("definition", "Definition", inset: (x: 1.2em, top: 0em))
+#let theorem = thmbox("theorem", "Theorem", base_level: 0, fill: rgb("#eeffee"))
+#let lemma = thmbox("theorem", "Lemma", base: "theorem", base_level: 0, fill: rgb("#eeffee"))
+#let corollary = thmplain("corollary", "Corollary", base: "theorem", base_level: 0, titlefmt: strong)
+#let definition = thmbox("definition", "Definition", base_level: 0, inset: (x: 1.2em, top: 0em))
 #let example = thmplain("example", "Example").with(numbering: none)
 #let proof = thmproof("proof", "Proof")
 #let proofsketch = thmproof("proof", "Proof sketch")
@@ -39,7 +34,7 @@
     author: [
       Fiona,
       Vikraman,
-      #underline[Rin],
+      #underline[Rin]
     ],
     date: "July 18, 2025",
     // datetime.today().display("[month repr:short] [day], [year]"),
@@ -162,6 +157,7 @@
     In scheme:
     ```lisp
     (a b c) ; a list of three elements
+    (a . (b . (c . ()))) ; the same list
     () ; the empty list
     (car '(a b c)) ; a
     (cdr '(a b c)) ; (b c)
@@ -216,9 +212,7 @@ $
 
 == Natural Numbers Objects
 
-Lawvere #cite(<lawvereElementaryTheoryCategory1964>) introduced natural numbers objects in his axiomatisation of structural set theory (ETCS).
-
-This definition makes sense in categories without general products or coproducts
+Lawvere #cite(<lawvereElementaryTheoryCategory1964>) introduced natural numbers objects in his axiomatisation of structural set theory (ETCS). This is precisely the universal property of being an initial F-algebra for the functor $F(X) = 1 + X$. However, note that this definition makes sense in categories without products or coproducts.
 
 $
   #fletcher-diagram(cell-size: 12mm, spacing: 10mm, node((0, 0), $1$), node((2, -1), $N$), node((4, -1), $N$), node((2, 1), $X$), node((4, 1), $X$), edge((0, 0), (2, -1), label: $0$, "->"), edge((0, 0), (2, 1), label: $x$, "->", label-side: right), edge((4, -1), (2, -1), label: $s$, "->"), edge((2, -1), (2, 1), label: $rec(x, r)$, "-->", label-side: left), edge((4, -1), (4, 1), label: $rec(x, r)$, "-->", label-side: left), edge((4, 1), (2, 1), label: $r$, "->", label-side: left))
@@ -483,9 +477,8 @@ Hereafter, assume the ambient category is symmetric strict monoidal.
 
 == Bilinear maps
 
+Since $L$ is a commutative monad, the canonical map $L(A) times L(B) -> L(A times B)$ is bilinear in the sense of Kock71.
 
 == Counterexamples
-
-
 
 #todo[example of category where omega chains don't exist but list objects exist]
