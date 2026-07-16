@@ -463,8 +463,27 @@ Hereafter, assume the ambient category is symmetric strict monoidal.
   3. $(L(A), nil, cons)$ is the free commutative monoid object on $A$.
 ]
 
+#proof[
+    $(1 => 2)$ We have already seen that list objects are monoids, so wee need only show that $app$ is commutative:
+    #v(-1em)
+    #align(center, image("diagrams/output-33.svg", width: 50%))
+    The left map is $app=it(id,cons)$ by definition, so we only need to show that the braided version satisfies the same computation rules:
+    #align(center, image("diagrams/output-34.svg", width: 45%))
 
-== Symmetric Lists
+    $
+        #grid(
+
+        align: (right, left),
+        columns: (50%, 50%),
+        gutter: 6em,
+        image("diagrams/output-34-1.svg", width: 100%), image("diagrams/output-34-2.svg", width: 60%),
+        )
+    $
+
+]
+
+
+==
 
 #theorem[
   If $cal(C)$ admits parametrised list objects for every object, then $CMon(cal(C))$ is monadic over $cal(C)$ via the evident forgetful functor.
@@ -473,6 +492,20 @@ Hereafter, assume the ambient category is symmetric strict monoidal.
 #theorem[
   If $(cal(C),times,1)$ is cartesian monoidal, then the induced monad is strong, and further, commutative.
 ]
+
+
+
+== Proofs
+
+#align(center + horizon, image("abstract.png", width: 25%))
+#align(center + horizon, [Extended abstract with proofs])
+
+
+
+==
+
+
+
 
 
 == Bilinear maps
