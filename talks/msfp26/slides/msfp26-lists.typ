@@ -196,8 +196,8 @@
     In Agda:
     ```haskell
     data List (A : Set) : Set where
-      nil : List A
-      _cons_ : A → List A → List A
+      [] : List A
+      _∷_ : A → List A → List A
     ```
   ],
   [
@@ -264,7 +264,7 @@ This is precisely the universal property of being an initial $F$-algebra for the
 Note that this definition makes sense in categories without products or coproducts.
 
 #pause
-We can adapt this universal property to axiomatise list objects in arbitrary monoidal categories.
+We can adapt this universal property to axiomatise list objects in general monoidal categories.
 
 == List Objects
 
@@ -510,8 +510,13 @@ $
 
     #grid(
       align: (left, center),
+<<<<<<< HEAD
       columns: (40%, 60%),
       gutter: 1em,
+=======
+      columns: (35%, 60%),
+      gutter: 0.0em,
+>>>>>>> 41fc072 (feat: work on symmetric lists)
 
       [
         In Agda:
@@ -529,7 +534,7 @@ $
           #grid(
             align: (left, right),
             columns: (35%, 50%),
-            gutter: 1em,
+            gutter: 0.5em,
             image("diagrams/output-1-1.svg", width: 100%), image("diagrams/output-2-1.svg", width: 100%),
           )
         ]
@@ -541,7 +546,7 @@ $
 
   so we pick $n = id$ and $c=cons$:
   $
-    app = it(id, cons).
+    app := it(id, cons).
   $
 
 // == Using the iterator
@@ -581,7 +586,7 @@ The stronger universal property resolves the first limitation, allowing us more 
 #pause
 For the second limitation:
 
-#v(-0.8em)
+#v(-0.5em)
 
 #theorem[
     $(L(A), nil, app)$ is the free monoid on $A$.
@@ -595,16 +600,31 @@ For the second limitation:
 
 #v(-1em)
 
-#pause
+#lemma[
+  If $cal(C)$ admits parametrised list objects for every object, then $L(-)$ is a functor.
+]
 $
-  #fletcher-diagram(cell-size: 12mm, spacing: 30mm,
-    node((0, 0), $cal(C)$),
-    node((-0.1, -0.5), $tack.l$),
-    node((0, -1), $Mon(cal(C))$),
-    edge((0, 0), (0, -1), label: $L$, "->", label-side: left, bend: 40deg),
-    edge((0, -1), (0, 0), label: $U$, "->", label-side: left),
-  )
+  f : A -> B quad mapsto quad  (A ->^f B ->^(eta_B) L(B))^sharp : L(A) -> L(B)
 $
+// The functorial action on a morphism $f : A -> B$ is given by:
+// $
+//   (f compose eta_B)^sharp : L(A) -> L(B)
+// $
+// where
+// #align(center,image("eta.svg", width: 15%))
+
+
+
+// #pause
+// $
+//   #fletcher-diagram(cell-size: 12mm, spacing: 30mm,
+//     node((0, 0), $cal(C)$),
+//     node((-0.1, -0.5), $tack.l$),
+//     node((0, -1), $Mon(cal(C))$),
+//     edge((0, 0), (0, -1), label: $L$, "->", label-side: left, bend: 45deg),
+//     edge((0, -1), (0, 0), label: $U$, "->", label-side: left),
+//   )
+// $
 
 // #theorem([#cite(<fioreListObjectsAlgebraic2017>, form: "prose")])[
 //     If $cal(C)$ admits parametrised list objects for every object, then $Mon(cal(C))$ is monadic over $cal(C)$ via the evident forgetful functor.
@@ -669,11 +689,33 @@ Hereafter, the ambient category is symmetric strict monoidal.
 #speaker-note("Can only eliminate into symmetric list algebras instead of ordinary list algebras.")
 
 
-
-
 == Symmetric Lists
 
+Hereafter, the ambient category is symmetric strict monoidal.
 
+#definition("Symmetric list objects", number: "2")[
+  #v(19pt)
+  $
+    #grid(
+      align: (center + horizon, center),
+      columns: (1fr, 1fr),
+      gutter: 1em,
+      image("diagrams/output-5-1.svg", width: 100%),
+      [
+        ```haskell
+        data Ilst (A : Set) : Set where
+          [] : Ilst A
+          _::_ : A → Ilst A → Ilst A
+          swap : (a b : A) → (xs : Ilst A) → a :: b :: xs ≡ b :: a :: xs
+        ```
+      ],
+    )
+  $
+  #v(20pt)
+  A (_parametrised_) _symmetric list object_ or _ilst_ on $A$ is a list object $L(A)$ satisfying the additional axiom above, and with the corresponding universal property.
+]
+
+<<<<<<< HEAD
 
 In Agda:
 ```haskell
@@ -688,6 +730,18 @@ data Ilst (A : Set) : Set where
 
 
 
+=======
+#show raw.where(lang: "haskell"): it => [
+  #show regex("\bIlst\b"): keyword => text(
+    fill: red.darken(20%),
+    weight: "bold",
+    "ilst"
+  )
+  #it
+]
+
+
+>>>>>>> 41fc072 (feat: work on symmetric lists)
 
 
 
@@ -717,20 +771,22 @@ _Proof_. $(1 => 2)$ We already have that list objects are monoids, so we need on
 #v(-1em)
 Call the two maps $f$ and $g$, respectively.
 
-
 ==
 
-The left map $f$ is $app:=it(id,cons)$ by definition, so we only need to show that the braided version satisfies the same computation rules:
+The left map $f$ is $app:=it(id,cons)$ by definition, so, by the uniqueness of the iterator, it suffices to show that the braided version satisfies the same computation rules:
 #align(center, image("diagrams/output-34.svg", width: 45%))
 
-$
-  #grid(
-    align: (right, left),
-    columns: (50%, 50%),
-    gutter: 6em,
-    image("diagrams/output-34-1.svg", width: 100%), image("diagrams/output-34-2.svg", width: 60%),
-  )
-$
+#align(center+horizon,
+  [
+    #grid(
+      align: (right, left),
+      columns: (50%, 50%),
+      gutter: 6em,
+      image("diagrams/output-34-1.svg", width: 100%), image("diagrams/output-34-2.svg", width: 60%)
+    )
+    #align(bottom, qed())
+  ]
+)
 
 
 
@@ -811,6 +867,7 @@ $
   )
 ]
 
+<<<<<<< HEAD
 
 
 
@@ -835,3 +892,5 @@ Since $L$ is a commutative monad, the canonical map $L(A) times L(B) -> L(A time
 // typst-preview--master-file: t
 // typst-preview-preview-mode: "slide"
 // End:
+=======
+>>>>>>> 41fc072 (feat: work on symmetric lists)
