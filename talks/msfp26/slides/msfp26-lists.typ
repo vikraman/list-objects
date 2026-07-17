@@ -2,8 +2,8 @@
 #import themes.university: *
 #import "@preview/cetz:0.5.2"
 #import "@preview/fletcher:0.5.8" as fletcher: edge, node
-#import "@preview/ctheorems:1.1.3": *
-#import "@preview/numbly:0.1.0": numbly
+#import "@preview/theorion:0.6.0": *
+#show: show-theorion
 #import "@preview/pinit:0.2.2": *
 #import "@preview/xarrow:0.4.0": *
 
@@ -13,15 +13,68 @@
 #let cetz-canvas = touying-reducer.with(reduce: cetz.canvas, cover: cetz.draw.hide.with(bounds: true))
 #let fletcher-diagram = touying-reducer.with(reduce: fletcher.diagram, cover: fletcher.hide)
 
-// theorems configuration by ctheorems
-#show: thmrules.with(qed-symbol: $square$)
-#let theorem = thmbox("theorem", "Theorem", base_level: 0, fill: rgb("#eeffee"))
-#let lemma = thmbox("theorem", "Lemma", base: "theorem", base_level: 0, fill: rgb("#eeffee"))
-#let corollary = thmplain("corollary", "Corollary", base: "theorem", base_level: 0, titlefmt: strong)
-#let definition = thmbox("definition", "Definition", base_level: 0, inset: (x: 1.2em, top: 0em))
-#let example = thmplain("example", "Example").with(numbering: none)
-#let proof = thmproof("proof", "Proof")
-#let proofsketch = thmproof("proof", "Proof sketch")
+// disable heading numbers
+#set heading(numbering: none)
+
+// theorems configuration for theorion
+#let thmbox-render(
+  fill: red,
+  prefix: none,
+  title: "",
+  full-title: "",
+  body,
+) = block(
+  stroke: (left: 0.25em + fill),
+  inset: (left: 1em, y: .75em),
+  width: 100%,
+  breakable: true,
+  [
+    #if full-title != "" { block(sticky: true, strong(text(fill: fill, full-title))) }
+    #body
+  ],
+)
+
+#let (theorem-counter, theorem-box, theorem, show-theorem) = make-frame(
+  "theorem",
+  "Theorem",
+  inherited-levels: 2,
+  render: thmbox-render.with(fill: red.darken(20%)),
+)
+#let (lemma-counter, lemma-box, lemma, show-lemma) = make-frame(
+  "lemma",
+  "Lemma",
+  counter: theorem-counter,
+  render: thmbox-render.with(fill: teal.darken(10%)),
+)
+#let (corollary-counter, corollary-box, corollary, show-corollary) = make-frame(
+  "corollary",
+  "Corollary",
+  inherited-from: theorem-counter,
+  render: thmbox-render.with(fill: fuchsia.darken(10%)),
+)
+#let (definition-counter, definition-box, definition, show-definition) = make-frame(
+  "definition",
+  "Definition",
+  counter: theorem-counter,
+  render: thmbox-render.with(fill: orange),
+)
+#let (example-counter, example-box, example, show-example) = make-frame(
+  "example",
+  "Example",
+  counter: theorem-counter,
+  render: thmbox-render.with(fill: olive),
+)
+#let example = example.with(numbering: none)
+#let proofsketch = proof.with(title: "Proof sketch")
+
+#let show-theorion = body => {
+  show: show-theorem
+  show: show-lemma
+  show: show-corollary
+  show: show-definition
+  show: show-example
+  body
+}
 
 // theme configuration
 #show: university-theme.with(
@@ -29,7 +82,11 @@
   // align: horizon,
   config-common(
     show-bibliography-as-footnote: bibliography(title: none, "lists.bib"),
-      show-notes-on-second-screen: bottom,
+    // show-notes-on-second-screen: bottom,
+    // freeze-slide-counter: true,
+    frozen-counters: (theorem-counter,),
+    default-frozen-states: (),
+    enable-mark-warning: false,
   ),
   config-info(
     title: [Symmetric List Objects],
@@ -155,12 +212,12 @@
 
 // syntax rules
 #show raw.where(lang: "haskell"): it => [
-    #show regex("nil"): keyword => [\[\]]
-    #show regex("cons"): keyword => [∷]
-    #show regex("append"): keyword => $app$
-    #show regex("\bList\b"): keyword => $cal(L)sans("ist")$
-    #show regex("\bIlst\b"): keyword => $cal(I)sans("lst")$
-    #it
+  #show regex("nil"): keyword => [\[\]]
+  #show regex("cons"): keyword => [∷]
+  #show regex("append"): keyword => $app$
+  #show regex("\bList\b"): keyword => $cal(L)sans("ist")$
+  #show regex("\bIlst\b"): keyword => $cal(I)sans("lst")$
+  #it
 ]
 
 // begin presentation
@@ -242,7 +299,9 @@ $
 
 Lawvere introduced#cite(<lawvereElementaryTheoryCategory1964>) natural numbers objects in his axiomatisation of set theory (ETCS):
 $
-  #fletcher-diagram(cell-size: 12mm, spacing: 10mm,
+  #fletcher-diagram(
+    cell-size: 12mm,
+    spacing: 10mm,
     node((0, 0), $1$),
     node((2, -1), $N$),
     node((4, -1), $N$),
@@ -251,9 +310,9 @@ $
     edge((0, 0), (2, -1), label: $zero$, "->"),
     edge((0, 0), (2, 1), label: $z$, "->", label-side: right),
     edge((4, -1), (2, -1), label: $succ$, "->"),
-    edge((2, -1), (2, 1), label: $rec(z,s)$, "-->", label-side: left),
-    edge((4, -1), (4, 1), label: $rec(z,s)$, "-->", label-side: left),
-    edge((4, 1), (2, 1), label: $s$, "->", label-side: left)
+    edge((2, -1), (2, 1), label: $rec(z, s)$, "-->", label-side: left),
+    edge((4, -1), (4, 1), label: $rec(z, s)$, "-->", label-side: left),
+    edge((4, 1), (2, 1), label: $s$, "->", label-side: left),
   )
 $
 #v(-0.5em)
@@ -270,7 +329,9 @@ We can adapt this universal property to axiomatise list objects in general monoi
 
 #definition("List objects", number: "1")[#v(-0.5em)
   $
-    #fletcher-diagram(cell-size: 10mm, spacing: 10mm,
+    #fletcher-diagram(
+      cell-size: 10mm,
+      spacing: 10mm,
       node((0, 0), $1$),
       node((2, -1), $L(A)$),
       node((4, -1), $A times.o L(A)$),
@@ -281,7 +342,7 @@ We can adapt this universal property to axiomatise list objects in general monoi
       edge((2, -1), (2, 1), label: $it(n, c)$, "-->", label-side: left),
       edge((4, -1), (4, 1), label: $it(n, c)$, "-->", label-side: left),
       edge((0, 0), (2, 1), label: $n$, "->", label-side: right),
-      edge((4, 1), (2, 1), label: $c$, "->", label-side: left)
+      edge((4, 1), (2, 1), label: $c$, "->", label-side: left),
     )
   $#v(-0.5em)
   A list object on $A$ is:#v(-0.2em)
@@ -308,21 +369,21 @@ We can adapt this universal property to axiomatise list objects in general monoi
 
 - In a category of endofunctors $[cat(C),cat(C)]$ with monoidal structure given by functor composition $(1,compose)$, list objects are free monad:
   $
-      1 xarrow(#nil) frak(F)(F) xarrow(sym: <-, #cons) F compose frak(F)(F)
+    1 xarrow(#nil) frak(F)(F) xarrow(sym: <-, #cons) F compose frak(F)(F)
   $
 
 #pause
 
 - In the category of modules over a commutative ring $R$ under $R$-tensor products, list objects are tensor algebras:
   $
-      1 xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o plus.o.big_n V^(times.o^n)
+    1 xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o plus.o.big_n V^(times.o^n)
   $
 
 #pause
 
 - In the category of pointed spaces under smash product, list objects on connected spaces corresponds to the James construction:
   $
-      1 xarrow(#nil) J(A) xarrow(sym:<-, #cons) A times J(A)
+    1 xarrow(#nil) J(A) xarrow(sym: <-, #cons) A times J(A)
   $
 
 
@@ -337,15 +398,15 @@ We can adapt this universal property to axiomatise list objects in general monoi
 
   #pause
 
-    - To define the list append function
-      $
-        app : L(A) times.o L(A) -> L(A)
-      $
-      we would need to curry the second argument to isolate the $L(A)$ on the left:
-      $
-          app : L(A) -> [L(A),L(A)]
-      $
-      but this requires internal homs.
+  - To define the list append function
+    $
+      app : L(A) times.o L(A) -> L(A)
+    $
+    we would need to curry the second argument to isolate the $L(A)$ on the left:
+    $
+      app : L(A) -> [L(A),L(A)]
+    $
+    but this requires internal homs.
 
 #pause
 
@@ -366,15 +427,9 @@ We can adapt this universal property to axiomatise list objects in general monoi
 
 To solve the first problem, we strengthen the universal property as follows:
 
-#definition("Parametrised list object", number:"1")[
+#definition("Parametrised list objects", number: "2")[
   $
-    #fletcher-diagram(cell-size: 30mm, spacing: 0mm,
-      node((0, -1), $1$),
-      node((2, -1), $L(A)$),
-      node((4, -1), $A times.o L(A)$),
-      edge((0, -1), (2, -1), label: $nil$, "->"),
-      edge((4, -1), (2, -1), label: $cons$, "->"),
-    )
+    #fletcher-diagram(cell-size: 30mm, spacing: 0mm, node((0, -1), $1$), node((2, -1), $L(A)$), node((4, -1), $A times.o L(A)$), edge((0, -1), (2, -1), label: $nil$, "->"), edge((4, -1), (2, -1), label: $cons$, "->"))
   $
 ]
 
@@ -382,29 +437,18 @@ To solve the first problem, we strengthen the universal property as follows:
 
 To solve the first problem, we strengthen the universal property as follows:
 
-#definition("Parametrised list object", number:"1")[
-    $
-      #h(-2.85pt)
-      #fletcher-diagram(cell-size: 30mm, spacing: 0mm,
-        node((0, -1), $1$),
-        node((0, 1), $P$),
-        node((2, -1), $L(A)$),
-        node((4, -1), $A times.o L(A)$),
-        node((2, 1), $L$),
-        node((4, 1), $A times.o L$),
-        edge((0, -1), (2, -1), label: $nil$, "->"),
-        edge((4, -1), (2, -1), label: $cons$, "->"),
-        edge((0, 1), (2, 1), label: $n$, "->", label-side: right),
-        edge((4, 1), (2, 1), label: $c$, "->", label-side: left)
-      )
-    $
+#definition("Parametrised list objects", number: "2")[
+  $
+    #h(-2.85pt)
+    #fletcher-diagram(cell-size: 30mm, spacing: 0mm, node((0, -1), $1$), node((0, 1), $P$), node((2, -1), $L(A)$), node((4, -1), $A times.o L(A)$), node((2, 1), $L$), node((4, 1), $A times.o L$), edge((0, -1), (2, -1), label: $nil$, "->"), edge((4, -1), (2, -1), label: $cons$, "->"), edge((0, 1), (2, 1), label: $n$, "->", label-side: right), edge((4, 1), (2, 1), label: $c$, "->", label-side: left))
+  $
 ]
 
 // == Parametrised List Objects
 
 // To solve the first problem, we strengthen the universal property as follows:
 
-// #definition("Parametrised list object", number:"1")[
+// #definition("Parametrised list objects", number:"2")[
 //     $
 //         #h(-2.85pt)
 //         #fletcher-diagram(cell-size: 30mm, spacing: 0mm,
@@ -433,25 +477,11 @@ To solve the first problem, we strengthen the universal property as follows:
 
 To solve the first problem, we strengthen the universal property as follows:
 
-#definition("Parametrised list object", number:"1")[
+#definition("Parametrised list objects", number: "2")[
   #v(-1.5pt)
   $
     #h(72.5pt)
-    #fletcher-diagram(cell-size: (28.66mm,30mm), spacing: 0mm,
-      node((0, -1), $1 times.o P$),
-      node((0, 1), $P$),
-      node((2, -1), $L(A) times.o P$),
-      node((4, -1), $A times.o L(A) times.o P$),
-      node((2, 1), $L$),
-      node((4, 1), $A times.o L$),
-      edge((0, -1), (2, -1), label: $nil times.o P$, "->"),
-      edge((4, -1), (2, -1), label: $cons times.o P$, "->"),
-      edge((0, -1), (0, 1), "="),
-      edge((2, -1), (2, 1), label: $it(n, c)$, "-->", label-side: left),
-      edge((4, -1), (4, 1), label: $A times.o it(n, c)$, "-->", label-side: left),
-      edge((0, 1), (2, 1), label: $n$, "->", label-side: right),
-      edge((4, 1), (2, 1), label: $c$, "->", label-side: left)
-    )
+    #fletcher-diagram(cell-size: (28.66mm, 30mm), spacing: 0mm, node((0, -1), $1 times.o P$), node((0, 1), $P$), node((2, -1), $L(A) times.o P$), node((4, -1), $A times.o L(A) times.o P$), node((2, 1), $L$), node((4, 1), $A times.o L$), edge((0, -1), (2, -1), label: $nil times.o P$, "->"), edge((4, -1), (2, -1), label: $cons times.o P$, "->"), edge((0, -1), (0, 1), "="), edge((2, -1), (2, 1), label: $it(n, c)$, "-->", label-side: left), edge((4, -1), (4, 1), label: $A times.o it(n, c)$, "-->", label-side: left), edge((0, 1), (2, 1), label: $n$, "->", label-side: right), edge((4, 1), (2, 1), label: $c$, "->", label-side: left))
   $
 ]
 
@@ -461,21 +491,7 @@ To solve the first problem, we strengthen the universal property as follows:
 
 $
   #h(72.5pt)
-  #fletcher-diagram(cell-size: 25mm, spacing: 0mm,
-    node((0, -1), $1 times.o P$),
-    node((0, 1), $P$),
-    node((2, -1), $L(A) times.o P$),
-    node((4, -1), $A times.o L(A) times.o P$),
-    node((2, 1), $L$),
-    node((4, 1), $A times.o L$),
-    edge((0, -1), (2, -1), label: $nil times.o P$, "->"),
-    edge((4, -1), (2, -1), label: $cons times.o P$, "->"),
-    edge((0, -1), (0, 1), "="),
-    edge((2, -1), (2, 1), label: $it(n, c)$, "-->", label-side: left),
-    edge((4, -1), (4, 1), label: $A times.o it(n, c)$, "-->", label-side: left),
-    edge((0, 1), (2, 1), label: $n$, "->", label-side: right),
-    edge((4, 1), (2, 1), label: $c$, "->", label-side: left)
-  )
+  #fletcher-diagram(cell-size: 25mm, spacing: 0mm, node((0, -1), $1 times.o P$), node((0, 1), $P$), node((2, -1), $L(A) times.o P$), node((4, -1), $A times.o L(A) times.o P$), node((2, 1), $L$), node((4, 1), $A times.o L$), edge((0, -1), (2, -1), label: $nil times.o P$, "->"), edge((4, -1), (2, -1), label: $cons times.o P$, "->"), edge((0, -1), (0, 1), "="), edge((2, -1), (2, 1), label: $it(n, c)$, "-->", label-side: left), edge((4, -1), (4, 1), label: $A times.o it(n, c)$, "-->", label-side: left), edge((0, 1), (2, 1), label: $n$, "->", label-side: right), edge((4, 1), (2, 1), label: $c$, "->", label-side: left))
 $
 
 $
@@ -498,7 +514,7 @@ We can now use this stronger universal property to define $app$ as an iterator.
 #pause
 
 $
-    it(n,c) : L(A) times.o P -> L
+  it(n, c) : L(A) times.o P -> L
 $
 
 - Since $app : L(A) times.o L(A) -> L(A)$, we have $L(A)$ as both the parameter $P$ and the target $L$.
@@ -508,38 +524,33 @@ $
   #pause
 
 
-    #grid(
-      align: (left, center),
-<<<<<<< HEAD
-      columns: (40%, 60%),
-      gutter: 1em,
-=======
-      columns: (35%, 60%),
-      gutter: 0.0em,
->>>>>>> 41fc072 (feat: work on symmetric lists)
 
-      [
-        In Agda:
+  #grid(
+    align: (left, center),
+    columns: (45%, 55%),
+    gutter: 1em,
+    [
+      In Agda:
 
-        ```haskell
-        _append_ : List A -> List A -> List A
-        nil append ys = ys
-        (x cons xs) append ys = x cons (xs append ys)
-        ```
-      ],
-      [
-        #pause
-        #align(horizon)[
-          #v(1em)
-          #grid(
-            align: (left, right),
-            columns: (35%, 50%),
-            gutter: 0.5em,
-            image("diagrams/output-1-1.svg", width: 100%), image("diagrams/output-2-1.svg", width: 100%),
-          )
-        ]
+      ```haskell
+      _append_ : List A -> List A -> List A
+      nil append ys = ys
+      (x cons xs) append ys = x cons (xs append ys)
+      ```
+    ],
+    [
+      #pause
+      #align(horizon)[
+        #v(1em)
+        #grid(
+          align: (left, right),
+          columns: (35%, 50%),
+          gutter: 0.5em,
+          image("diagrams/output-1-1.svg", width: 100%), image("diagrams/output-2-1.svg", width: 100%),
+        )
       ]
-    )
+    ],
+  )
 
 
   #pause
@@ -589,7 +600,7 @@ For the second limitation:
 #v(-0.5em)
 
 #theorem[
-    $(L(A), nil, app)$ is the free monoid on $A$.
+  $(L(A), nil, app)$ is the free monoid on $A$.
 ]
 
 // #proofsketch[
@@ -604,7 +615,7 @@ For the second limitation:
   If $cal(C)$ admits parametrised list objects for every object, then $L(-)$ is a functor.
 ]
 $
-  f : A -> B quad mapsto quad  (A ->^f B ->^(eta_B) L(B))^sharp : L(A) -> L(B)
+  f : A -> B quad mapsto quad (A ->^f B ->^(eta_B) L(B))^sharp : L(A) -> L(B)
 $
 // The functorial action on a morphism $f : A -> B$ is given by:
 // $
@@ -626,17 +637,17 @@ $
 //   )
 // $
 
-// #theorem([#cite(<fioreListObjectsAlgebraic2017>, form: "prose")])[
-//     If $cal(C)$ admits parametrised list objects for every object, then $Mon(cal(C))$ is monadic over $cal(C)$ via the evident forgetful functor.
-// ]
+#theorem[
+  If $cal(C)$ admits parametrised list objects for every object, then $Mon(cal(C))$ is monadic over $cal(C)$ via the evident forgetful functor.
+]
 
 // #v(-1em)
 
 // #pause
 
-// #theorem([#cite(<fioreListObjectsAlgebraic2017>, form: "prose")])[
-//     If $(cal(C),times,1)$ is cartesian monoidal, then the induced monad is strong.
-// ]
+#theorem([#cite(<fioreListObjectsAlgebraic2017>, form: "author")#cite(<fioreListObjectsAlgebraic2017>)])[
+  If $(cal(C),times,1)$ is cartesian monoidal, then the induced monad is strong.
+]
 
 
 // == The Cartesian Setting
@@ -681,7 +692,7 @@ $
 
 Hereafter, the ambient category is symmetric strict monoidal.
 
-#definition("Symmetric list objects", number: "2")[
+#definition("Symmetric list objects", number: "3")[
   #align(center, image("diagrams/output-5.svg", width: 65%))
   A (_parametrised_) _symmetric list object_ or _ilst_ on $A$ is a list object $L(A)$ satisfying the additional axiom above, and with the corresponding universal property.
 ]
@@ -715,8 +726,6 @@ Hereafter, the ambient category is symmetric strict monoidal.
   A (_parametrised_) _symmetric list object_ or _ilst_ on $A$ is a list object $L(A)$ satisfying the additional axiom above, and with the corresponding universal property.
 ]
 
-<<<<<<< HEAD
-
 In Agda:
 ```haskell
 data Ilst (A : Set) : Set where
@@ -730,18 +739,8 @@ data Ilst (A : Set) : Set where
 
 
 
-=======
-#show raw.where(lang: "haskell"): it => [
-  #show regex("\bIlst\b"): keyword => text(
-    fill: red.darken(20%),
-    weight: "bold",
-    "ilst"
-  )
-  #it
-]
 
 
->>>>>>> 41fc072 (feat: work on symmetric lists)
 
 
 
@@ -773,20 +772,18 @@ Call the two maps $f$ and $g$, respectively.
 
 ==
 
-The left map $f$ is $app:=it(id,cons)$ by definition, so, by the uniqueness of the iterator, it suffices to show that the braided version satisfies the same computation rules:
+The left map $f$ is $app:=it(id, cons)$ by definition, so, by the uniqueness of the iterator, it suffices to show that the braided version satisfies the same computation rules:
 #align(center, image("diagrams/output-34.svg", width: 45%))
 
-#align(center+horizon,
-  [
-    #grid(
-      align: (right, left),
-      columns: (50%, 50%),
-      gutter: 6em,
-      image("diagrams/output-34-1.svg", width: 100%), image("diagrams/output-34-2.svg", width: 60%)
-    )
-    #align(bottom, qed())
-  ]
-)
+#align(center + horizon, [
+  #grid(
+    align: (right, left),
+    columns: (50%, 50%),
+    gutter: 6em,
+    image("diagrams/output-34-1.svg", width: 100%), image("diagrams/output-34-2.svg", width: 60%),
+  )
+  #align(bottom, qed())
+])
 
 
 
@@ -841,7 +838,7 @@ The left map $f$ is $app:=it(id,cons)$ by definition, so, by the uniqueness of t
     [
       #align(center + horizon, image("abstract.png", width: 80%))
       #align(center + horizon, [Extended abstract with proofs])
-    ]
+    ],
   )
 ]
 
@@ -863,34 +860,18 @@ The left map $f$ is $app:=it(id,cons)$ by definition, so, by the uniqueness of t
     [
       #align(center + horizon, image("abstract.png", width: 80%))
       #align(center + horizon, [Extended abstract with proofs])
-    ]
+    ],
   )
 ]
 
-<<<<<<< HEAD
 
 
 
 
 
 
-==
-
-
-
-
-
-== Bilinear maps
-
-Since $L$ is a commutative monad, the canonical map $L(A) times L(B) -> L(A times B)$ is bilinear in the sense of Kock71.
-
-== Counterexamples
-
-#todo[example of category where omega chains don't exist but list objects exist]
 
 // Local Variables:
 // typst-preview--master-file: t
 // typst-preview-preview-mode: "slide"
 // End:
-=======
->>>>>>> 41fc072 (feat: work on symmetric lists)
