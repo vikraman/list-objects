@@ -5,6 +5,7 @@
 #import "@preview/ctheorems:1.1.3": *
 #import "@preview/numbly:0.1.0": numbly
 #import "@preview/pinit:0.2.2": *
+#import "@preview/xarrow:0.4.0": *
 
 #let todo(t) = text(fill: red.darken(20%))[TODO: #t]
 
@@ -28,6 +29,7 @@
   // align: horizon,
   config-common(
     show-bibliography-as-footnote: bibliography(title: none, "lists.bib"),
+      show-notes-on-second-screen: bottom,
   ),
   config-info(
     title: [Symmetric List Objects],
@@ -130,21 +132,36 @@
   },
 )
 
-// macros...
+// math macros
 #let rec = math.op("rec")
 #let nil = math.op("nil")
 #let cons = math.op("cons")
 #let it = math.op("it")
-#let Mon = math.op("Mon")
-#let CMon = math.op("CMon")
 #let app = {
   math.plus
-  h(-0.5em)
+  h(-0.35em)
   math.plus
 }
+
+#let Mon = math.sans("Mon")
+#let CMon = math.sans("CMon")
+
 #let zero = math.op("zero")
 #let succ = math.op("succ")
+
 #let qed() = [#h(1fr)$square$]
+
+#let cat(c) = math.cal(c)
+
+// syntax rules
+#show raw.where(lang: "haskell"): it => [
+    #show regex("nil"): keyword => [\[\]]
+    #show regex("cons"): keyword => [∷]
+    #show regex("append"): keyword => $app$
+    #show regex("\bList\b"): keyword => $cal(L)sans("ist")$
+    #show regex("\bIlst\b"): keyword => $cal(I)sans("lst")$
+    #it
+]
 
 // begin presentation
 #title-slide()
@@ -180,7 +197,7 @@
     ```haskell
     data List (A : Set) : Set where
       nil : List A
-      cons : A → List A → List A
+      _cons_ : A → List A → List A
     ```
   ],
   [
@@ -289,23 +306,23 @@ We can adapt this universal property to axiomatise list objects in arbitrary mon
 
 == Examples of list objects in nature
 
-- In a category of endofunctors with monoidal structure given by functor composition, list objects are free monad:
+- In a category of endofunctors $[cat(C),cat(C)]$ with monoidal structure given by functor composition $(1,compose)$, list objects are free monad:
   $
-    nil = ? , quad cons = ?, quad it(n, c) = ?
+      1 xarrow(#nil) frak(F)(F) xarrow(sym: <-, #cons) F compose frak(F)(F)
   $
 
 #pause
 
 - In the category of modules over a commutative ring $R$ under $R$-tensor products, list objects are tensor algebras:
   $
-    nil = ? , quad cons = ?, quad it(n, c) = ?
+      1 xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o plus.o.big_n V^(times.o^n)
   $
 
 #pause
 
 - In the category of pointed spaces under smash product, list objects on connected spaces corresponds to the James construction:
   $
-    nil = ? , quad cons = ?, quad it(n, c) = ?
+      1 xarrow(#nil) J(A) xarrow(sym:<-, #cons) A times J(A)
   $
 
 
@@ -493,16 +510,16 @@ $
 
     #grid(
       align: (left, center),
-      columns: (35%, 60%),
+      columns: (40%, 60%),
       gutter: 1em,
 
       [
         In Agda:
 
         ```haskell
-        _++_ : List A -> List A -> List A
-        [] ++ ys          = ys
-        (x :: xs) ++ ys = x :: (xs ++ ys)
+        _append_ : List A -> List A -> List A
+        nil append ys = ys
+        (x cons xs) append ys = x cons (xs append ys)
         ```
       ],
       [
@@ -657,22 +674,13 @@ Hereafter, the ambient category is symmetric strict monoidal.
 == Symmetric Lists
 
 
-#show raw.where(lang: "haskell"): it => [
-  #show regex("\bIlst\b"): keyword => text(
-    fill: red.darken(20%),
-    weight: "bold",
-    "foo"
-  )
-  #it
-]
-
 
 In Agda:
 ```haskell
-data SLlst (A : Set) : Set where
+data Ilst (A : Set) : Set where
   nil : Ilst A
-  cons : A → List A → List A
-  swap :
+  _cons_ : A -> Ilst A -> Ilst A
+  swap : (a b : A) -> (xs : Ilst A) -> a cons b cons xs = b cons a cons xs
 ```
 
 
@@ -822,3 +830,8 @@ Since $L$ is a commutative monad, the canonical map $L(A) times L(B) -> L(A time
 == Counterexamples
 
 #todo[example of category where omega chains don't exist but list objects exist]
+
+// Local Variables:
+// typst-preview--master-file: t
+// typst-preview-preview-mode: "slide"
+// End:
