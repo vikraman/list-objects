@@ -108,10 +108,11 @@
 // font configuration
 #let scriptsize = 12pt
 #let normalsize = 20pt
+#let smallsize = 16pt
 #set text(font: "Gentium Book Plus", weight: "regular", size: normalsize)
 #show math.equation: set text(font: "New Computer Modern Math")
 
-#show raw: set text(font: ("Iosevka Comfy", "Iosevka", "DejaVu Sans Mono"))
+#show raw: set text(font: ("Iosevka Comfy", "Iosevka", "DejaVu Sans Mono"), size: smallsize)
 #set raw(lang: "sml")
 #set strong(delta: 100)
 #set par(justify: true)
