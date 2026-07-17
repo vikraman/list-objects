@@ -108,11 +108,10 @@
 // font configuration
 #let scriptsize = 12pt
 #let normalsize = 20pt
-#set text(font: "Libertinus Sans", weight: "light", size: normalsize)
-#show math.equation: set text(font: "Libertinus Math")
-#show sym.amp.inv: set text(font: "New Computer Modern Math")
+#set text(font: "Gentium Book Plus", weight: "regular", size: normalsize)
+#show math.equation: set text(font: "New Computer Modern Math")
 
-#show raw: set text(font: "Iosevka Comfy")
+#show raw: set text(font: ("Iosevka Comfy", "Iosevka", "DejaVu Sans Mono"))
 #set raw(lang: "sml")
 #set strong(delta: 100)
 #set par(justify: true)
