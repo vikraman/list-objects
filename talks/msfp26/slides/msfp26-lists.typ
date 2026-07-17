@@ -99,6 +99,7 @@
     // datetime.today().display("[month repr:short] [day], [year]"),
 
     institution: [MSP, University of Strathclyde, Glasgow, UK],
+    logo: box[#image("term-left.svg", width: 1em)],
     // logo: [🏴󠁧󠁢󠁳󠁣󠁴󠁿],
     // logo: [#image("msp-logo.png")],
     // logo: [#image("strathclyde-logo.png")],
@@ -224,9 +225,6 @@
 #title-slide()
 
 
-
-
-
 == Lists
 
 #grid(
@@ -319,11 +317,14 @@ $
 
 #pause
 
-This is precisely the universal property of being an initial $F$-algebra for the functor $F(X) = 1 + X$.
-Note that this definition makes sense in categories without products or coproducts.
+#speaker-note[
+  This is precisely the universal property of being an initial $F$-algebra for the functor $F(X) = 1 + X$.
+  Note that this definition makes sense in categories without products or coproducts.
+]
 
-#pause
 We can adapt this universal property to axiomatise list objects in general monoidal categories.
+
+#todo[cite: Joyal's arithmetic universes, Maietti, Cockett's Locoi, Pare and Roman's parametrized NNO.]
 
 == List Objects
 
