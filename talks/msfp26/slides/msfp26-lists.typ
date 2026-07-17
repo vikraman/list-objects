@@ -429,7 +429,15 @@ To solve the first problem, we strengthen the universal property as follows:
 
 #definition("Parametrised list objects", number: "2")[
   $
-    #fletcher-diagram(cell-size: 30mm, spacing: 0mm, node((0, -1), $1$), node((2, -1), $L(A)$), node((4, -1), $A times.o L(A)$), edge((0, -1), (2, -1), label: $nil$, "->"), edge((4, -1), (2, -1), label: $cons$, "->"))
+    #fletcher-diagram(
+      cell-size: 30mm,
+      spacing: 0mm,
+      node((0, -1), $1$),
+      node((2, -1), $L(A)$),
+      node((4, -1), $A times.o L(A)$),
+      edge((0, -1), (2, -1), label: $nil$, "->"),
+      edge((4, -1), (2, -1), label: $cons$, "->"),
+    )
   $
 ]
 
@@ -440,7 +448,20 @@ To solve the first problem, we strengthen the universal property as follows:
 #definition("Parametrised list objects", number: "2")[
   $
     #h(-2.85pt)
-    #fletcher-diagram(cell-size: 30mm, spacing: 0mm, node((0, -1), $1$), node((0, 1), $P$), node((2, -1), $L(A)$), node((4, -1), $A times.o L(A)$), node((2, 1), $L$), node((4, 1), $A times.o L$), edge((0, -1), (2, -1), label: $nil$, "->"), edge((4, -1), (2, -1), label: $cons$, "->"), edge((0, 1), (2, 1), label: $n$, "->", label-side: right), edge((4, 1), (2, 1), label: $c$, "->", label-side: left))
+    #fletcher-diagram(
+      cell-size: 30mm,
+      spacing: 0mm,
+      node((0, -1), $1$),
+      node((0, 1), $P$),
+      node((2, -1), $L(A)$),
+      node((4, -1), $A times.o L(A)$),
+      node((2, 1), $L$),
+      node((4, 1), $A times.o L$),
+      edge((0, -1), (2, -1), label: $nil$, "->"),
+      edge((4, -1), (2, -1), label: $cons$, "->"),
+      edge((0, 1), (2, 1), label: $n$, "->", label-side: right),
+      edge((4, 1), (2, 1), label: $c$, "->", label-side: left),
+    )
   $
 ]
 
@@ -481,7 +502,23 @@ To solve the first problem, we strengthen the universal property as follows:
   #v(-1.5pt)
   $
     #h(72.5pt)
-    #fletcher-diagram(cell-size: (28.66mm, 30mm), spacing: 0mm, node((0, -1), $1 times.o P$), node((0, 1), $P$), node((2, -1), $L(A) times.o P$), node((4, -1), $A times.o L(A) times.o P$), node((2, 1), $L$), node((4, 1), $A times.o L$), edge((0, -1), (2, -1), label: $nil times.o P$, "->"), edge((4, -1), (2, -1), label: $cons times.o P$, "->"), edge((0, -1), (0, 1), "="), edge((2, -1), (2, 1), label: $it(n, c)$, "-->", label-side: left), edge((4, -1), (4, 1), label: $A times.o it(n, c)$, "-->", label-side: left), edge((0, 1), (2, 1), label: $n$, "->", label-side: right), edge((4, 1), (2, 1), label: $c$, "->", label-side: left))
+    #fletcher-diagram(
+      cell-size: (28.66mm, 30mm),
+      spacing: 0mm,
+      node((0, -1), $1 times.o P$),
+      node((0, 1), $P$),
+      node((2, -1), $L(A) times.o P$),
+      node((4, -1), $A times.o L(A) times.o P$),
+      node((2, 1), $L$),
+      node((4, 1), $A times.o L$),
+      edge((0, -1), (2, -1), label: $nil times.o P$, "->"),
+      edge((4, -1), (2, -1), label: $cons times.o P$, "->"),
+      edge((0, -1), (0, 1), "="),
+      edge((2, -1), (2, 1), label: $it(n, c)$, "-->", label-side: left),
+      edge((4, -1), (4, 1), label: $A times.o it(n, c)$, "-->", label-side: left),
+      edge((0, 1), (2, 1), label: $n$, "->", label-side: right),
+      edge((4, 1), (2, 1), label: $c$, "->", label-side: left),
+    )
   $
 ]
 
@@ -491,7 +528,23 @@ To solve the first problem, we strengthen the universal property as follows:
 
 $
   #h(72.5pt)
-  #fletcher-diagram(cell-size: 25mm, spacing: 0mm, node((0, -1), $1 times.o P$), node((0, 1), $P$), node((2, -1), $L(A) times.o P$), node((4, -1), $A times.o L(A) times.o P$), node((2, 1), $L$), node((4, 1), $A times.o L$), edge((0, -1), (2, -1), label: $nil times.o P$, "->"), edge((4, -1), (2, -1), label: $cons times.o P$, "->"), edge((0, -1), (0, 1), "="), edge((2, -1), (2, 1), label: $it(n, c)$, "-->", label-side: left), edge((4, -1), (4, 1), label: $A times.o it(n, c)$, "-->", label-side: left), edge((0, 1), (2, 1), label: $n$, "->", label-side: right), edge((4, 1), (2, 1), label: $c$, "->", label-side: left))
+  #fletcher-diagram(
+    cell-size: 25mm,
+    spacing: 0mm,
+    node((0, -1), $1 times.o P$),
+    node((0, 1), $P$),
+    node((2, -1), $L(A) times.o P$),
+    node((4, -1), $A times.o L(A) times.o P$),
+    node((2, 1), $L$),
+    node((4, 1), $A times.o L$),
+    edge((0, -1), (2, -1), label: $nil times.o P$, "->"),
+    edge((4, -1), (2, -1), label: $cons times.o P$, "->"),
+    edge((0, -1), (0, 1), "="),
+    edge((2, -1), (2, 1), label: $it(n, c)$, "-->", label-side: left),
+    edge((4, -1), (4, 1), label: $A times.o it(n, c)$, "-->", label-side: left),
+    edge((0, 1), (2, 1), label: $n$, "->", label-side: right),
+    edge((4, 1), (2, 1), label: $c$, "->", label-side: left),
+  )
 $
 
 $
