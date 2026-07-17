@@ -32,15 +32,17 @@
   config-info(
     title: [Symmetric List Objects],
     author: [
-      Fiona,
-      Vikraman,
-      #underline[Rin]
+      Fiona Blackett,
+      Vikraman Choudhury,
+      #underline[Rin Liu]
     ],
-    date: "July 18, 2025",
+    date: "July 18, 2026",
     // datetime.today().display("[month repr:short] [day], [year]"),
 
     institution: [MSP, University of Strathclyde, Glasgow, UK],
-    logo: [🏴󠁧󠁢󠁳󠁣󠁴󠁿],
+    // logo: [🏴󠁧󠁢󠁳󠁣󠁴󠁿],
+    // logo: [#image("msp-logo.png")],
+    // logo: [#image("strathclyde-logo.png")],
   ),
 )
 
@@ -140,6 +142,9 @@
   h(-0.5em)
   math.plus
 }
+#let zero = math.op("zero")
+#let succ = math.op("succ")
+#let qed() = [#h(1fr)$square$]
 
 // begin presentation
 #title-slide()
@@ -175,7 +180,7 @@
     ```haskell
     data List (A : Set) : Set where
       nil : List A
-      cons : A -> List A -> List A
+      cons : A → List A → List A
     ```
   ],
   [
@@ -196,10 +201,16 @@ In categories with finite products and countable coproducts, we can construct li
 $
   product.co_(n >= 0) A^n
 $
+
+#pause
+
 Alternatively, if we have a natural numbers object, sigma types, and functions out of $sans("Fin")_n$, we can construct lists as:
 $
   sum_(n:bb(N)) A^(sans("Fin")_n)
 $
+
+#pause
+
 We can also construct lists as initial algebras of the following functor:
 $
   F(X) = 1 + A times X
@@ -210,31 +221,59 @@ $
 $
 
 
-== Natural Numbers Objects
+== List Objects
 
-Lawvere #cite(<lawvereElementaryTheoryCategory1964>) introduced natural numbers objects in his axiomatisation of structural set theory (ETCS). This is precisely the universal property of being an initial F-algebra for the functor $F(X) = 1 + X$. However, note that this definition makes sense in categories without products or coproducts.
+Lawvere introduced#cite(<lawvereElementaryTheoryCategory1964>) natural numbers objects in his axiomatisation of set theory (ETCS):
+$
+  #fletcher-diagram(cell-size: 12mm, spacing: 10mm,
+    node((0, 0), $1$),
+    node((2, -1), $N$),
+    node((4, -1), $N$),
+    node((2, 1), $X$),
+    node((4, 1), $X$),
+    edge((0, 0), (2, -1), label: $zero$, "->"),
+    edge((0, 0), (2, 1), label: $z$, "->", label-side: right),
+    edge((4, -1), (2, -1), label: $succ$, "->"),
+    edge((2, -1), (2, 1), label: $rec(z,s)$, "-->", label-side: left),
+    edge((4, -1), (4, 1), label: $rec(z,s)$, "-->", label-side: left),
+    edge((4, 1), (2, 1), label: $s$, "->", label-side: left)
+  )
+$
+#v(-0.5em)
 
-$
-  #fletcher-diagram(cell-size: 12mm, spacing: 10mm, node((0, 0), $1$), node((2, -1), $N$), node((4, -1), $N$), node((2, 1), $X$), node((4, 1), $X$), edge((0, 0), (2, -1), label: $0$, "->"), edge((0, 0), (2, 1), label: $x$, "->", label-side: right), edge((4, -1), (2, -1), label: $s$, "->"), edge((2, -1), (2, 1), label: $rec(x, r)$, "-->", label-side: left), edge((4, -1), (4, 1), label: $rec(x, r)$, "-->", label-side: left), edge((4, 1), (2, 1), label: $r$, "->", label-side: left))
-$
+#pause
+
+This is precisely the universal property of being an initial $F$-algebra for the functor $F(X) = 1 + X$.
+Note that this definition makes sense in categories without products or coproducts.
+
+#pause
+We can adapt this universal property to axiomatise list objects in arbitrary monoidal categories.
 
 == List Objects
 
-We can adapt this universal property to axiomatise list objects in arbitrary monoidal categories:
-
-#v(-0.5em)
-
-#definition[
-  A _list object_ on an object $A$ is:
-  - an object $L(A)$ with maps $1 ->^nil L(A) <-^cons A times.o L(A)$, such that;
-  - for every $L$ with maps $1 ->^n L <-^c A times.o L$, there exists a unique _mediating map_ or _iterator_
+#definition("List objects", number: "1")[#v(-0.5em)
   $
-    it (n,c): L(A) times.o P -> L
-  $
-  such that the following diagram commutes:
-  $
-    #fletcher-diagram(spacing: 8mm, node((0, 0), $1$), node((2, -1), $L(A)$), node((4, -1), $A times.o L(A)$), node((2, 1), $L$), node((4, 1), $A times.o L$), edge((0, 0), (2, -1), label: $nil$, "->"), edge((4, -1), (2, -1), label: $cons$, "->"), edge((2, -1), (2, 1), label: $it(n, c)$, "-->", label-side: left), edge((4, -1), (4, 1), label: $it(n, c)$, "-->", label-side: left), edge((0, 0), (2, 1), label: $n$, "->", label-side: right), edge((4, 1), (2, 1), label: $c$, "->", label-side: left))
-  $
+    #fletcher-diagram(cell-size: 10mm, spacing: 10mm,
+      node((0, 0), $1$),
+      node((2, -1), $L(A)$),
+      node((4, -1), $A times.o L(A)$),
+      node((2, 1), $L$),
+      node((4, 1), $A times.o L$),
+      edge((0, 0), (2, -1), label: $nil$, "->"),
+      edge((4, -1), (2, -1), label: $cons$, "->"),
+      edge((2, -1), (2, 1), label: $it(n, c)$, "-->", label-side: left),
+      edge((4, -1), (4, 1), label: $it(n, c)$, "-->", label-side: left),
+      edge((0, 0), (2, 1), label: $n$, "->", label-side: right),
+      edge((4, 1), (2, 1), label: $c$, "->", label-side: left)
+    )
+  $#v(-0.5em)
+  A list object on $A$ is:#v(-0.2em)
+  - an object $L(A)$ with maps $nil : 1 -> L(A)$ and $cons : A times.o L(A)$, such that;#v(-0.5em)
+  - for every $L$ with maps $n:1 -> L$ and $c : A times.o L -> L$, there exists a unique _iterator_
+    $
+      it (n,c): L(A) -> L
+    $
+    such that the above diagram commutes.
 ]
 
 
@@ -254,10 +293,16 @@ We can adapt this universal property to axiomatise list objects in arbitrary mon
   $
     nil = ? , quad cons = ?, quad it(n, c) = ?
   $
+
+#pause
+
 - In the category of modules over a commutative ring $R$ under $R$-tensor products, list objects are tensor algebras:
   $
     nil = ? , quad cons = ?, quad it(n, c) = ?
   $
+
+#pause
+
 - In the category of pointed spaces under smash product, list objects on connected spaces corresponds to the James construction:
   $
     nil = ? , quad cons = ?, quad it(n, c) = ?
@@ -271,25 +316,32 @@ We can adapt this universal property to axiomatise list objects in arbitrary mon
 
 == Limitations
 
-We can only eliminate out of list objects alone.
-- To define list append:
-  $
-    app : L(A) times.o L(A) -> L(A)
-  $
-  we need to curry the second argument:
-  $
-    app : L(A) -> L(A)^(L(A))
-  $
-  but this requires $L(A)$ to be exponentiable.
+1. We can only eliminate out of lone list objects.
+
+  #pause
+
+    - To define the list append function
+      $
+        app : L(A) times.o L(A) -> L(A)
+      $
+      we would need to curry the second argument to isolate the $L(A)$ on the left:
+      $
+          app : L(A) -> [L(A),L(A)]
+      $
+      but this requires internal homs.
+
+#pause
 
 #v(2em)
 
-These list objects also do not necessarily coincide with free monoids.
+2. These list objects also do not necessarily coincide with free monoids.
 
-- For example, every object of $(sans("Set"), union.sq, emptyset)$ is the free monoid on itself, but list objects are always infinite:
-  $
-    mu X.emptyset union.sq A union.sq X quad=quad mu X. A union.sq X
-  $
+  #pause
+
+  - For example, every object of $(sans("Set"), union.sq, emptyset)$ is the free monoid on itself, but list objects on inhabited sets are always infinite:
+    $
+      mu X.emptyset union.sq A union.sq X quad=quad mu X. A union.sq X
+    $
 
 
 
@@ -297,42 +349,126 @@ These list objects also do not necessarily coincide with free monoids.
 
 To solve the first problem, we strengthen the universal property as follows:
 
-
-#definition[
-  A _parametrised_ list object on an object $A$ is:
-  - an object $L(A)$ with maps $1 -->^(nil) L(A) <--^(cons) A times.o L(A)$, such that;
-  - for any $L$ with maps $P -->^n L <--^c A times.o L$, there exists a unique map
-    $
-      it (n,c): L(A) times.o P-> L
-    $
-    such that the following diagram commutes:
-    $
-      #fletcher-diagram(spacing: 10mm, node((0, -1), $1 times.o P$), node((0, 1), $P$), node((2, -1), $L(A) times.o P$), node((4, -1), $A times.o L(A) times.o P$), node((2, 1), $L$), node((4, 1), $A times.o L times.o P$), edge((0, -1), (2, -1), label: $nil times.o P$, "->"), edge((2, -1), (4, -1), label: $cons times.o P$, "->"), edge((0, -1), (0, 1), "="), edge((2, -1), (2, 1), label: $it(n, c)$, "-->", label-side: left), edge((4, -1), (4, 1), label: $it(n, c)$, "-->", label-side: left), edge((0, 01), (2, 1), label: $x$, "->", label-side: right), edge((2, 1), (4, 1), label: $r$, "->", label-side: right))
-    $
+#definition("Parametrised list object", number:"1")[
+  $
+    #fletcher-diagram(cell-size: 30mm, spacing: 0mm,
+      node((0, -1), $1$),
+      node((2, -1), $L(A)$),
+      node((4, -1), $A times.o L(A)$),
+      edge((0, -1), (2, -1), label: $nil$, "->"),
+      edge((4, -1), (2, -1), label: $cons$, "->"),
+    )
+  $
 ]
 
 == Parametrised List Objects
 
 To solve the first problem, we strengthen the universal property as follows:
 
-
-#definition[
-  A _parametrised_ list object on an object $A$ is:
-  - an object $L(A)$ with maps $1 -->^(nil) L(A) <--^(cons) A times.o L(A)$, such that;
-  - for any $L$ with maps $P -->^n L <--^c A times.o L$, there exists a unique map
+#definition("Parametrised list object", number:"1")[
     $
-      it (n,c): L(A) times.o P-> L
+      #h(-2.85pt)
+      #fletcher-diagram(cell-size: 30mm, spacing: 0mm,
+        node((0, -1), $1$),
+        node((0, 1), $P$),
+        node((2, -1), $L(A)$),
+        node((4, -1), $A times.o L(A)$),
+        node((2, 1), $L$),
+        node((4, 1), $A times.o L$),
+        edge((0, -1), (2, -1), label: $nil$, "->"),
+        edge((4, -1), (2, -1), label: $cons$, "->"),
+        edge((0, 1), (2, 1), label: $n$, "->", label-side: right),
+        edge((4, 1), (2, 1), label: $c$, "->", label-side: left)
+      )
     $
-    such that the following two computation rules hold:
+]
 
+// == Parametrised List Objects
+
+// To solve the first problem, we strengthen the universal property as follows:
+
+// #definition("Parametrised list object", number:"1")[
+//     $
+//         #h(-2.85pt)
+//         #fletcher-diagram(cell-size: 30mm, spacing: 0mm,
+//         node((0, -1), $1$),
+//         node((0, 1), $P$),
+//         node((2, -1), $L(A)$),
+//         node((4, -1), $A times.o L(A)$),
+//         node((2, 1), $L$),
+//         node((4, 1), $A times.o L$),
+
+//         edge((0, -1), (2, -1), label: $nil$, "->"),
+//         edge((4, -1), (2, -1), label: $cons$, "->"),
+
+//         edge((0, 1), (2, 1), label: $n$, "->", label-side: right),
+//         edge((4, 1), (2, 1), label: $c$, "->", label-side: left),
+
+
+//         node((1, 0), $L(A) times.o P$),
+//         node((3, 0), $L$),
+//         edge((1, 0), (3, 0), label: $it(n, c)$, "-->"),
+//       )
+//     $
+// ]
+
+== Parametrised List Objects
+
+To solve the first problem, we strengthen the universal property as follows:
+
+#definition("Parametrised list object", number:"1")[
+  #v(-1.5pt)
+  $
+    #h(72.5pt)
+    #fletcher-diagram(cell-size: (28.66mm,30mm), spacing: 0mm,
+      node((0, -1), $1 times.o P$),
+      node((0, 1), $P$),
+      node((2, -1), $L(A) times.o P$),
+      node((4, -1), $A times.o L(A) times.o P$),
+      node((2, 1), $L$),
+      node((4, 1), $A times.o L$),
+      edge((0, -1), (2, -1), label: $nil times.o P$, "->"),
+      edge((4, -1), (2, -1), label: $cons times.o P$, "->"),
+      edge((0, -1), (0, 1), "="),
+      edge((2, -1), (2, 1), label: $it(n, c)$, "-->", label-side: left),
+      edge((4, -1), (4, 1), label: $A times.o it(n, c)$, "-->", label-side: left),
+      edge((0, 1), (2, 1), label: $n$, "->", label-side: right),
+      edge((4, 1), (2, 1), label: $c$, "->", label-side: left)
+    )
+  $
+]
+
+
+
+== String Diagrams
+
+$
+  #h(72.5pt)
+  #fletcher-diagram(cell-size: 25mm, spacing: 0mm,
+    node((0, -1), $1 times.o P$),
+    node((0, 1), $P$),
+    node((2, -1), $L(A) times.o P$),
+    node((4, -1), $A times.o L(A) times.o P$),
+    node((2, 1), $L$),
+    node((4, 1), $A times.o L$),
+    edge((0, -1), (2, -1), label: $nil times.o P$, "->"),
+    edge((4, -1), (2, -1), label: $cons times.o P$, "->"),
+    edge((0, -1), (0, 1), "="),
+    edge((2, -1), (2, 1), label: $it(n, c)$, "-->", label-side: left),
+    edge((4, -1), (4, 1), label: $A times.o it(n, c)$, "-->", label-side: left),
+    edge((0, 1), (2, 1), label: $n$, "->", label-side: right),
+    edge((4, 1), (2, 1), label: $c$, "->", label-side: left)
+  )
+$
+
+$
   #grid(
     align: (center, center),
     columns: (35%, 50%),
     gutter: 2em,
     image("diagrams/output-1.svg", width: 100%), image("diagrams/output-2.svg", width: 100%),
   )
-]
-
+$
 
 
 
@@ -340,73 +476,266 @@ To solve the first problem, we strengthen the universal property as follows:
 
 == Using the iterator
 
-We can now use this stronger universal property to define $app$ as an iterator:
+We can now use this stronger universal property to define $app$ as an iterator.
+
+#pause
+
+$
+    it(n,c) : L(A) times.o P -> L
+$
 
 - Since $app : L(A) times.o L(A) -> L(A)$, we have $L(A)$ as both the parameter $P$ and the target $L$.
-  We now only need maps $n : L(A) -> L(A)$ and $c : A times.o L(A) times.o L(A)$.
 
-  In Agda:
+- We now only need maps $n : L(A) -> L(A)$ and $c : A times.o L(A) times.o L(A)$.
 
-  ```haskell
-  _++_ : List A -> List A -> List A
-  [] ++ ys          = ys
-  (x :: xs) ++ ys = x :: (xs ++ ys)
-  ```
+  #pause
+
+
+    #grid(
+      align: (left, center),
+      columns: (35%, 60%),
+      gutter: 1em,
+
+      [
+        In Agda:
+
+        ```haskell
+        _++_ : List A -> List A -> List A
+        [] ++ ys          = ys
+        (x :: xs) ++ ys = x :: (xs ++ ys)
+        ```
+      ],
+      [
+        #pause
+        #align(horizon)[
+          #v(1em)
+          #grid(
+            align: (left, right),
+            columns: (35%, 50%),
+            gutter: 1em,
+            image("diagrams/output-1-1.svg", width: 100%), image("diagrams/output-2-1.svg", width: 100%),
+          )
+        ]
+      ]
+    )
+
+
+  #pause
+
   so we pick $n = id$ and $c=cons$:
   $
     app = it(id, cons).
   $
 
+// == Using the iterator
+
+// Since the iterator is unique, we can also prove that two maps are equal by showing that they satisfy the two computation rules $nil$-$beta$ and $cons$-$beta$, and are hence the same iterator.
+
+// #lemma[
+//   The following maps $f,g:L(A) -> L(A)$ are equal:
+//   #figure(
+//     image("diagrams/output-10.svg", width: 45%),
+//   )
+// ]
+
+// #pause
+
+// _Proof_.
+// We claim that both maps are the iterator $it(nil, cons)$.
+
+// #pause
+
+// The identity immediately satisfies both rules, so we have $g=it(nil, cons)$.
+
+// ==
+
+// We have $f$-$nil$-$beta$ by applying $app$-$nil$-$beta$:
+// #align(center, image("diagrams/output-11.svg", width: 80%))
+// #pause
+// and similarly, $f$-$cons$-$beta$ from $app$-$cons$-$beta$:
+// #align(center, image("diagrams/output-12.svg", width: 100%))
+// #pause
+// and hence $f=it(nil, cons)=g$.#qed()
 
 
-== Using the iterator
+== Monoids
 
-Since the iterator is unique, we can also prove that two maps are equal by showing that they satisfy the two computation rules $nil$-$beta$ and $cons$-$beta$, and are hence the same iterator.
-
-#lemma[
-  The following maps $f,g:L(A) -> L(A)$ are equal:
-  #figure(
-    image("diagrams/output-10.svg", width: 45%),
-  )
-]
-
-#proof[
-  We claim that both maps are the iterator $it(nil, cons)$.
-
-  The identity immediately satisfies both rules, so we have $g=it(nil, cons)$.
-
-  #v(2em)
-
-  We have $f$-$nil$-$beta$ by applying $app$-$nil$-$beta$:
-  #align(center, image("diagrams/output-11.svg", width: 80%))
-  and similarly, $f$-$cons$-$beta$ from $app$-$cons$-$beta$:
-
-  #align(center, image("diagrams/output-12.svg", width: 100%))
-  and hence $f=it(nil, cons)=g$.
-]
-
-== Free monoids
-
-The stronger univeral property resolves the first limitation, allowing us more flexibility when eliminating from lists.
-
+The stronger universal property resolves the first limitation, allowing us more flexibility when eliminating from lists.
+#pause
 For the second limitation:
 
-#theorem[
-  $(L(A), nil, app)$ is the free monoid on $A$.
-]
-
-#proofsketch[
-  The left unit law holds immediately by $++$-$nil$-$beta$:
-  #align(center, image("diagrams/output-9.svg", width: 40%))
-  and the previous lemma shows the right unit law. Associativity and the unique extension property are proved similarly using iterators.
-]
+#v(-0.8em)
 
 #theorem[
-  If $cal(C)$ admits parametrised list objects for every object, then $Mon(cal(C))$ is monadic over $cal(C)$ via the evident forgetful functor.
+    $(L(A), nil, app)$ is the free monoid on $A$.
+]
+
+// #proofsketch[
+//   The left unit law holds immediately by $++$-$nil$-$beta$:
+//   #align(center, image("diagrams/output-9.svg", width: 40%))
+//   and the previous lemma shows the right unit law. Associativity and the unique extension property are proved similarly using iterators.
+// ]
+
+#v(-1em)
+
+#pause
+$
+  #fletcher-diagram(cell-size: 12mm, spacing: 30mm,
+    node((0, 0), $cal(C)$),
+    node((-0.1, -0.5), $tack.l$),
+    node((0, -1), $Mon(cal(C))$),
+    edge((0, 0), (0, -1), label: $L$, "->", label-side: left, bend: 40deg),
+    edge((0, -1), (0, 0), label: $U$, "->", label-side: left),
+  )
+$
+
+// #theorem([#cite(<fioreListObjectsAlgebraic2017>, form: "prose")])[
+//     If $cal(C)$ admits parametrised list objects for every object, then $Mon(cal(C))$ is monadic over $cal(C)$ via the evident forgetful functor.
+// ]
+
+// #v(-1em)
+
+// #pause
+
+// #theorem([#cite(<fioreListObjectsAlgebraic2017>, form: "prose")])[
+//     If $(cal(C),times,1)$ is cartesian monoidal, then the induced monad is strong.
+// ]
+
+
+// == The Cartesian Setting
+
+// #theorem[
+//   If $(cal(C),times,1)$ is cartesian monoidal, and $L(A)$ is a list object, then $L(A)$ satisfies the following stronger universal property:
+
+//   For every $L$ with maps $P ->^n L <-^c A times L times P$, there exists a _doubly parametrised iterator_:
+//   $
+//     caron(it)(n,c) : L(A) times P -> L
+//   $
+//   such that the following computation rules hold:
+
+//   $
+//     #grid(
+//       align: (center, center),
+//       columns: (35%, 50%),
+//       gutter: 2em,
+//       image("diagrams/output-3.svg", width: 100%), image("diagrams/output-4.svg", width: 100%),
+//     )
+//   $
+// ]
+
+
+// #theorem[
+//   If $(cal(C),times,1)$ is cartesian monoidal, then the induced monad is strong.
+// ]
+
+// A construction of the right strength $tau_(A,B):L(A) times B -> L(A times B)$ is as follows.
+
+// We can equip $L(A times B)$ with a doubly-parametrised list algebra structure using:
+// - $n := B ->^! 1 ->^nil L(A times B)$
+// - $c := A times L(A times B) times B ->^tilde.equiv A times B times L(A times B) ->^cons L(A times B)$.
+// From the strong universal property, we obtain a map
+// $
+//   tau_(A,B) := caron(it)(n,c) : L(A) times B -> L(A times B)
+// $
+
+
+
+== Symmetric Lists
+
+Hereafter, the ambient category is symmetric strict monoidal.
+
+#definition("Symmetric list objects", number: "2")[
+  #align(center, image("diagrams/output-5.svg", width: 65%))
+  A (_parametrised_) _symmetric list object_ or _ilst_ on $A$ is a list object $L(A)$ satisfying the additional axiom above, and with the corresponding universal property.
+]
+
+#speaker-note("Can only eliminate into symmetric list algebras instead of ordinary list algebras.")
+
+
+
+
+== Symmetric Lists
+
+
+#show raw.where(lang: "haskell"): it => [
+  #show regex("\bIlst\b"): keyword => text(
+    fill: red.darken(20%),
+    weight: "bold",
+    "foo"
+  )
+  #it
 ]
 
 
-== The Cartesian Setting
+In Agda:
+```haskell
+data SLlst (A : Set) : Set where
+  nil : Ilst A
+  cons : A → List A → List A
+  swap :
+```
+
+
+
+
+
+
+
+
+
+== Symmetric Lists
+
+#theorem(number: "5")[
+  Let $(L(A), nil, cons)$ be a list object on $A$. Then, the following are equivalent:
+
+  1. $(L(A), nil, cons)$ is a symmetric list object;
+  2. $(L(A), nil, app)$ is a commutative monoid object;
+  3. $(L(A), nil, cons)$ is the free commutative monoid object on $A$.
+]
+
+== Symmetric Lists
+
+#theorem(number: "5")[
+  Let $(L(A), nil, cons)$ be a list object on $A$. Then, the following are equivalent:
+
+  1. $(L(A), nil, cons)$ is a symmetric list object;
+  2. $(L(A), nil, app)$ is a commutative monoid object;
+  3. $(L(A), nil, cons)$ is the free commutative monoid object on $A$.
+]
+
+_Proof_. $(1 => 2)$ We already have that list objects are monoids, so we need only show that $app$ is commutative:
+#v(-1em)
+#align(center, image("diagrams/output-33.svg", width: 50%))
+#v(-1em)
+Call the two maps $f$ and $g$, respectively.
+
+
+==
+
+The left map $f$ is $app:=it(id,cons)$ by definition, so we only need to show that the braided version satisfies the same computation rules:
+#align(center, image("diagrams/output-34.svg", width: 45%))
+
+$
+  #grid(
+    align: (right, left),
+    columns: (50%, 50%),
+    gutter: 6em,
+    image("diagrams/output-34-1.svg", width: 100%), image("diagrams/output-34-2.svg", width: 60%),
+  )
+$
+
+
+
+
+
+
+==
+
+#theorem[
+  If $cal(C)$ admits symmetric list objects for every object, then $CMon(cal(C))$ is monadic over $cal(C)$ via the evident forgetful functor.
+]
+
+==
 
 #theorem[
   If $(cal(C),times,1)$ is cartesian monoidal, and $L(A)$ is a list object, then $L(A)$ satisfies the following stronger universal property:
@@ -428,77 +757,55 @@ For the second limitation:
 ]
 
 
-#theorem[
-  If $(cal(C),times,1)$ is cartesian monoidal, then the induced monad is strong.
-]
-
-A construction of the right strength $tau_(A,B):L(A) times B -> L(A times B)$ is as follows.
-
-We can equip $L(A times B)$ with a doubly-parametrised list algebra structure using:
-- $n := B ->^! 1 ->^nil -> L(A times B)$
-- $c := A times L(A times B) times B ->^tilde.equiv A times B times L(A times B) ->^cons L(A times B)$.
-From the strong universal property, we obtain a map
-$
-  tau_(A,B) := caron(it)(n,c) : L(A) times B -> L(A times B)
-$
-
-
-== Symmetric Lists
-
-Hereafter, assume the ambient category is symmetric strict monoidal.
-
-#definition[
-  A (_parametrised_) _symmetric list object_ or _ilst_ on $A$ is a list object $L(A)$ with the following additional axiom:
-  #align(center, image("diagrams/output-5.svg", width: 65%))
-  and satisfying the corresponding universal property.
-]
-
-== Symmetric Lists
-
-#theorem[
-  Let $(L(A), nil, cons)$ be a list object on $A$. Then, the following are equivalent:
-
-  1. $(L(A), nil, cons)$ is a symmetric list object;
-  2. $(L(A), nil, app)$ is a commutative monoid object;
-  3. $(L(A), nil, cons)$ is the free commutative monoid object on $A$.
-]
-
-#proof[
-    $(1 => 2)$ We have already seen that list objects are monoids, so wee need only show that $app$ is commutative:
-    #v(-1em)
-    #align(center, image("diagrams/output-33.svg", width: 50%))
-    The left map is $app=it(id,cons)$ by definition, so we only need to show that the braided version satisfies the same computation rules:
-    #align(center, image("diagrams/output-34.svg", width: 45%))
-
-    $
-        #grid(
-
-        align: (right, left),
-        columns: (50%, 50%),
-        gutter: 6em,
-        image("diagrams/output-34-1.svg", width: 100%), image("diagrams/output-34-2.svg", width: 60%),
-        )
-    $
-
-]
-
-
-==
-
-#theorem[
-  If $cal(C)$ admits parametrised list objects for every object, then $CMon(cal(C))$ is monadic over $cal(C)$ via the evident forgetful functor.
-]
 
 #theorem[
   If $(cal(C),times,1)$ is cartesian monoidal, then the induced monad is strong, and further, commutative.
 ]
 
 
+== Further Work
 
-== Proofs
+#align(horizon)[
+  #grid(
+    columns: (4fr, 2fr),
+    [
+      - Symmetric trees
+      - General theory of parametrised inital algebras
+      - Symmetric list models of linear logic
+      - Operads
+    ],
+    [
+      #align(center + horizon, image("abstract.png", width: 80%))
+      #align(center + horizon, [Extended abstract with proofs])
+    ]
+  )
+]
 
-#align(center + horizon, image("abstract.png", width: 25%))
-#align(center + horizon, [Extended abstract with proofs])
+
+== Summary
+
+#align(horizon)[
+  #grid(
+    columns: (4fr, 2fr),
+    [
+      - List objects
+      - Parametrised list objects
+      - Iterator as induction
+      - Strength in Cartesian setting
+      - Symmetric lists
+      - Strong universal property in Cartesian setting
+      - Induced commutative monad
+    ],
+    [
+      #align(center + horizon, image("abstract.png", width: 80%))
+      #align(center + horizon, [Extended abstract with proofs])
+    ]
+  )
+]
+
+
+
+
 
 
 
