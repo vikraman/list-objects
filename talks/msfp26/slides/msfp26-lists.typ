@@ -174,7 +174,7 @@
 ]
 
 #show raw.where(block: true): block.with(
-  fill: luma(240),
+  fill: rgb("#f9ffff"),
   inset: 1em,
   radius: 0.5em,
 )
@@ -322,7 +322,7 @@ $
   Note that this definition makes sense in categories without products or coproducts.
 ]
 
-We can adapt this universal property to axiomatise list objects in general monoidal categories.
+We can adapt this universal property to axiomatise list objects in general monoidal categories. This was originally done by Joyal
 
 #todo[cite: Joyal's arithmetic universes, Maietti, Cockett's Locoi, Pare and Roman's parametrized NNO.]
 
@@ -382,7 +382,7 @@ We can adapt this universal property to axiomatise list objects in general monoi
 
 #pause
 
-- In the category of pointed spaces under smash product, list objects on connected spaces corresponds to the James construction:
+- In the category of pointed spaces under smash product, list objects on connected spaces correspond to the James construction:
   $
     1 xarrow(#nil) J(A) xarrow(sym: <-, #cons) A times J(A)
   $
@@ -502,7 +502,34 @@ To solve the first problem, we strengthen the universal property as follows:
 #definition("Parametrised list objects", number: "2")[
   #v(-1.5pt)
   $
-    #h(72.5pt)
+    #h(22pt)
+    #fletcher-diagram(
+      cell-size: (28.66mm, 30mm),
+      spacing: 0mm,
+      node((0, -1), $1 times.o P$),
+      node((0, 1), $P$),
+      node((2, -1), $L(A) times.o P$),
+      node((4, -1), $A times.o L(A) times.o P$),
+      node((2, 1), $L$),
+      node((4, 1), $A times.o L$),
+      edge((0, -1), (2, -1), label: $nil times.o P$, "->"),
+      edge((4, -1), (2, -1), label: $cons times.o P$, "->"),
+      edge((2, -1), (2, 1), label: $it(n, c)$, "-->", label-side: left),
+      edge((0, 1), (2, 1), label: $n$, "->", label-side: right),
+      edge((4, 1), (2, 1), label: $c$, "->", label-side: left),
+    )
+  $
+]
+
+
+== Parametrised List Objects
+
+To solve the first problem, we strengthen the universal property as follows:
+
+#definition("Parametrised list objects", number: "2")[
+  #v(-1.5pt)
+  $
+    #h(74pt)
     #fletcher-diagram(
       cell-size: (28.66mm, 30mm),
       spacing: 0mm,
@@ -573,7 +600,7 @@ $
 
 - Since $app : L(A) times.o L(A) -> L(A)$, we have $L(A)$ as both the parameter $P$ and the target $L$.
 
-- We now only need maps $n : L(A) -> L(A)$ and $c : A times.o L(A) times.o L(A)$.
+- We now only need maps $n : L(A) -> L(A)$ and $c : A times.o L(A) -> L(A)$.
 
   #pause
 
@@ -581,10 +608,9 @@ $
 
   #grid(
     align: (left, center),
-    columns: (45%, 55%),
-    gutter: 1em,
+    columns: (40%, 60%),
+    gutter: 0.0em,
     [
-      In Agda:
 
       ```haskell
       _append_ : List A -> List A -> List A
@@ -595,11 +621,11 @@ $
     [
       #pause
       #align(horizon)[
-        #v(1em)
+        #v(0.2em)
         #grid(
           align: (left, right),
           columns: (35%, 50%),
-          gutter: 0.5em,
+          gutter: 2em,
           image("diagrams/output-1-1.svg", width: 100%), image("diagrams/output-2-1.svg", width: 100%),
         )
       ]
@@ -663,6 +689,7 @@ For the second limitation:
 //   and the previous lemma shows the right unit law. Associativity and the unique extension property are proved similarly using iterators.
 // ]
 
+#pause
 #v(-1em)
 
 #lemma[
@@ -671,39 +698,32 @@ For the second limitation:
 $
   f : A -> B quad mapsto quad (A ->^f B ->^(eta_B) L(B))^sharp : L(A) -> L(B)
 $
-// The functorial action on a morphism $f : A -> B$ is given by:
-// $
-//   (f compose eta_B)^sharp : L(A) -> L(B)
-// $
-// where
-// #align(center,image("eta.svg", width: 15%))
+
+#speaker-note(
+$
+  eta := #image("eta.svg", width: 15%)
+$
+)
+
+== Monoids
 
 
+#align(horizon, [
+  $
+    #fletcher-diagram(cell-size: 12mm, spacing: 30mm,
+      node((0, -1), $Mon(cal(C))$),
+      node((0, 0), $cal(C)$),
 
-// #pause
-// $
-//   #fletcher-diagram(cell-size: 12mm, spacing: 30mm,
-//     node((0, 0), $cal(C)$),
-//     node((-0.1, -0.5), $tack.l$),
-//     node((0, -1), $Mon(cal(C))$),
-//     edge((0, 0), (0, -1), label: $L$, "->", label-side: left, bend: 45deg),
-//     edge((0, -1), (0, 0), label: $U$, "->", label-side: left),
-//   )
-// $
+      edge((0, 0), (0, -1), label: $L$, "->", label-side: left, bend: 45deg),
+      edge((0, -1), (0, 0), label: $U$, "->", label-side: left),
 
-#theorem[
-  If $cal(C)$ admits parametrised list objects for every object, then $Mon(cal(C))$ is monadic over $cal(C)$ via the evident forgetful functor.
-]
-
-// #v(-1em)
-
-// #pause
-
-#theorem([#cite(<fioreListObjectsAlgebraic2017>, form: "author")#cite(<fioreListObjectsAlgebraic2017>)])[
-  If $(cal(C),times,1)$ is cartesian monoidal, then the induced monad is strong.
-]
-
-
+      node((-0.1, -0.5), $tack.l$),
+    )
+  $
+  #theorem(number:"3",[#cite(<fioreListObjectsAlgebraic2017>, form: "author")#cite(<fioreListObjectsAlgebraic2017>)])[
+    If $(cal(C),times,1)$ is cartesian monoidal, then the induced monad is strong.
+  ]
+])
 // == The Cartesian Setting
 
 // #theorem[
@@ -730,16 +750,6 @@ $
 //   If $(cal(C),times,1)$ is cartesian monoidal, then the induced monad is strong.
 // ]
 
-// A construction of the right strength $tau_(A,B):L(A) times B -> L(A times B)$ is as follows.
-
-// We can equip $L(A times B)$ with a doubly-parametrised list algebra structure using:
-// - $n := B ->^! 1 ->^nil L(A times B)$
-// - $c := A times L(A times B) times B ->^tilde.equiv A times B times L(A times B) ->^cons L(A times B)$.
-// From the strong universal property, we obtain a map
-// $
-//   tau_(A,B) := caron(it)(n,c) : L(A) times B -> L(A times B)
-// $
-
 
 
 == Symmetric Lists
@@ -758,10 +768,11 @@ Hereafter, the ambient category is symmetric strict monoidal.
 
 Hereafter, the ambient category is symmetric strict monoidal.
 
-#definition("Symmetric list objects", number: "2")[
+#definition("Symmetric list objects", number: "3")[
   #v(19pt)
-  $
-    #grid(
+
+  #align(horizon + center,
+    grid(
       align: (center + horizon, center),
       columns: (1fr, 1fr),
       gutter: 1em,
@@ -771,26 +782,49 @@ Hereafter, the ambient category is symmetric strict monoidal.
         data Ilst (A : Set) : Set where
           [] : Ilst A
           _::_ : A → Ilst A → Ilst A
-          swap : (a b : A) → (xs : Ilst A) → a :: b :: xs ≡ b :: a :: xs
+          swap : (a b : A) (xs : Ilst A)
+             → a :: b :: xs ≡ b :: a :: xs
         ```
       ],
     )
-  $
+  )
+
   #v(20pt)
   A (_parametrised_) _symmetric list object_ or _ilst_ on $A$ is a list object $L(A)$ satisfying the additional axiom above, and with the corresponding universal property.
 ]
 
-In Agda:
-```haskell
-data Ilst (A : Set) : Set where
-  nil : Ilst A
-  _cons_ : A -> Ilst A -> Ilst A
-  swap : (a b : A) -> (xs : Ilst A) -> a cons b cons xs = b cons a cons xs
-```
+// In Agda:
+// ```haskell
+// data Ilst (A : Set) : Set where
+//   nil : Ilst A
+//   _cons_ : A -> Ilst A -> Ilst A
+//   swap : (a b : A) -> (xs : Ilst A) -> a cons b cons xs = b cons a cons xs
+// ```
 
 
 
 
+
+== Examples of symmetric list objects in nature
+
+- In the category of modules over a commutative ring $R$ under $R$-tensor products, symmetric list objects are symmetric algebras:
+  $
+    1 xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o plus.o.big_n V^(times.o^n)
+  $
+
+#pause
+
+- In the category of ??? under ???, symmetric list objects on ??? are ???:
+  $
+    1 xarrow(#nil) J(A) xarrow(sym: <-, #cons) A times J(A)
+  $
+
+#pause
+
+- In the category of ??? under ???, symmetric list objects on ??? are ???:
+  $
+    1 xarrow(#nil) J(A) xarrow(sym: <-, #cons) A times J(A)
+  $
 
 
 
@@ -800,41 +834,45 @@ data Ilst (A : Set) : Set where
 
 == Symmetric Lists
 
-#theorem(number: "5")[
-  Let $(L(A), nil, cons)$ be a list object on $A$. Then, the following are equivalent:
-
-  1. $(L(A), nil, cons)$ is a symmetric list object;
-  2. $(L(A), nil, app)$ is a commutative monoid object;
-  3. $(L(A), nil, cons)$ is the free commutative monoid object on $A$.
+#theorem(number:"4")[
+  For any symmetric list $L(A)$:
+  // #v(-1em)
+  #align(center, image("diagrams/output-28.svg", width: 50%))
+  // #v(-1em)
 ]
 
-== Symmetric Lists
+_Proof._
+Let the two maps be $f$ and $g$ respectively.
 
-#theorem(number: "5")[
-  Let $(L(A), nil, cons)$ be a list object on $A$. Then, the following are equivalent:
+#pause
 
-  1. $(L(A), nil, cons)$ is a symmetric list object;
-  2. $(L(A), nil, app)$ is a commutative monoid object;
-  3. $(L(A), nil, cons)$ is the free commutative monoid object on $A$.
-]
+We claim that $f=it(eta,cons)=g$.
 
-_Proof_. $(1 => 2)$ We already have that list objects are monoids, so we need only show that $app$ is commutative:
-#v(-1em)
-#align(center, image("diagrams/output-33.svg", width: 50%))
-#v(-1em)
-Call the two maps $f$ and $g$, respectively.
+#pause
+
+Since the iterator is unique, it suffices to show that they both satisfy the two computation rules $nil$-$beta$ and $cons$-$beta$.
 
 ==
 
-The left map $f$ is $app:=it(id, cons)$ by definition, so, by the uniqueness of the iterator, it suffices to show that the braided version satisfies the same computation rules:
-#align(center, image("diagrams/output-34.svg", width: 45%))
+#align(center + horizon, [
+  #grid(
+    align: (right, center, left),
+    columns: (45%, 2%, 45%),
+    gutter: 1.5em,
+    image("diagrams/output-29.svg", width: 100%), grid.vline(), [], image("diagrams/output-30.svg", width: 100%)
+  )
+  #align(bottom, qed())
+])
+
+
+==
 
 #align(center + horizon, [
   #grid(
-    align: (right, left),
-    columns: (50%, 50%),
-    gutter: 6em,
-    image("diagrams/output-34-1.svg", width: 100%), image("diagrams/output-34-2.svg", width: 60%),
+    align: (right + top, center, left + top),
+    columns: (45%, 2%, 45%),
+    gutter: 1.5em,
+    image("diagrams/output-31.svg", width: 100%), grid.vline(), h(-5em), image("diagrams/output-32.svg", width: 100%)
   )
   #align(bottom, qed())
 ])
@@ -844,15 +882,84 @@ The left map $f$ is $app:=it(id, cons)$ by definition, so, by the uniqueness of 
 
 
 
-==
 
-#theorem[
-  If $cal(C)$ admits symmetric list objects for every object, then $CMon(cal(C))$ is monadic over $cal(C)$ via the evident forgetful functor.
+
+== Symmetric Lists
+
+#theorem(number: "5")[
+  Let $(L(A), nil, cons)$ be a list object on $A$. Then, the following are equivalent:
+
+  1. $(L(A), nil, cons)$ is a symmetric list object;
+  2. $(L(A), nil, app)$ is a commutative monoid object;
+  3. $(L(A), nil, cons)$ is the free commutative monoid object on $A$.
 ]
 
+
+
+// == Symmetric Lists
+
+// #theorem(number: "5")[
+//   Let $(L(A), nil, cons)$ be a list object on $A$. Then, the following are equivalent:
+
+//   1. $(L(A), nil, cons)$ is a symmetric list object;
+//   2. $(L(A), nil, app)$ is a commutative monoid object;
+//   3. $(L(A), nil, cons)$ is the free commutative monoid object on $A$.
+// ]
+
+// _Proof_. $(1 => 2)$ We already have that list objects are monoids, so we need only show that $app$ is commutative:
+// #v(-1em)
+// #align(center, image("diagrams/output-33.svg", width: 50%))
+// #v(-1em)
+// Call the two maps $f$ and $g$, respectively.
+
+// ==
+
+// The left map $f$ is $app:=it(id, cons)$ by definition, so, by the uniqueness of the iterator, it suffices to show that the braided version satisfies the same computation rules:
+// #align(center, image("diagrams/output-34.svg", width: 45%))
+
+// #align(center + horizon, [
+//   #grid(
+//     align: (right, center, left),
+//     columns: (45%, 2%, 45%),
+//     gutter: 5em,
+//     image("diagrams/output-34-1.svg", width: 100%), grid.vline(), h(-5em), image("diagrams/output-34-2.svg", width: 55%)
+//   )
+//   #align(bottom, qed())
+// ])
+
+
+
+
+
+#pause
+
+#v(-1em)
+
+#lemma(number:"5")[
+  If $cal(C)$ admits symmetric list objects for every object, then $L(-)$ is a functor.
+]
+
+#v(-1em)
+
+#pause
+
+$
+  #fletcher-diagram(cell-size: 12mm, spacing: 30mm,
+    node((0, -1), $CMon(cal(C))$),
+    node((0, 0), $cal(C)$),
+
+    edge((0, 0), (0, -1), label: $L$, "->", label-side: left, bend: 45deg),
+    edge((0, -1), (0, 0), label: $U$, "->", label-side: left),
+
+    node((-0.1, -0.5), $tack.l$),
+  )
+$
+
+
+
 ==
 
-#theorem[
+#theorem(number:"6")[
   If $(cal(C),times,1)$ is cartesian monoidal, and $L(A)$ is a list object, then $L(A)$ satisfies the following stronger universal property:
 
   For every $L$ with maps $P ->^n L <-^c A times L times P$, there exists a _doubly parametrised iterator_:
@@ -871,11 +978,68 @@ The left map $f$ is $app:=it(id, cons)$ by definition, so, by the uniqueness of 
   $
 ]
 
+// #pause
+==
 
 
-#theorem[
+
+
+
+
+
+#theorem(number:"7")[
   If $(cal(C),times,1)$ is cartesian monoidal, then the induced monad is strong, and further, commutative.
 ]
+
+A construction of the right strength $tau_(A,B):L(A) times B -> L(A times B)$ is as follows.
+
+We can equip $L(A times B)$ with a doubly-parametrised list algebra structure using:
+- $n := B ->^! 1 ->^nil L(A times B)$
+- $c := A times L(A times B) times B ->^tilde.equiv A times B times L(A times B) ->^cons L(A times B)$.
+From the strong universal property, we obtain a map
+$
+  tau_(A,B) := caron(it)(n,c) : L(A) times B -> L(A times B)
+$
+
+
+==
+
+#align(center + horizon, fletcher-diagram({
+	node((1, 0), [$L(A) times L(B)$])
+	node((0, 1), [$L(L(A)times B)$])
+	node((2, 1), [$L(A times L(B))$])
+	node((2, 2), [$L L(A times B)$])
+	node((0, 2), [$L L(A times B)$])
+	node((1, 3), [$L(A times B)$])
+	edge((1, 0), (2, 1), [$tau_(A,L(B))$], label-side: left, "->")
+	edge((1, 0), (0, 1), [$sigma_(L(A),B)$], label-side: right, "->")
+	edge((2, 1), (2, 2), [$L(sigma_(A,B))$], label-side: left, "->")
+	edge((0, 1), (0, 2), [$L(tau_(A,B))$], label-side: right, "->")
+	edge((0, 2), (1, 3), [$mu_(A times B)$], label-side: right, "->")
+	edge((2, 2), (1, 3), [$mu_(A times B)$], label-side: left, "->")
+}))
+
+==
+
+// https://q.uiver.app/#r=typst&q=WzAsNixbMSwwLCJMKEEpIHRpbWVzIEwoQikiXSxbMCwxLCJMKEwoQSl0aW1lcyBCKSJdLFsyLDEsIkwoQSB0aW1lcyBMKEIpKSJdLFsyLDIsIkwgTChBIHRpbWVzIEIpIl0sWzAsMiwiTCBMKEEgdGltZXMgQikiXSxbMSwzLCJMKEEgdGltZXMgQikiXSxbMCwyLCJcXHRhdV97QSxMKEIpfSJdLFswLDEsIlxcc2lnbWFfe0woQSksQn0iLDJdLFsyLDMsIkwoXFxzaWdtYV97QSxCfSkiXSxbMSw0LCJMKFxcdGF1X3tBLEJ9KSIsMl0sWzQsNSwiXFxtdV97QVxcdGltZXMgQn0iLDJdLFszLDUsIlxcbXVfe0FcXHRpbWVzIEJ9Il0sWzEsNSwiXFx0YXVfe0EsQn1eXFxzaGFycCJdLFsyLDUsIlxcc2lnbWFfe0EsQn1eXFxzaGFycCIsMl1d
+#align(center + horizon, fletcher-diagram({
+	node((1, 0), [$L(A) times L(B)$])
+	node((0, 1), [$L(L(A)times B)$])
+	node((2, 1), [$L(A times L(B))$])
+	node((2, 2), [$L L(A times B)$])
+	node((0, 2), [$L L(A times B)$])
+	node((1, 3), [$L(A times B)$])
+	edge((1, 0), (2, 1), [$tau_(A,L(B))$], label-side: left, "->")
+	edge((1, 0), (0, 1), [$sigma_(L(A),B)$], label-side: right, "->")
+	edge((2, 1), (2, 2), [$L(sigma_(A,B))$], label-side: left, "->")
+	edge((0, 1), (0, 2), [$L(tau_(A,B))$], label-side: right, "->")
+	edge((0, 2), (1, 3), [$mu_(A times B)$], label-side: right, "->")
+	edge((2, 2), (1, 3), [$mu_(A times B)$], label-side: left, "->")
+	edge((0, 1), (1, 3), [$tau_(A,B)^sharp$], label-side: left, "->")
+	edge((2, 1), (1, 3), [$sigma_(A,B)^sharp$], label-side: right, "->")
+}))
+
+
 
 
 == Further Work
@@ -884,10 +1048,10 @@ The left map $f$ is $app:=it(id, cons)$ by definition, so, by the uniqueness of 
   #grid(
     columns: (4fr, 2fr),
     [
-      - Symmetric trees
+      - Other symmetric structures
       - General theory of parametrised inital algebras
-      - Symmetric list models of linear logic
-      - Operads
+      - MELL
+      - $E_n$ Operads
     ],
     [
       #align(center + horizon, image("abstract.png", width: 80%))
@@ -895,6 +1059,8 @@ The left map $f$ is $app:=it(id, cons)$ by definition, so, by the uniqueness of 
     ],
   )
 ]
+
+
 
 
 == Summary
