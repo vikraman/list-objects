@@ -421,7 +421,7 @@ $
 
 #pause
 
-- In the category of pointed spaces under smash product, list objects on connected spaces correspond to the James construction:
+- In $Cat("Top"_bullet.op)(S^0,and)$ the category of pointed spaces under smash product, list objects on connected spaces correspond to the James construction:
   $
     1 xarrow(#nil) J(A) xarrow(sym: <-, #cons) A and J(A)
   $
