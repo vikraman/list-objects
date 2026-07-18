@@ -99,7 +99,13 @@
     // datetime.today().display("[month repr:short] [day], [year]"),
 
     institution: [MSP, University of Strathclyde, Glasgow, UK],
-    logo: box[#image("term-left.svg", width: 1em)],
+    logo: box(inset: 0.15em)[
+      #grid(
+        columns: (auto, auto),
+        image("term-left.svg", width: 0.75em), image("type-right.svg", width: 0.75em),
+      )
+    ],
+
     // logo: [🏴󠁧󠁢󠁳󠁣󠁴󠁿],
     // logo: [#image("msp-logo.png")],
     // logo: [#image("strathclyde-logo.png")],
@@ -700,9 +706,9 @@ $
 $
 
 #speaker-note(
-$
-  eta := #image("eta.svg", width: 15%)
-$
+  $
+    eta := #image("eta.svg", width: 15%)
+  $,
 )
 
 == Monoids
@@ -710,17 +716,9 @@ $
 
 #align(horizon, [
   $
-    #fletcher-diagram(cell-size: 12mm, spacing: 30mm,
-      node((0, -1), $Mon(cal(C))$),
-      node((0, 0), $cal(C)$),
-
-      edge((0, 0), (0, -1), label: $L$, "->", label-side: left, bend: 45deg),
-      edge((0, -1), (0, 0), label: $U$, "->", label-side: left),
-
-      node((-0.1, -0.5), $tack.l$),
-    )
+    #fletcher-diagram(cell-size: 12mm, spacing: 30mm, node((0, -1), $Mon(cal(C))$), node((0, 0), $cal(C)$), edge((0, 0), (0, -1), label: $L$, "->", label-side: left, bend: 45deg), edge((0, -1), (0, 0), label: $U$, "->", label-side: left), node((-0.1, -0.5), $tack.l$))
   $
-  #theorem(number:"3",[#cite(<fioreListObjectsAlgebraic2017>, form: "author")#cite(<fioreListObjectsAlgebraic2017>)])[
+  #theorem(number: "3", [#cite(<fioreListObjectsAlgebraic2017>, form: "author")#cite(<fioreListObjectsAlgebraic2017>)])[
     If $(cal(C),times,1)$ is cartesian monoidal, then the induced monad is strong.
   ]
 ])
@@ -771,23 +769,21 @@ Hereafter, the ambient category is symmetric strict monoidal.
 #definition("Symmetric list objects", number: "3")[
   #v(19pt)
 
-  #align(horizon + center,
-    grid(
-      align: (center + horizon, center),
-      columns: (1fr, 1fr),
-      gutter: 1em,
-      image("diagrams/output-5-1.svg", width: 100%),
-      [
-        ```haskell
-        data Ilst (A : Set) : Set where
-          [] : Ilst A
-          _::_ : A → Ilst A → Ilst A
-          swap : (a b : A) (xs : Ilst A)
-             → a :: b :: xs ≡ b :: a :: xs
-        ```
-      ],
-    )
-  )
+  #align(horizon + center, grid(
+    align: (center + horizon, center),
+    columns: (1fr, 1fr),
+    gutter: 1em,
+    image("diagrams/output-5-1.svg", width: 100%),
+    [
+      ```haskell
+      data Ilst (A : Set) : Set where
+        [] : Ilst A
+        _::_ : A → Ilst A → Ilst A
+        swap : (a b : A) (xs : Ilst A)
+           → a :: b :: xs ≡ b :: a :: xs
+      ```
+    ],
+  ))
 
   #v(20pt)
   A (_parametrised_) _symmetric list object_ or _ilst_ on $A$ is a list object $L(A)$ satisfying the additional axiom above, and with the corresponding universal property.
@@ -834,7 +830,7 @@ Hereafter, the ambient category is symmetric strict monoidal.
 
 == Symmetric Lists
 
-#theorem(number:"4")[
+#theorem(number: "4")[
   For any symmetric list $L(A)$:
   // #v(-1em)
   #align(center, image("diagrams/output-28.svg", width: 50%))
@@ -846,7 +842,7 @@ Let the two maps be $f$ and $g$ respectively.
 
 #pause
 
-We claim that $f=it(eta,cons)=g$.
+We claim that $f=it(eta, cons)=g$.
 
 #pause
 
@@ -859,7 +855,7 @@ Since the iterator is unique, it suffices to show that they both satisfy the two
     align: (right, center, left),
     columns: (45%, 2%, 45%),
     gutter: 1.5em,
-    image("diagrams/output-29.svg", width: 100%), grid.vline(), [], image("diagrams/output-30.svg", width: 100%)
+    image("diagrams/output-29.svg", width: 100%), grid.vline(), [], image("diagrams/output-30.svg", width: 100%),
   )
   #align(bottom, qed())
 ])
@@ -872,7 +868,7 @@ Since the iterator is unique, it suffices to show that they both satisfy the two
     align: (right + top, center, left + top),
     columns: (45%, 2%, 45%),
     gutter: 1.5em,
-    image("diagrams/output-31.svg", width: 100%), grid.vline(), h(-5em), image("diagrams/output-32.svg", width: 100%)
+    image("diagrams/output-31.svg", width: 100%), grid.vline(), h(-5em), image("diagrams/output-32.svg", width: 100%),
   )
   #align(bottom, qed())
 ])
@@ -935,7 +931,7 @@ Since the iterator is unique, it suffices to show that they both satisfy the two
 
 #v(-1em)
 
-#lemma(number:"5")[
+#lemma(number: "5")[
   If $cal(C)$ admits symmetric list objects for every object, then $L(-)$ is a functor.
 ]
 
@@ -944,22 +940,14 @@ Since the iterator is unique, it suffices to show that they both satisfy the two
 #pause
 
 $
-  #fletcher-diagram(cell-size: 12mm, spacing: 30mm,
-    node((0, -1), $CMon(cal(C))$),
-    node((0, 0), $cal(C)$),
-
-    edge((0, 0), (0, -1), label: $L$, "->", label-side: left, bend: 45deg),
-    edge((0, -1), (0, 0), label: $U$, "->", label-side: left),
-
-    node((-0.1, -0.5), $tack.l$),
-  )
+  #fletcher-diagram(cell-size: 12mm, spacing: 30mm, node((0, -1), $CMon(cal(C))$), node((0, 0), $cal(C)$), edge((0, 0), (0, -1), label: $L$, "->", label-side: left, bend: 45deg), edge((0, -1), (0, 0), label: $U$, "->", label-side: left), node((-0.1, -0.5), $tack.l$))
 $
 
 
 
 ==
 
-#theorem(number:"6")[
+#theorem(number: "6")[
   If $(cal(C),times,1)$ is cartesian monoidal, and $L(A)$ is a list object, then $L(A)$ satisfies the following stronger universal property:
 
   For every $L$ with maps $P ->^n L <-^c A times L times P$, there exists a _doubly parametrised iterator_:
@@ -987,7 +975,7 @@ $
 
 
 
-#theorem(number:"7")[
+#theorem(number: "7")[
   If $(cal(C),times,1)$ is cartesian monoidal, then the induced monad is strong, and further, commutative.
 ]
 
@@ -1005,38 +993,38 @@ $
 ==
 
 #align(center + horizon, fletcher-diagram({
-	node((1, 0), [$L(A) times L(B)$])
-	node((0, 1), [$L(L(A)times B)$])
-	node((2, 1), [$L(A times L(B))$])
-	node((2, 2), [$L L(A times B)$])
-	node((0, 2), [$L L(A times B)$])
-	node((1, 3), [$L(A times B)$])
-	edge((1, 0), (2, 1), [$tau_(A,L(B))$], label-side: left, "->")
-	edge((1, 0), (0, 1), [$sigma_(L(A),B)$], label-side: right, "->")
-	edge((2, 1), (2, 2), [$L(sigma_(A,B))$], label-side: left, "->")
-	edge((0, 1), (0, 2), [$L(tau_(A,B))$], label-side: right, "->")
-	edge((0, 2), (1, 3), [$mu_(A times B)$], label-side: right, "->")
-	edge((2, 2), (1, 3), [$mu_(A times B)$], label-side: left, "->")
+  node((1, 0), [$L(A) times L(B)$])
+  node((0, 1), [$L(L(A)times B)$])
+  node((2, 1), [$L(A times L(B))$])
+  node((2, 2), [$L L(A times B)$])
+  node((0, 2), [$L L(A times B)$])
+  node((1, 3), [$L(A times B)$])
+  edge((1, 0), (2, 1), [$tau_(A,L(B))$], label-side: left, "->")
+  edge((1, 0), (0, 1), [$sigma_(L(A),B)$], label-side: right, "->")
+  edge((2, 1), (2, 2), [$L(sigma_(A,B))$], label-side: left, "->")
+  edge((0, 1), (0, 2), [$L(tau_(A,B))$], label-side: right, "->")
+  edge((0, 2), (1, 3), [$mu_(A times B)$], label-side: right, "->")
+  edge((2, 2), (1, 3), [$mu_(A times B)$], label-side: left, "->")
 }))
 
 ==
 
 // https://q.uiver.app/#r=typst&q=WzAsNixbMSwwLCJMKEEpIHRpbWVzIEwoQikiXSxbMCwxLCJMKEwoQSl0aW1lcyBCKSJdLFsyLDEsIkwoQSB0aW1lcyBMKEIpKSJdLFsyLDIsIkwgTChBIHRpbWVzIEIpIl0sWzAsMiwiTCBMKEEgdGltZXMgQikiXSxbMSwzLCJMKEEgdGltZXMgQikiXSxbMCwyLCJcXHRhdV97QSxMKEIpfSJdLFswLDEsIlxcc2lnbWFfe0woQSksQn0iLDJdLFsyLDMsIkwoXFxzaWdtYV97QSxCfSkiXSxbMSw0LCJMKFxcdGF1X3tBLEJ9KSIsMl0sWzQsNSwiXFxtdV97QVxcdGltZXMgQn0iLDJdLFszLDUsIlxcbXVfe0FcXHRpbWVzIEJ9Il0sWzEsNSwiXFx0YXVfe0EsQn1eXFxzaGFycCJdLFsyLDUsIlxcc2lnbWFfe0EsQn1eXFxzaGFycCIsMl1d
 #align(center + horizon, fletcher-diagram({
-	node((1, 0), [$L(A) times L(B)$])
-	node((0, 1), [$L(L(A)times B)$])
-	node((2, 1), [$L(A times L(B))$])
-	node((2, 2), [$L L(A times B)$])
-	node((0, 2), [$L L(A times B)$])
-	node((1, 3), [$L(A times B)$])
-	edge((1, 0), (2, 1), [$tau_(A,L(B))$], label-side: left, "->")
-	edge((1, 0), (0, 1), [$sigma_(L(A),B)$], label-side: right, "->")
-	edge((2, 1), (2, 2), [$L(sigma_(A,B))$], label-side: left, "->")
-	edge((0, 1), (0, 2), [$L(tau_(A,B))$], label-side: right, "->")
-	edge((0, 2), (1, 3), [$mu_(A times B)$], label-side: right, "->")
-	edge((2, 2), (1, 3), [$mu_(A times B)$], label-side: left, "->")
-	edge((0, 1), (1, 3), [$tau_(A,B)^sharp$], label-side: left, "->")
-	edge((2, 1), (1, 3), [$sigma_(A,B)^sharp$], label-side: right, "->")
+  node((1, 0), [$L(A) times L(B)$])
+  node((0, 1), [$L(L(A)times B)$])
+  node((2, 1), [$L(A times L(B))$])
+  node((2, 2), [$L L(A times B)$])
+  node((0, 2), [$L L(A times B)$])
+  node((1, 3), [$L(A times B)$])
+  edge((1, 0), (2, 1), [$tau_(A,L(B))$], label-side: left, "->")
+  edge((1, 0), (0, 1), [$sigma_(L(A),B)$], label-side: right, "->")
+  edge((2, 1), (2, 2), [$L(sigma_(A,B))$], label-side: left, "->")
+  edge((0, 1), (0, 2), [$L(tau_(A,B))$], label-side: right, "->")
+  edge((0, 2), (1, 3), [$mu_(A times B)$], label-side: right, "->")
+  edge((2, 2), (1, 3), [$mu_(A times B)$], label-side: left, "->")
+  edge((0, 1), (1, 3), [$tau_(A,B)^sharp$], label-side: left, "->")
+  edge((2, 1), (1, 3), [$sigma_(A,B)^sharp$], label-side: right, "->")
 }))
 
 
