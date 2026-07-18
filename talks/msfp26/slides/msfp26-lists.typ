@@ -243,6 +243,7 @@
 
 #grid(
   columns: (auto, auto),
+  gutter: 2em,
   grid(
     rows: (4fr, 3fr),
     [
@@ -347,14 +348,6 @@ $
 
 We can adapt this universal property to axiomatise list objects in general monoidal categories.
 
-== Previous work
-
-- Joyal introduced arithmetic universes with list objects
-- Maietti #cite(<maiettiJoyalsArithmeticUniverses2003>) #cite(<maiettiJoyalsArithmeticUniverse2010>) studies them in type theory
-- Paré and Roman #cite(<pareMonoidalCategoriesNatural1989>) study monoidal categories with parametrized NNOs
-- Cockett #cite(<cockettListarithmeticDistributiveCategories1990>) and Jay #cite(<jayFiniteObjectsLocos1997>) study pretoposes with list objects, called locoi
-- Fiore and Saville #cite(<fioreListObjectsAlgebraic2017>) study parametrised list objects
-
 == List Objects
 
 #definition("List objects", number: "1")[#v(-0.5em)
@@ -386,6 +379,13 @@ We can adapt this universal property to axiomatise list objects in general monoi
 
 
 
+== Previous work
+
+- Joyal introduced arithmetic universes with list objects
+- Maietti#cite(<maiettiJoyalsArithmeticUniverses2003>)#cite(<maiettiJoyalsArithmeticUniverse2010>) studies them in type theory
+- Paré and Roman#cite(<pareMonoidalCategoriesNatural1989>) study monoidal categories with parametrized NNOs
+- Cockett#cite(<cockettListarithmeticDistributiveCategories1990>) and Jay#cite(<jayFiniteObjectsLocos1997>) study pretoposes with list objects, called locoi
+- Fiore and Saville#cite(<fioreListObjectsAlgebraic2017>) study parametrised list objects
 
 
 
@@ -401,11 +401,15 @@ We can adapt this universal property to axiomatise list objects in general monoi
   $
     1 xarrow(#nil) cal(L)_(f)(A) xarrow(sym: <-, #cons) A times cal(L)_(f)(A)
   $
+  #v(-0.5em)
+
+#pause
 
 - In $[cat(C),cat(C)]_(f)("Id",compose)$ the category of (finitary) endofunctors $[cat(C),cat(C)]$ with monoidal structure given by functor composition $("Id",compose)$, list objects are the free monad construction:
 $
   "Id" xarrow(#nil) F^(*)(F) xarrow(sym: <-, #cons) F compose F^(*)(F)
 $
+  #v(-0.5em)
 
 #pause
 
@@ -413,6 +417,7 @@ $
   $
     R xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o_R plus.o.big_n V^(times.o^n)
   $
+  #v(-0.5em)
 
 #pause
 
@@ -420,6 +425,7 @@ $
   $
     1 xarrow(#nil) J(A) xarrow(sym: <-, #cons) A and J(A)
   $
+  #v(-0.5em)
 
 
 
@@ -730,21 +736,26 @@ For the second limitation:
   If $cal(C)$ admits parametrised list objects for every object, then $L(-)$ is a functor.
 ]
 $
-  f : A -> B quad mapsto quad (A ->^f B ->^(eta_B) L(B))^sharp : L(A) -> L(B)
+  f : X -> Y quad mapsto quad (X ->^f Y ->^(eta_Y) L(Y))^sharp : L(X) -> L(Y)
 $
 
-#speaker-note(
-  $
-    eta := #image("eta.svg", width: 15%)
-  $,
-)
+$
+  eta := #image("eta.svg", width: 15%), quad quad (A ->^g (B, e, m))^sharp := it(e, m compose (g times.o B))
+$
 
 == Monoids
 
-
 #align(horizon, [
   $
-    #fletcher-diagram(cell-size: 12mm, spacing: 30mm, node((0, -1), $Mon(cal(C))$), node((0, 0), $cal(C)$), edge((0, 0), (0, -1), label: $L$, "->", label-side: left, bend: 45deg), edge((0, -1), (0, 0), label: $U$, "->", label-side: left), node((-0.1, -0.5), $tack.l$))
+    #fletcher-diagram(
+      cell-size: 12mm,
+      spacing: 30mm,
+      node((0, -1), $Mon(cal(C))$),
+      node((0, 0), $cal(C)$),
+      edge((0, 0), (0, -1), label: $L$, "->", label-side: left, bend: 45deg),
+      edge((0, -1), (0, 0), label: $U$, "->", label-side: left),
+      node((-0.1, -0.5), $tack.l$)
+    )
   $
   #theorem(number: "3", [#cite(<fioreListObjectsAlgebraic2017>, form: "author")#cite(<fioreListObjectsAlgebraic2017>)])[
     If $(cal(C),times,1)$ is cartesian monoidal, then the induced monad is strong.
@@ -784,7 +795,7 @@ Hereafter, the ambient category is symmetric strict monoidal.
 
 #definition("Symmetric list objects", number: "3")[
   #align(center, image("diagrams/output-5.svg", width: 65%))
-  A (_parametrised_) _symmetric list object_ or _ilst_ on $A$ is a list object $L(A)$ satisfying the additional axiom above, and with the corresponding universal property.
+  A (_parametrised_) _symmetric list object_ or _ilst_ on $A$ is a parametrised list object $L(A)$ satisfying the additional axiom above, and with the corresponding universal property.
 ]
 
 #speaker-note("Can only eliminate into symmetric list algebras instead of ordinary list algebras.")
@@ -814,7 +825,7 @@ Hereafter, the ambient category is symmetric strict monoidal.
   ))
 
   #v(20pt)
-  A (_parametrised_) _symmetric list object_ or _ilst_ on $A$ is a list object $L(A)$ satisfying the additional axiom above, and with the corresponding universal property.
+  A (_parametrised_) _symmetric list object_ or _ilst_ on $A$ is a parametrised list object $L(A)$ satisfying the additional axiom above, and with the corresponding universal property.
 ]
 
 // In Agda:
@@ -869,6 +880,8 @@ Hereafter, the ambient category is symmetric strict monoidal.
   #align(center, image("diagrams/output-28.svg", width: 50%))
   // #v(-1em)
 ]
+
+#pause
 
 _Proof._
 Let the two maps be $f$ and $g$ respectively.
