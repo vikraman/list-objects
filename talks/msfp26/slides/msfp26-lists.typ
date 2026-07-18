@@ -108,7 +108,7 @@
     logo: box(inset: 0.15em)[
       #grid(
         columns: (auto, auto),
-        image("term-left.svg", width: 0.75em), image("type-right.svg", width: 0.75em),
+        image("term-left.svg", width: 0.75em), image("type-right.svg", width: 0.7em),
       )
     ],
 
