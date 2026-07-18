@@ -838,16 +838,16 @@ Hereafter, the ambient category is symmetric strict monoidal.
 
 #pause
 
-- In $Cat("Top")(1,times)$ (the category of pointed topological spaces) under the cartesian product, symmetric list objects are the infinite symmetric product construction:
+- In $Cat("Top"_bullet.op)(1,times)$ (the category of pointed topological spaces) under the cartesian product, symmetric list objects are the infinite symmetric product construction:
   $
-    1 xarrow(#nil) "SP"(X) xarrow(sym: <-, #cons) X times "SP"(X)
+    1 xarrow(#nil) "SP"^(infinity)(X) xarrow(sym: <-, #cons) X times "SP"^(infinity)(X)
   $
 
 #pause
 
-- In the category of relations with $times.o$, symmetric list objects are finite multisets:
+- In the $Cat("Rel")(1,times.o)$ category of relations with $times.o$, symmetric list objects are finite multisets:
   $
-    1 xarrow(#nil) cal(M)_(f)(A) xarrow(sym: <-, #cons) A times cal(M)_(f)(A)
+    1 xarrow(#nil) cal(M)_(f)(A) xarrow(sym: <-, #cons) A times.o cal(M)_(f)(A)
   $
 
 
