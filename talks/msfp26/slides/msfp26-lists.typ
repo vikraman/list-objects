@@ -91,11 +91,17 @@
   config-info(
     title: [Symmetric List Objects],
     author: [
-      Fiona Blackett,
-      Vikraman Choudhury,
-      #underline[Rin Liu]
+      Rin Liu\ \
+      #text(size: 12pt)[
+        joint work with\
+        Fiona Blackett & Vikraman Choudhury
+      ]
     ],
-    date: "July 18, 2026",
+    date: [
+      \ \ \
+      July 18, 2026\ \
+      MSFP @ FLoC 2026, Lisbon, Portugal
+    ],
     // datetime.today().display("[month repr:short] [day], [year]"),
 
     institution: [MSP, University of Strathclyde, Glasgow, UK],
