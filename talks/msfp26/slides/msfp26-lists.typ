@@ -1081,10 +1081,10 @@ $
       *Summary*
       - Parametrised list objects give free monoids
       - Symmetric list objects give free commutative monoids
-      - Iterator as induction?
-      - Strong if Cartesian?
-      - Double parametrised if Cartesian?
-      - Induced commutative monad?
+      - Iterator as recursion
+      - Doubly parametrised if Cartesian
+      - Strong monad if Cartesian
+      - Commutative monad if Symmetric
     ],
     [
       *Future Work*
