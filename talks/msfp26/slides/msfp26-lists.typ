@@ -377,23 +377,13 @@ We can adapt this universal property to axiomatise list objects in general monoi
     such that the above diagram commutes.
 ]
 
-
-
 == Previous work
 
 - Joyal introduced arithmetic universes with list objects
-- Maietti#cite(<maiettiJoyalsArithmeticUniverses2003>)#cite(<maiettiJoyalsArithmeticUniverse2010>) studies them in type theory
+- Maietti#cite(<maiettiJoyalsArithmeticUniverses2003>) #cite(<maiettiJoyalsArithmeticUniverse2010>) studies them in type theory
 - Paré and Roman#cite(<pareMonoidalCategoriesNatural1989>) study monoidal categories with parametrized NNOs
 - Cockett#cite(<cockettListarithmeticDistributiveCategories1990>) and Jay#cite(<jayFiniteObjectsLocos1997>) study pretoposes with list objects, called locoi
 - Fiore and Saville#cite(<fioreListObjectsAlgebraic2017>) study parametrised list objects
-
-
-
-
-
-
-
-
 
 == Examples of list objects in nature
 
@@ -405,15 +395,17 @@ We can adapt this universal property to axiomatise list objects in general monoi
 
 #pause
 
-- In $[cat(C),cat(C)]_(f)("Id",compose)$ the category of (finitary) endofunctors $[cat(C),cat(C)]$ with monoidal structure given by functor composition $("Id",compose)$, list objects are the free monad construction:
+#pause
+
+- In $[cat(C),cat(C)]_("fin")("Id",compose)$ (finitary endofunctors), list objects are the free monad construction:
 $
   "Id" xarrow(#nil) F^(*)(F) xarrow(sym: <-, #cons) F compose F^(*)(F)
 $
-  #v(-0.5em)
+#v(-0.5em)
 
 #pause
 
-- In $Cat("R-Mod")(R,times.o_R)$ the category of modules over a commutative ring $R$ under $R$-tensor products, list objects are tensor algebras:
+- In $Cat("R-Mod")(R,times.o_R)$ (modules over a commutative ring $R$), list objects are tensor algebras:
   $
     R xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o_R plus.o.big_n V^(times.o^n)
   $
@@ -421,7 +413,7 @@ $
 
 #pause
 
-- In $Cat("Top"_bullet.op)(S^0,and)$ the category of pointed spaces under smash product, list objects on connected spaces correspond to the James construction:
+- In $Cat("Top"_bullet.op)(S^0,and)$ (pointed spaces under smash product), list objects on connected spaces correspond to the James construction:
   $
     1 xarrow(#nil) J(A) xarrow(sym: <-, #cons) A and J(A)
   $
@@ -754,7 +746,7 @@ $
       node((0, 0), $cal(C)$),
       edge((0, 0), (0, -1), label: $L$, "->", label-side: left, bend: 45deg),
       edge((0, -1), (0, 0), label: $U$, "->", label-side: left),
-      node((-0.1, -0.5), $tack.l$)
+      node((-0.1, -0.5), $tack.l$),
     )
   $
   #theorem(number: "3", [#cite(<fioreListObjectsAlgebraic2017>, form: "author")#cite(<fioreListObjectsAlgebraic2017>)])[
@@ -839,16 +831,17 @@ $
 
 == Examples of symmetric list objects in nature
 
-- In $Cat("Set")(1, times)$ (or any Grothendieck topos over #Cat("Set")), symmetric list objects are finite multisets:
-  #v(-1em)
-  $
-    1 xarrow(#nil) cal(M)_(f)(A) xarrow(sym: <-, #cons) A times cal(M)_(f)(A)
-  $
-  #v(-0.5em)
+- In $Cat("Set")(1, times)$ (or any Grothendieck topos over #Cat("Set")), symm. list objects are finite multisets:
+$
+  1 xarrow(#nil) cal(M)_(f)(A) xarrow(sym: <-, #cons) A times cal(M)_(f)(A)
+$
+#v(-0.5em)
 
 #pause
 
-- In $Cat("R-Mod")(R, times.o_R)$ (the category of modules over a commutative ring $R$) under $R$-tensor products, symmetric list objects are symmetric algebras:
+#pause
+
+- In $Cat("R-Mod")(R, times.o_R)$, symmetric list objects are symmetric algebras:
   $
     1 xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o plus.o.big_n V^(times.o^n)
   $
@@ -856,7 +849,7 @@ $
 
 #pause
 
-- In $Cat("Top"_bullet.op)(1,times)$ (the category of pointed topological spaces) under the cartesian product, symmetric list objects are the infinite symmetric product construction:
+- In $Cat("Top"_bullet.op)(1,times)$ (pointed topological spaces with cartesian product) symmetric list objects are the infinite symmetric product construction:
   $
     1 xarrow(#nil) "SP"^(infinity)(X) xarrow(sym: <-, #cons) X times "SP"^(infinity)(X)
   $
@@ -864,7 +857,7 @@ $
 
 #pause
 
-- In the $Cat("Rel")(1,times.o)$ category of relations with $times.o$, symmetric list objects are finite multisets:
+- In $Cat("Rel")(1,times.o)$ (binary relations with $times.o$), symmetric list objects are finite multisets:
   $
     1 xarrow(#nil) cal(M)_(f)(A) xarrow(sym: <-, #cons) A times.o cal(M)_(f)(A)
   $
@@ -942,50 +935,45 @@ Since the iterator is unique, it suffices to show that they both satisfy the two
 
 
 
-// == Symmetric Lists
+== Symmetric Lists
 
-// #theorem(number: "5")[
-//   Let $(L(A), nil, cons)$ be a list object on $A$. Then, the following are equivalent:
+#theorem(number: "5")[
+  Let $(L(A), nil, cons)$ be a list object on $A$. Then, the following are equivalent:
 
-//   1. $(L(A), nil, cons)$ is a symmetric list object;
-//   2. $(L(A), nil, app)$ is a commutative monoid object;
-//   3. $(L(A), nil, cons)$ is the free commutative monoid object on $A$.
-// ]
+  1. $(L(A), nil, cons)$ is a symmetric list object;
+  2. $(L(A), nil, app)$ is a commutative monoid object;
+  3. $(L(A), nil, cons)$ is the free commutative monoid object on $A$.
+]
 
-// _Proof_. $(1 => 2)$ We already have that list objects are monoids, so we need only show that $app$ is commutative:
-// #v(-1em)
-// #align(center, image("diagrams/output-33.svg", width: 50%))
-// #v(-1em)
-// Call the two maps $f$ and $g$, respectively.
-
-// ==
-
-// The left map $f$ is $app:=it(id, cons)$ by definition, so, by the uniqueness of the iterator, it suffices to show that the braided version satisfies the same computation rules:
-// #align(center, image("diagrams/output-34.svg", width: 45%))
-
-// #align(center + horizon, [
-//   #grid(
-//     align: (right, center, left),
-//     columns: (45%, 2%, 45%),
-//     gutter: 5em,
-//     image("diagrams/output-34-1.svg", width: 100%), grid.vline(), h(-5em), image("diagrams/output-34-2.svg", width: 55%)
-//   )
-//   #align(bottom, qed())
-// ])
-
-
-
-
-
-#pause
-
+_Proof_. $(1 => 2)$ We already have that list objects are monoids, so we need only show that $app$ is commutative:
 #v(-1em)
+#align(center, image("diagrams/output-33.svg", width: 50%))
+#v(-1em)
+Call the two maps $f$ and $g$, respectively.
+
+==
+
+The left map $f$ is $app:=it(id, cons)$ by definition, so it suffices to show that the braided version satisfies the same computation rules:
+#align(center, image("diagrams/output-34.svg", width: 45%))
+
+#align(center + horizon, [
+  #grid(
+    align: (right, center, left),
+    columns: (45%, 2%, 45%),
+    gutter: 5em,
+    image("diagrams/output-34-1.svg", width: 100%),
+    grid.vline(),
+    h(-5em),
+    image("diagrams/output-34-2.svg", width: 55%),
+  )
+  #align(bottom, qed())
+])
+
+==
 
 #lemma(number: "5")[
   If $cal(C)$ admits symmetric list objects for every object, then $L(-)$ is a functor.
 ]
-
-#v(-1em)
 
 #pause
 
