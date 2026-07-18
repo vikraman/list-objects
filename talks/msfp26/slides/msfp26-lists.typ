@@ -116,8 +116,13 @@
 #let scriptsize = 12pt
 #let normalsize = 20pt
 #let smallsize = 16pt
+#let footnotesize = 12pt
 #set text(font: "Gentium Book Plus", weight: "regular", size: normalsize)
 #show math.equation: set text(font: "New Computer Modern Math")
+#show footnote.entry: it => {
+  set text(size: footnotesize)
+  it
+}
 
 #show raw: set text(font: ("Iosevka Comfy", "Iosevka", "DejaVu Sans Mono"), size: smallsize)
 #set raw(lang: "sml")
@@ -328,9 +333,15 @@ $
   Note that this definition makes sense in categories without products or coproducts.
 ]
 
-We can adapt this universal property to axiomatise list objects in general monoidal categories. This was originally done by Joyal
+We can adapt this universal property to axiomatise list objects in general monoidal categories.
 
-#todo[cite: Joyal's arithmetic universes, Maietti, Cockett's Locoi, Pare and Roman's parametrized NNO.]
+== Previous work
+
+- Joyal introduced arithmetic universes with list objects
+- Maietti #cite(<maiettiJoyalsArithmeticUniverses2003>) #cite(<maiettiJoyalsArithmeticUniverse2010>) studies them in type theory
+- Paré and Roman #cite(<pareMonoidalCategoriesNatural1989>) study monoidal categories with parametrized NNOs
+- Cockett #cite(<cockettListarithmeticDistributiveCategories1990>) and Jay #cite(<jayFiniteObjectsLocos1997>) study pretoposes with list objects, called locoi
+- Fiore and Saville #cite(<fioreListObjectsAlgebraic2017>) study parametrised list objects
 
 == List Objects
 
