@@ -828,14 +828,11 @@ Hereafter, the ambient category is symmetric strict monoidal.
   A (_parametrised_) _symmetric list object_ or _ilst_ on $A$ is a parametrised list object $L(A)$ satisfying the additional axiom above, and with the corresponding universal property.
 ]
 
-// In Agda:
-// ```haskell
-// data Ilst (A : Set) : Set where
-//   nil : Ilst A
-//   _cons_ : A -> Ilst A -> Ilst A
-//   swap : (a b : A) -> (xs : Ilst A) -> a cons b cons xs = b cons a cons xs
-// ```
+#pause
 
+$
+  sum_(n >= 0) A^n \/ S_n
+$
 
 
 
@@ -843,14 +840,19 @@ Hereafter, the ambient category is symmetric strict monoidal.
 == Examples of symmetric list objects in nature
 
 - In $Cat("Set")(1, times)$ (or any Grothendieck topos over #Cat("Set")), symmetric list objects are finite multisets:
+  #v(-1em)
   $
     1 xarrow(#nil) cal(M)_(f)(A) xarrow(sym: <-, #cons) A times cal(M)_(f)(A)
   $
+  #v(-0.5em)
+
+#pause
 
 - In $Cat("R-Mod")(R, times.o_R)$ (the category of modules over a commutative ring $R$) under $R$-tensor products, symmetric list objects are symmetric algebras:
   $
     1 xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o plus.o.big_n V^(times.o^n)
   $
+  #v(-0.5em)
 
 #pause
 
@@ -858,6 +860,7 @@ Hereafter, the ambient category is symmetric strict monoidal.
   $
     1 xarrow(#nil) "SP"^(infinity)(X) xarrow(sym: <-, #cons) X times "SP"^(infinity)(X)
   $
+  #v(-0.5em)
 
 #pause
 
@@ -865,6 +868,7 @@ Hereafter, the ambient category is symmetric strict monoidal.
   $
     1 xarrow(#nil) cal(M)_(f)(A) xarrow(sym: <-, #cons) A times.o cal(M)_(f)(A)
   $
+  #v(-0.5em)
 
 
 
