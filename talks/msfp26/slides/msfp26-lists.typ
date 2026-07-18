@@ -90,7 +90,7 @@
   ),
   config-info(
     title: [Symmetric List Objects],
-    author: [ Rin Liu],
+    author: [Rin Liu],
     institution: [
       #text(size: 12pt)[
         joint work with\
@@ -242,41 +242,50 @@
 == Lists
 
 #grid(
-  columns: (1fr, 1fr),
-  rows: (1fr, 1fr),
-  [
-    In scheme:
-    ```lisp
-    (a b c) ; a list of three elements
-    (a . (b . (c . ()))) ; the same list
-    () ; the empty list
-    (car '(a b c)) ; a
-    (cdr '(a b c)) ; (b c)
-    ```
-  ],
-  [
-    In Haskell:
-    ```haskell
-    data [a] = [] | a : [a]
-    ```
-  ],
+  columns: (auto, auto),
+  grid(
+    rows: (4fr, 3fr),
+    [
+      In scheme:
+      ```lisp
+      (a b c) ; a list of three elements
+      (a . (b . (c . ()))) ; the same list
+      () ; the empty list
+      (car '(a b c)) ; a
+      (cdr '(a b c)) ; (b c)
+      ```
+    ],
+    [
+      In Haskell:
+      ```haskell
+      data [a] = [] | a : [a]
+      ```
+    ],
+  ),
+  grid(
+    rows: (3fr, 3fr, 2fr),
+    [
+      In Agda:
+      ```haskell
+      data List (A : Set) : Set where
+        [] : List A
+        _∷_ : A → List A → List A
+      ```
+    ],
 
-  [
-    In Agda:
-    ```haskell
-    data List (A : Set) : Set where
-      [] : List A
-      _∷_ : A → List A → List A
-    ```
-  ],
-  [
-    In Rocq:
-    ```ml
-    Inductive list (A : Type) : Type :=
-      | nil : list A
-      | cons : A -> list A -> list A.
-    ```
-  ],
+    [
+      In Rocq:
+      ```ml
+      Inductive list (A : Type) : Type :=
+        | nil : list A
+        | cons : A -> list A -> list A.
+      ```
+    ],
+    [
+      Linked lists:
+      #image("singly-linked-list.svg", width: 15em)
+    ],
+  ),
 )
 
 
