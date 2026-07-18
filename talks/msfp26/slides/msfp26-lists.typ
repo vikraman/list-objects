@@ -96,7 +96,7 @@
         joint work with\
         Fiona Blackett & Vikraman Choudhury
       ]\ \
-      MSP, University of Strathclyde, Glasgow, UK\ \
+      *MSP, University of Strathclyde, Glasgow, UK*\ \
       MSFP @ FLoC 2026, Lisbon, Portugal
     ],
     date: [ July 18, 2026 ],
@@ -128,7 +128,7 @@
 
 #show raw: set text(font: ("Iosevka Comfy", "Iosevka", "DejaVu Sans Mono"), size: smallsize)
 #set raw(lang: "sml")
-#set strong(delta: 100)
+#set strong(delta: 500)
 #set par(justify: true)
 #show list: set block(spacing: 1em)
 
@@ -1080,40 +1080,29 @@ $
 
 
 
-== Further Work
+== Conclusion
 
 #align(horizon)[
+  #set list(spacing: 0.8em, tight: false)
+  #set par(justify: false)
   #grid(
-    columns: (4fr, 2fr),
+    columns: (3fr, 3fr, 2fr),
+    column-gutter: 1.5em,
+    align: top,
     [
-      - Other symmetric structures
+      *Summary*
+      - Parametrised list objects give free monoids
+      - Symmetric list objects give free commutative monoids
+      - Iterator as induction?
+      - Strong if Cartesian?
+      - Double parametrised if Cartesian?
+      - Induced commutative monad?
+    ],
+    [
+      *Future Work*
       - General theory of parametrised inital algebras
-      - MELL
-      - $E_n$ Operads
-    ],
-    [
-      #align(center + horizon, image("abstract.png", width: 80%))
-      #align(center + horizon, [Extended abstract with proofs])
-    ],
-  )
-]
-
-
-
-
-== Summary
-
-#align(horizon)[
-  #grid(
-    columns: (4fr, 2fr),
-    [
-      - List objects
-      - Parametrised list objects
-      - Iterator as induction
-      - Strength in Cartesian setting
-      - Symmetric lists
-      - Strong universal property in Cartesian setting
-      - Induced commutative monad
+      - Constructions of exponentials in LL
+      - Higher symmetric monoidal structures
     ],
     [
       #align(center + horizon, image("abstract.png", width: 80%))
