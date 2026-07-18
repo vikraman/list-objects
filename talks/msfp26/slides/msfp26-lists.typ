@@ -392,16 +392,16 @@ We can adapt this universal property to axiomatise list objects in general monoi
 
 == Examples of list objects in nature
 
-- In a category of endofunctors $[cat(C),cat(C)]$ with monoidal structure given by functor composition $(1,compose)$, list objects are free monad:
+- In the category of (finitary) endofunctors $[cat(C),cat(C)]$ with monoidal structure given by functor composition $("Id",compose)$, list objects are free monad:
   $
-    1 xarrow(#nil) frak(F)(F) xarrow(sym: <-, #cons) F compose frak(F)(F)
+    "Id" xarrow(#nil) F^(*)(F) xarrow(sym: <-, #cons) F compose F^(*)(F)
   $
 
 #pause
 
 - In the category of modules over a commutative ring $R$ under $R$-tensor products, list objects are tensor algebras:
   $
-    1 xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o plus.o.big_n V^(times.o^n)
+    R xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o_R plus.o.big_n V^(times.o^n)
   $
 
 #pause
