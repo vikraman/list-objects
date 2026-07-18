@@ -839,8 +839,6 @@ $
 
 #pause
 
-#pause
-
 - In $Cat("R-Mod")(R, times.o_R)$, symmetric list objects are symmetric algebras:
   $
     1 xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o plus.o.big_n V^(times.o^n)
