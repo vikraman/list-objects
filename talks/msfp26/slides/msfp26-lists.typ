@@ -227,6 +227,7 @@
 #let qed() = [#h(1fr)$square$]
 
 #let cat(c) = math.cal(c)
+#let Cat(c) = math.sans(c)
 
 // syntax rules
 #show raw.where(lang: "haskell"): it => [
@@ -820,23 +821,28 @@ Hereafter, the ambient category is symmetric strict monoidal.
 
 == Examples of symmetric list objects in nature
 
-- In the category of modules over a commutative ring $R$ under $R$-tensor products, symmetric list objects are symmetric algebras:
+- In $Cat("Set")(1, times)$ (or any Grothendieck topos over #Cat("Set")), symmetric list objects are finite multisets:
+  $
+    1 xarrow(#nil) cal(M)_(f)(A) xarrow(sym: <-, #cons) A times cal(M)_(f)(A)
+  $
+
+- In $Cat("R-Mod")(R, times.o_R)$ (the category of modules over a commutative ring $R$) under $R$-tensor products, symmetric list objects are symmetric algebras:
   $
     1 xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o plus.o.big_n V^(times.o^n)
   $
 
 #pause
 
-- In the category of ??? under ???, symmetric list objects on ??? are ???:
+- In $Cat("Top")(1,times)$ (the category of pointed topological spaces) under the cartesian product, symmetric list objects are the infinite symmetric product construction:
   $
-    1 xarrow(#nil) J(A) xarrow(sym: <-, #cons) A times J(A)
+    1 xarrow(#nil) "SP"(X) xarrow(sym: <-, #cons) X times "SP"(X)
   $
 
 #pause
 
-- In the category of ??? under ???, symmetric list objects on ??? are ???:
+- In the category of relations with $times.o$, symmetric list objects are finite multisets:
   $
-    1 xarrow(#nil) J(A) xarrow(sym: <-, #cons) A times J(A)
+    1 xarrow(#nil) cal(M)_(f)(A) xarrow(sym: <-, #cons) A times cal(M)_(f)(A)
   $
 
 
