@@ -392,14 +392,19 @@ We can adapt this universal property to axiomatise list objects in general monoi
 
 == Examples of list objects in nature
 
-- In the category of (finitary) endofunctors $[cat(C),cat(C)]$ with monoidal structure given by functor composition $("Id",compose)$, list objects are free monad:
+- In $Cat("Set")(1, times)$ (or any Grothendieck topos over #Cat("Set")), list objects are cons-lists:
   $
-    "Id" xarrow(#nil) F^(*)(F) xarrow(sym: <-, #cons) F compose F^(*)(F)
+    1 xarrow(#nil) cal(L)_(f)(A) xarrow(sym: <-, #cons) A times cal(L)_(f)(A)
   $
+
+- In $[cat(C),cat(C)]_(f)("Id",compose)$ the category of (finitary) endofunctors $[cat(C),cat(C)]$ with monoidal structure given by functor composition $("Id",compose)$, list objects are the free monad construction:
+$
+  "Id" xarrow(#nil) F^(*)(F) xarrow(sym: <-, #cons) F compose F^(*)(F)
+$
 
 #pause
 
-- In the category of modules over a commutative ring $R$ under $R$-tensor products, list objects are tensor algebras:
+- In $Cat("R-Mod")(R,times.o_R)$ the category of modules over a commutative ring $R$ under $R$-tensor products, list objects are tensor algebras:
   $
     R xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o_R plus.o.big_n V^(times.o^n)
   $
@@ -408,7 +413,7 @@ We can adapt this universal property to axiomatise list objects in general monoi
 
 - In the category of pointed spaces under smash product, list objects on connected spaces correspond to the James construction:
   $
-    1 xarrow(#nil) J(A) xarrow(sym: <-, #cons) A times J(A)
+    1 xarrow(#nil) J(A) xarrow(sym: <-, #cons) A and J(A)
   $
 
 
