@@ -263,7 +263,7 @@
     ],
   ),
   grid(
-    rows: (3fr, 3fr, 2fr),
+    rows: (6fr, 6fr, 5fr),
     [
       In Agda:
       ```haskell
@@ -451,9 +451,9 @@ $
 
   #pause
 
-  - For example, every object of $(sans("Set"), union.sq, emptyset)$ is the free monoid on itself, but list objects on inhabited sets are always infinite:
+  - For example, every object of $Cat("Set")(0, +)$ is the free monoid on itself, but list objects on inhabited sets are always infinite:
     $
-      mu X.emptyset union.sq A union.sq X quad=quad mu X. A union.sq X
+      mu X. 0 + (A + X) quad tilde.equiv quad mu X. A + X
     $
 
 
