@@ -387,7 +387,7 @@ We can adapt this universal property to axiomatise list objects in general monoi
 
 == Examples of list objects in nature
 
-- In $Cat("Set")(1, times)$ (or any Grothendieck topos over #Cat("Set")), list objects are cons-lists:
+- In $(Cat("Set"),1,times)$ (or any Grothendieck topos over #Cat("Set")), list objects are cons-lists:
   $
     1 xarrow(#nil) cal(L)_(f)(A) xarrow(sym: <-, #cons) A times cal(L)_(f)(A)
   $
@@ -395,7 +395,7 @@ We can adapt this universal property to axiomatise list objects in general monoi
 
 #pause
 
-- In $[cat(C),cat(C)]_("fin")("Id",compose)$ (finitary endofunctors), list objects are the free monad construction:
+- In $([cat(C),cat(C)]_("fin"),"Id",compose)$ (finitary endofunctors), list objects are the free monad construction:
 $
   "Id" xarrow(#nil) F^(*)(F) xarrow(sym: <-, #cons) F compose F^(*)(F)
 $
@@ -403,7 +403,7 @@ $
 
 #pause
 
-- In $Cat("R-Mod")(R,times.o_R)$ (modules over a commutative ring $R$), list objects are tensor algebras:
+- In $(Cat("R-Mod"),R,times.o_R)$ (modules over a commutative ring $R$), list objects are tensor algebras:
   $
     R xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o_R plus.o.big_n V^(times.o^n)
   $
@@ -411,7 +411,7 @@ $
 
 #pause
 
-- In $Cat("Top"_bullet.op)(S^0,and)$ (pointed spaces under smash product), list objects on connected spaces correspond to the James construction:
+- In $(Cat("Top"_bullet.op),S^0,and)$ (pointed spaces under smash product), list objects on _connected_ spaces correspond to the James construction:
   $
     1 xarrow(#nil) J(A) xarrow(sym: <-, #cons) A and J(A)
   $
@@ -429,7 +429,7 @@ $
 
   #pause
 
-  - To define the list append function
+  - For example, to define the list append function
     $
       app : L(A) times.o L(A) -> L(A)
     $
@@ -447,7 +447,7 @@ $
 
   #pause
 
-  - For example, every object of $Cat("Set")(0, +)$ is the free monoid on itself, but list objects on inhabited sets are always infinite:
+  - For instance, every object of $(Cat("Set"), 0, +)$ is the free monoid on itself, but list objects on inhabited sets are always infinite:
     $
       mu X. 0 + (A + X) quad tilde.equiv quad mu X. A + X
     $
@@ -830,7 +830,7 @@ $
 
 == Examples of symmetric list objects in nature
 
-- In $Cat("Set")(1, times)$ (or any Grothendieck topos over #Cat("Set")), symm. list objects are finite multisets:
+- In $(Cat("Set"),1,times)$ (or any Grothendieck topos over #Cat("Set")), symm. list objects are finite multisets:
 $
   1 xarrow(#nil) cal(M)_(f)(A) xarrow(sym: <-, #cons) A times cal(M)_(f)(A)
 $
@@ -838,7 +838,7 @@ $
 
 #pause
 
-- In $Cat("R-Mod")(R, times.o_R)$, symmetric list objects are symmetric algebras:
+- In $(Cat("R-Mod"),R,times.o_R)$, symmetric list objects are symmetric algebras:
   $
     R xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o_R plus.o.big_n V^(times.o^n)
   $
@@ -846,7 +846,7 @@ $
 
 #pause
 
-- In $Cat("Top"_bullet.op)(1,times)$ (pointed topological spaces with cartesian product) symmetric list objects are the infinite symmetric product construction:
+- In $(Cat("Top"_bullet.op),1,times)$ (pointed spaces with cartesian product) symmetric list objects are the infinite symmetric product construction:
   $
     1 xarrow(#nil) "SP"^(infinity)(X) xarrow(sym: <-, #cons) X times "SP"^(infinity)(X)
   $
@@ -854,7 +854,7 @@ $
 
 #pause
 
-- In $Cat("Rel")(1,times.o)$ (binary relations with $times.o$), symmetric list objects are finite multisets:
+- In $(Cat("Rel"),1,times.o)$ (binary relations with $times.o$), symmetric list objects are finite multisets:
   $
     1 xarrow(#nil) cal(M)_(f)(A) xarrow(sym: <-, #cons) A times.o cal(M)_(f)(A)
   $
@@ -897,7 +897,6 @@ Since the iterator is unique, it suffices to show that they both satisfy the two
     gutter: 1.5em,
     image("diagrams/output-29.svg", width: 100%), grid.vline(), [], image("diagrams/output-30.svg", width: 100%),
   )
-  #align(bottom, qed())
 ])
 
 
