@@ -395,8 +395,6 @@ We can adapt this universal property to axiomatise list objects in general monoi
 
 #pause
 
-#pause
-
 - In $[cat(C),cat(C)]_("fin")("Id",compose)$ (finitary endofunctors), list objects are the free monad construction:
 $
   "Id" xarrow(#nil) F^(*)(F) xarrow(sym: <-, #cons) F compose F^(*)(F)
