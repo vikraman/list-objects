@@ -301,6 +301,7 @@ $
 #pause
 
 Alternatively, if we have a natural numbers object, sigma types, and functions out of $sans("Fin")_n$, we can construct lists as:
+#v(-1em)
 $
   sum_(n:bb(N)) A^(sans("Fin")_n)
 $
@@ -905,9 +906,9 @@ Since the iterator is unique, it suffices to show that they both satisfy the two
 #align(center + horizon, [
   #grid(
     align: (right + top, center, left + top),
-    columns: (45%, 2%, 45%),
+    columns: (45%, 2%, 40%),
     gutter: 1.5em,
-    image("diagrams/output-31.svg", width: 100%), grid.vline(), h(-5em), image("diagrams/output-32.svg", width: 100%),
+    image("diagrams/output-31.svg", width: 100%), grid.vline(), [], image("diagrams/output-32.svg", width: 100%),
   )
   #align(bottom, qed())
 ])
