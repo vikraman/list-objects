@@ -940,7 +940,7 @@ Since the iterator is unique, it suffices to show that they both satisfy the two
 
   1. $(L(A), nil, cons)$ is a symmetric list object;
   2. $(L(A), nil, app)$ is a commutative monoid object;
-  3. $(L(A), nil, cons)$ is the free commutative monoid object on $A$.
+  3. $(L(A), eta, nil, app)$ is the free commutative monoid object on $A$.
 ]
 
 _Proof_. $(1 => 2)$ We already have that list objects are monoids, so we need only show that $app$ is commutative:
