@@ -716,21 +716,22 @@ For the second limitation:
 // #proofsketch[
 //   The left unit law holds immediately by $++$-$nil$-$beta$:
 //   #align(center, image("diagrams/output-9.svg", width: 40%))
-//   and the previous lemma shows the right unit law. Associativity and the unique extension property are proved similarly using iterators.
-// ]
+//   and the previous lemma shows the right unit law. Associativity and the unique extension property are proved similarly using iterators.// ]
+
+#v(-1em)
+$
+  eta := #image("eta.svg", width: 15%), quad quad (A ->^g (B, e, m))^sharp := it(e, m compose (g times.o B))
+$
 
 #pause
-#v(-1em)
 
 #lemma[
   If $cal(C)$ admits parametrised list objects for every object, then $L(-)$ is a functor.
 ]
+
+#v(-1em)
 $
   f : X -> Y quad mapsto quad (X ->^f Y ->^(eta_Y) L(Y))^sharp : L(X) -> L(Y)
-$
-
-$
-  eta := #image("eta.svg", width: 15%), quad quad (A ->^g (B, e, m))^sharp := it(e, m compose (g times.o B))
 $
 
 == Monoids
@@ -839,7 +840,7 @@ $
 
 - In $Cat("R-Mod")(R, times.o_R)$, symmetric list objects are symmetric algebras:
   $
-    1 xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o_R plus.o.big_n V^(times.o^n)
+    R xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o_R plus.o.big_n V^(times.o^n)
   $
   #v(-0.5em)
 
