@@ -363,7 +363,7 @@ We can adapt this universal property to axiomatise list objects in general monoi
       edge((0, 0), (2, -1), label: $nil$, "->"),
       edge((4, -1), (2, -1), label: $cons$, "->"),
       edge((2, -1), (2, 1), label: $it(n, c)$, "-->", label-side: left),
-      edge((4, -1), (4, 1), label: $it(n, c)$, "-->", label-side: left),
+      edge((4, -1), (4, 1), label: $A times.o it(n, c)$, "-->", label-side: left),
       edge((0, 0), (2, 1), label: $n$, "->", label-side: right),
       edge((4, 1), (2, 1), label: $c$, "->", label-side: left),
     )
@@ -712,7 +712,7 @@ For the second limitation:
 #v(-0.5em)
 
 #theorem[
-  $(L(A), nil, app)$ is the free monoid on $A$.
+  $(L(A), eta, nil, app)$ with universal extension $(-)^(sharp)$ is the free monoid on $A$.
 ]
 
 // #proofsketch[
@@ -823,7 +823,7 @@ Hereafter, the ambient category is symmetric strict monoidal.
 #pause
 
 $
-  sum_(n >= 0) A^n \/ S_n
+  product.co_(n >= 0) A^n \/ S_n
 $
 
 
@@ -841,7 +841,7 @@ $
 
 - In $Cat("R-Mod")(R, times.o_R)$, symmetric list objects are symmetric algebras:
   $
-    1 xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o plus.o.big_n V^(times.o^n)
+    1 xarrow(#nil) plus.o.big_n V^(times.o^n) xarrow(sym: <-, #cons) V times.o_R plus.o.big_n V^(times.o^n)
   $
   #v(-0.5em)
 
@@ -928,7 +928,7 @@ Since the iterator is unique, it suffices to show that they both satisfy the two
 
   1. $(L(A), nil, cons)$ is a symmetric list object;
   2. $(L(A), nil, app)$ is a commutative monoid object;
-  3. $(L(A), nil, cons)$ is the free commutative monoid object on $A$.
+  3. $(L(A), eta, nil, app)$ is the free commutative monoid object on $A$.
 ]
 
 
@@ -1086,7 +1086,7 @@ $
     ],
     [
       *Future Work*
-      - General theory of parametrised inital algebras
+      - General theory of parametrised initial algebras
       - Constructions of exponentials in LL
       - Higher symmetric monoidal structures
     ],
