@@ -2965,8 +2965,8 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoida
         \node[operator,fill=cbg] (c2) at (0,0) {$c$};
         \node[anchor=east,operator,fill=cbg] (c1) at ($(c2.220)+(-1,-0.4)$) {$c$};
 
-        \node (in1) at ($(c2.140)+(-1,0.6)$) {};
         \node (in2) at ($(c1.140)+(-1,0.2)$) {};
+        \node (in1) at ($(in2 |- c2.140)+(0, 0.6)$) {};
         \node (in3) at ($(c1.220)+(-1,-0.2)$) {};
         \node (out) at ($(c2.east)+(1,0)$) {};
 
