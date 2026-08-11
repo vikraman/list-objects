@@ -12,6 +12,7 @@
 *.cb2
 .*.lb
 *.axp
+*.vtc
 
 ## Intermediate documents:
 *.dvi
@@ -312,6 +313,7 @@ TSWLatexianTemp*
 
 # auto folder when using emacs and auctex
 ./auto/*
+auto/
 *.el
 
 # expex forward references with \gathertags

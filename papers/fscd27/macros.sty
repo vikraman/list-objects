@@ -1,0 +1,121 @@
+% !TeX root = fscd27-lists.tex
+
+\ProvidesPackage{macros}
+
+\RequirePackage{amsthm}
+\RequirePackage{xparse}
+\RequirePackage{xcolor-solarized}
+\RequirePackage{svg}
+\RequirePackage{fontawesome5}
+\RequirePackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=solarized-red,
+  filecolor=solarized-magenta,
+  urlcolor=solarized-blue
+}
+
+% cleveref setup
+% \RequirePackage[nameinlink,capitalize]{cleveref}
+
+% lists
+\RequirePackage[inline]{enumitem}
+\setlist{leftmargin=1.5em}
+\RequirePackage{apxproof}
+\RequirePackage{worldflags}
+
+\usetikzlibrary{backgrounds}
+
+%% itemize margin
+\newenvironment{myitemize}
+{\begin{itemize}[leftmargin=*]}
+    {\end{itemize}}
+
+% editing marks
+\newcommand{\todo}[1]{{\color{solarized-red}TODO: #1}}
+\ifx\note\undefined
+  \newcommand{\note}[1]{\textcolor{solarized-green}{NOTE: #1}}
+\fi
+\newcommand{\redtext}[1]{\textcolor{solarized-red}{#1}}
+\newcommand{\newtext}[1]{\textcolor{solarized-blue}{#1}}
+
+% author marks
+\newcommand{\vc}[1]{\textcolor{solarized-magenta}{VC: #1}}
+\newcommand{\ww}[1]{\textcolor{solarized-blue}{WW: #1}}
+
+% references
+\makeatletter
+\newcommand{\crefnames}[3]{%
+  \@for\next:=#1\do{%
+    \expandafter\crefname\expandafter{\next}{#2}{#3}%
+  }%
+}
+\makeatother
+%% shorten cref names
+\crefnames{part,chapter,section,subsection}{\S}{\S\S}
+\crefnames{paragraph}{\P}{\P\P}
+
+% paragraphs
+\newcommand{\myparagraph}[1]{
+  \medskip%
+  \noindent\sffamily\large\bfseries{#1.}%
+  \normalfont\normalsize\mdseries%
+}
+
+% frenchquotes
+\newcommand{\frenchquote}[1]{\guillemotleft{}#1\guillemotright{}}
+
+%% nil and cons
+\newcommand{\nil}{\term{nil}}
+\newcommand{\doublecolon}[0]{\mathbin{\,\normalcolon\normalcolon\,}}
+\newcommand{\cons}{\doublecolon}
+
+% ++
+\newcommand{\doubleplus}[0]{\mathbin{+\kern -0.4em+}}
+% \newcommand\doubleplus{\mathbin{\text{\ttfamily\upshape ++}}}
+\newcommand{\concat}{\mult}
+\newcommand{\append}{\mult}
+
+%% two character variable names
+\newcommand{\xs}{\ensuremath{\mathit{xs}}}
+\newcommand{\ys}{\ensuremath{\mathit{ys}}}
+\newcommand{\zs}{\ensuremath{\mathit{zs}}}
+\newcommand{\ws}{\ensuremath{\mathit{ws}}}
+\newcommand{\as}{\ensuremath{\mathit{as}}}
+\newcommand{\bs}{\ensuremath{\mathit{bs}}}
+\newcommand{\cs}{\ensuremath{\mathit{cs}}}
+\newcommand{\ds}{\ensuremath{\mathit{ds}}}
+
+% Bool
+\newcommand{\boolt}{{\mathbf{2}}}
+
+% mult
+\newcommand{\mult}{\mathbin{\bullet}}
+
+% constructions
+\newcommand{\List}{\term{List}}
+\newcommand{\Array}{\term{Array}}
+\newcommand{\PList}{\term{PList}}
+\newcommand{\SList}{\term{SList}}
+\newcommand{\Bag}{\term{Bag}}
+\newcommand{\Perm}{\term{Perm}}
+\newcommand{\isSorted}{\term{isSorted}}
+
+% apxproof
+\newtheoremrep{proposition}[theorem]{Proposition}
+\newtheoremrep{lemma}[theorem]{Lemma}
+
+% yoneda
+\DeclareFontFamily{U}{min}{}
+\DeclareFontShape{U}{min}{m}{n}{<-> udmj30}{}
+\newcommand{\yo}
+{\!\text{\usefont{U}{min}{m}{n}\symbol{'210}}\!}
+
+%% artifact links
+\makeatletter
+\NewDocumentCommand{\alink}{mmm}{%
+  \href{https://symmetries.windtfw.com/fscd27.html\##1-#3}{%
+    \ifstrempty{#2}{\faCog}{\faCog~#2}%
+  }%
+}
+\makeatother
