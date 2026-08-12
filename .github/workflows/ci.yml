@@ -1,27 +1,136 @@
-name: Build LaTeX document and upload PDF file
+name: Build documents and upload PDF files
 on: [push]
 permissions:
     contents: write
 jobs:
-    build_latex:
+    discover_talks:
         runs-on: ubuntu-latest
+        outputs:
+            venues: ${{ steps.list.outputs.venues }}
         steps:
             - name: Set up Git repository
               uses: actions/checkout@v7
-            - name: Compile LaTeX document
+            - name: List talk venues
+              id: list
+              run: |
+                  venues=$(ls -d talks/*/ | xargs -n1 basename | jq -R -s -c 'split("\n")[:-1]')
+                  echo "venues=$venues" >> "$GITHUB_OUTPUT"
+
+    discover_papers:
+        runs-on: ubuntu-latest
+        outputs:
+            venues: ${{ steps.list.outputs.venues }}
+        steps:
+            - name: Set up Git repository
+              uses: actions/checkout@v7
+            - name: List paper venues
+              id: list
+              run: |
+                  venues=$(ls -d papers/*/ | xargs -n1 basename | jq -R -s -c 'split("\n")[:-1]')
+                  echo "venues=$venues" >> "$GITHUB_OUTPUT"
+
+    build_talks:
+        needs: discover_talks
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                venue: ${{ fromJson(needs.discover_talks.outputs.venues) }}
+        steps:
+            - name: Set up Git repository
+              uses: actions/checkout@v7
+            - name: Find abstract sources
+              id: abstract_files
+              working-directory: talks/${{ matrix.venue }}
+              run: |
+                  files=$(grep -l '^\\documentclass' *.tex 2>/dev/null || true)
+                  echo "files<<EOF" >> "$GITHUB_OUTPUT"
+                  echo "$files" >> "$GITHUB_OUTPUT"
+                  echo "EOF" >> "$GITHUB_OUTPUT"
+            - name: Compile abstract
+              if: steps.abstract_files.outputs.files != ''
               uses: xu-cheng/latex-action@v4
               with:
-                  working_directory: talks/msfp26
-                  root_file: msfp26-lists.tex
-            - name: Upload PDF file
+                  working_directory: talks/${{ matrix.venue }}
+                  root_file: ${{ steps.abstract_files.outputs.files }}
+            - name: Upload abstract PDF
+              if: steps.abstract_files.outputs.files != ''
               uses: actions/upload-artifact@v7
               with:
-                  name: msfp26-lists
-                  path: talks/msfp26/msfp26-lists.pdf
+                  name: ${{ matrix.venue }}-abstract
+                  path: talks/${{ matrix.venue }}/*.pdf
                   overwrite: true
-            - name: Release PDF file
-              uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228
-              #uses: softprops/action-gh-release@v2
+            - name: Find slides sources
+              id: slides_files
+              working-directory: talks/${{ matrix.venue }}/slides
+              continue-on-error: true
+              run: |
+                  files=$(find . -maxdepth 1 -name '*.typ' -printf '%f\n')
+                  echo "files<<EOF" >> "$GITHUB_OUTPUT"
+                  echo "$files" >> "$GITHUB_OUTPUT"
+                  echo "EOF" >> "$GITHUB_OUTPUT"
+            - name: Set up Typst
+              if: steps.slides_files.outputs.files != ''
+              uses: typst-community/setup-typst@v4
+            - name: Compile slides
+              if: steps.slides_files.outputs.files != ''
+              working-directory: talks/${{ matrix.venue }}/slides
+              run: |
+                  for f in ${{ steps.slides_files.outputs.files }}; do
+                      typst compile "$f" "${f%.typ}.pdf"
+                  done
+            - name: Upload slides PDF
+              if: steps.slides_files.outputs.files != ''
+              uses: actions/upload-artifact@v7
               with:
-                  files: talks/msfp26/msfp26-lists.pdf
+                  name: ${{ matrix.venue }}-slides
+                  path: talks/${{ matrix.venue }}/slides/*.pdf
+                  overwrite: true
+
+    build_papers:
+        needs: discover_papers
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                venue: ${{ fromJson(needs.discover_papers.outputs.venues) }}
+        steps:
+            - name: Set up Git repository
+              uses: actions/checkout@v7
+            - name: Find paper sources
+              id: paper_files
+              working-directory: papers/${{ matrix.venue }}
+              run: |
+                  files=$(grep -l '^\\documentclass' *.tex 2>/dev/null || true)
+                  echo "files<<EOF" >> "$GITHUB_OUTPUT"
+                  echo "$files" >> "$GITHUB_OUTPUT"
+                  echo "EOF" >> "$GITHUB_OUTPUT"
+            - name: Compile paper
+              if: steps.paper_files.outputs.files != ''
+              uses: xu-cheng/latex-action@v4
+              with:
+                  working_directory: papers/${{ matrix.venue }}
+                  root_file: ${{ steps.paper_files.outputs.files }}
+            - name: Upload paper PDFs
+              if: steps.paper_files.outputs.files != ''
+              uses: actions/upload-artifact@v7
+              with:
+                  name: ${{ matrix.venue }}-paper
+                  path: papers/${{ matrix.venue }}/*.pdf
+                  overwrite: true
+
+    release:
+        needs: [build_talks, build_papers]
+        runs-on: ubuntu-latest
+        steps:
+            - name: Download PDF files
+              uses: actions/download-artifact@v7
+              with:
+                  path: dist
+                  merge-multiple: true
+            - name: Release PDF files
+              uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228
+              #uses: softprops/action-gh-release@v3
+              with:
+                  files: dist/*.pdf
                   draft: true
