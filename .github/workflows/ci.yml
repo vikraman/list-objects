@@ -124,14 +124,22 @@ jobs:
 
     release:
         needs: [build_talks, build_papers]
+        if: always()
         runs-on: ubuntu-latest
         steps:
             - name: Download PDF files
               uses: actions/download-artifact@v7
+              continue-on-error: true
               with:
                   path: dist
                   merge-multiple: true
+            - name: Check for PDF files
+              id: check
+              run: |
+                  count=$(find dist -name '*.pdf' 2>/dev/null | wc -l)
+                  echo "count=$count" >> "$GITHUB_OUTPUT"
             - name: Release PDF files
+              if: steps.check.outputs.count != '0'
               uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228
               #uses: softprops/action-gh-release@v3
               with:

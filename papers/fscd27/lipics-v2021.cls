@@ -1236,23 +1236,23 @@ pdfsubject={LIPIcs, Vol.\@SeriesVolume, \@EventShortTitle; Copyright (C) \ifx\au
 		\fi
 	\fi
 \else
-	\newtheorem{lemma}[theorem]{Lemma}
-	\newtheorem{corollary}[theorem]{Corollary}
-	\newtheorem{proposition}[theorem]{Proposition}
-	\newtheorem{exercise}[theorem]{Exercise}
-	\newtheorem{definition}[theorem]{Definition}
-	\newtheorem{conjecture}[theorem]{Conjecture}
-	\newtheorem{observation}[theorem]{Observation}
+	\@ifundefined{c@lemma}{\newtheorem{lemma}[theorem]{Lemma}}{}
+	\@ifundefined{c@corollary}{\newtheorem{corollary}[theorem]{Corollary}}{}
+	\@ifundefined{c@proposition}{\newtheorem{proposition}[theorem]{Proposition}}{}
+	\@ifundefined{c@exercise}{\newtheorem{exercise}[theorem]{Exercise}}{}
+	\@ifundefined{c@definition}{\newtheorem{definition}[theorem]{Definition}}{}
+	\@ifundefined{c@conjecture}{\newtheorem{conjecture}[theorem]{Conjecture}}{}
+	\@ifundefined{c@observation}{\newtheorem{observation}[theorem]{Observation}}{}
 	\theoremstyle{definition}
-	\newtheorem{example}[theorem]{Example}
+	\@ifundefined{c@example}{\newtheorem{example}[theorem]{Example}}{}
 	\theoremstyle{remark}
-	\newtheorem{note}[theorem]{Note}
-	\newtheorem*{note*}{Note}
-	\newtheorem{remark}[theorem]{Remark}
-	\newtheorem*{remark*}{Remark}
+	\@ifundefined{c@note}{\newtheorem{note}[theorem]{Note}}{}
+	\@ifundefined{note*}{\newtheorem*{note*}{Note}}{}
+	\@ifundefined{c@remark}{\newtheorem{remark}[theorem]{Remark}}{}
+	\@ifundefined{remark*}{\newtheorem*{remark*}{Remark}}{}
 	\theoremstyle{claimstyle}
-	\newtheorem{claim}[theorem]{Claim}
-	\newtheorem*{claim*}{Claim}
+	\@ifundefined{c@claim}{\newtheorem{claim}[theorem]{Claim}}{}
+	\@ifundefined{claim*}{\newtheorem*{claim*}{Claim}}{}
 \fi
 \theoremstyle{plain}
 \endinput
