@@ -74,12 +74,41 @@ jobs:
             - name: Set up Typst
               if: steps.slides_files.outputs.files != ''
               uses: typst-community/setup-typst@v4
+            - name: Get Iosevka release tag
+              if: steps.slides_files.outputs.files != ''
+              id: iosevka_version
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  tag=$(gh release view --repo be5invis/Iosevka --json tagName --jq .tagName)
+                  echo "tag=$tag" >> "$GITHUB_OUTPUT"
+            - name: Cache fonts
+              if: steps.slides_files.outputs.files != ''
+              id: font_cache
+              uses: actions/cache@v4
+              with:
+                  path: /tmp/fonts
+                  key: iosevka-font-${{ steps.iosevka_version.outputs.tag }}
+            - name: Install fonts
+              if: steps.slides_files.outputs.files != '' && steps.font_cache.outputs.cache-hit != 'true'
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  mkdir -p /tmp/fonts
+                  gh release download --repo be5invis/Iosevka --pattern 'PkgTTC-Iosevka-*.zip' --dir /tmp/fonts --clobber
+                  unzip -oq /tmp/fonts/PkgTTC-Iosevka-*.zip -d /tmp/fonts
+            - name: Cache Typst packages
+              if: steps.slides_files.outputs.files != ''
+              uses: actions/cache@v4
+              with:
+                  path: ~/.cache/typst/packages
+                  key: typst-packages-${{ hashFiles(format('talks/{0}/slides/*.typ', matrix.venue)) }}
             - name: Compile slides
               if: steps.slides_files.outputs.files != ''
               working-directory: talks/${{ matrix.venue }}/slides
               run: |
                   for f in ${{ steps.slides_files.outputs.files }}; do
-                      typst compile "$f" "${f%.typ}.pdf"
+                      typst compile --font-path /tmp/fonts "$f" "slides-${f%.typ}.pdf"
                   done
             - name: Upload slides PDF
               if: steps.slides_files.outputs.files != ''
@@ -111,7 +140,6 @@ jobs:
               if: steps.paper_files.outputs.files != ''
               uses: xu-cheng/latex-action@v4
               with:
-                  texlive_version: "2026"
                   working_directory: papers/${{ matrix.venue }}
                   root_file: ${{ steps.paper_files.outputs.files }}
             - name: Upload paper PDFs
@@ -140,8 +168,7 @@ jobs:
                   echo "count=$count" >> "$GITHUB_OUTPUT"
             - name: Release PDF files
               if: steps.check.outputs.count != '0'
-              uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228
-              #uses: softprops/action-gh-release@v3
+              uses: softprops/action-gh-release@v3.0.2
               with:
                   files: dist/*.pdf
                   draft: true
