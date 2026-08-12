@@ -62,10 +62,12 @@ jobs:
                   overwrite: true
             - name: Find slides sources
               id: slides_files
-              working-directory: talks/${{ matrix.venue }}/slides
-              continue-on-error: true
               run: |
-                  files=$(find . -maxdepth 1 -name '*.typ' -printf '%f\n')
+                  dir="talks/${{ matrix.venue }}/slides"
+                  files=""
+                  if [ -d "$dir" ]; then
+                      files=$(find "$dir" -maxdepth 1 -name '*.typ' -printf '%f\n')
+                  fi
                   echo "files<<EOF" >> "$GITHUB_OUTPUT"
                   echo "$files" >> "$GITHUB_OUTPUT"
                   echo "EOF" >> "$GITHUB_OUTPUT"
@@ -109,6 +111,7 @@ jobs:
               if: steps.paper_files.outputs.files != ''
               uses: xu-cheng/latex-action@v4
               with:
+                  texlive_version: "2026"
                   working_directory: papers/${{ matrix.venue }}
                   root_file: ${{ steps.paper_files.outputs.files }}
             - name: Upload paper PDFs
