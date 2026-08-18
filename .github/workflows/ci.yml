@@ -156,7 +156,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Download PDF files
-              uses: actions/download-artifact@v7
+              uses: actions/download-artifact@v8
               continue-on-error: true
               with:
                   path: dist
