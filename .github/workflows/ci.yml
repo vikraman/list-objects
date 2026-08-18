@@ -85,7 +85,7 @@ jobs:
             - name: Cache fonts
               if: steps.slides_files.outputs.files != ''
               id: font_cache
-              uses: actions/cache@v4
+              uses: actions/cache@v6
               with:
                   path: /tmp/fonts
                   key: iosevka-font-${{ steps.iosevka_version.outputs.tag }}
@@ -99,7 +99,7 @@ jobs:
                   unzip -oq /tmp/fonts/PkgTTC-Iosevka-*.zip -d /tmp/fonts
             - name: Cache Typst packages
               if: steps.slides_files.outputs.files != ''
-              uses: actions/cache@v4
+              uses: actions/cache@v6
               with:
                   path: ~/.cache/typst/packages
                   key: typst-packages-${{ hashFiles(format('talks/{0}/slides/*.typ', matrix.venue)) }}
