@@ -73,7 +73,7 @@ jobs:
                   echo "EOF" >> "$GITHUB_OUTPUT"
             - name: Set up Typst
               if: steps.slides_files.outputs.files != ''
-              uses: typst-community/setup-typst@v4
+              uses: typst-community/setup-typst@v5
             - name: Get Iosevka release tag
               if: steps.slides_files.outputs.files != ''
               id: iosevka_version
