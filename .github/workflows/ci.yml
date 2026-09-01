@@ -168,7 +168,7 @@ jobs:
                   echo "count=$count" >> "$GITHUB_OUTPUT"
             - name: Release PDF files
               if: steps.check.outputs.count != '0'
-              uses: softprops/action-gh-release@v3.0.2
+              uses: softprops/action-gh-release@v3.0.3
               with:
                   files: dist/*.pdf
                   draft: true
