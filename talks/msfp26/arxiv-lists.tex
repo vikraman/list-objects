@@ -90,22 +90,22 @@
 
 Lists are a fundamental data structure, important in computer science and mathematics. They are often defined in functional programming languages as cons-lists, generated inductively from a pair of constructors $\nil:L(A)$ and $\cons:A\to L(A)\to L(A)$, and whose eliminators allow for definitions by recursion and proofs by induction.
 
-In category theory, these lists are understood as initial algebras $\mu X.1+A\times X$~\cite{DBLP:phd/ethos/Hagino87,adamekInitialAlgebrasTerminal2025}. This list structure can be axiomatised more generally in the setting of a monoidal category, replacing the cartesian product with a tensor, and removing the need for a coproduct by axiomatising the $\nil$ and $\cons$ maps directly with an iteration mechanism. These list objects generalise the notion of Natural Numbers Objects~\cite{lawvereFUNCTORIALSEMANTICSALGEBRAIC1963} and were introduced in Joyal's arithmetic universes. An internal language for them was studied by Maietti~\cite{maiettiJoyalsArithmeticUniverse2010}, and other variants were explored in~\cite{cockettListarithmeticDistributiveCategories1990} and~\cite{jayFiniteObjectsLocos1997}.
+In category theory, these lists are understood as initial algebras $\mu X.1+A\times X$~\cite{DBLP:phd/ethos/Hagino87,adamekInitialAlgebrasTerminal2025}. This list structure can be axiomatised more generally in the setting of a monoidal category, replacing the cartesian product with a tensor, and removing the need for a coproduct by axiomatising the $\nil$ and $\cons$ maps directly with an iteration mechanism. These list objects generalise the notion of natural numbers objects~\cite{lawvereFUNCTORIALSEMANTICSALGEBRAIC1963} and were introduced in Joyal's arithmetic universes (see~\cite{maiettiJoyalsArithmeticUniverses2003}). An internal language for them was studied by Maietti~\cite{maiettiJoyalsArithmeticUniverse2010}, and other variants were explored in~\cite{cockettListarithmeticDistributiveCategories1990} and~\cite{jayFiniteObjectsLocos1997}.
 
-In all of these settings, additional axioms on the underlying category are required to reconstruct traditional list operations, such as list append ($\App$), from these list objects. However, in the minimal setting of a monoidal category, this notion of a list object can be strengthened to that of a \textit{parametrised} list object which supports parametrised recursion. It is shown in~\cite{fioreListObjectsAlgebraic2017} that this yields a construction of free monoids (see also~\cite{kellyUnifiedTreatmentTransfinite1980}) in monoidal categories. We give a string diagrammatic proof of this result, showing that if a monoidal category $\cat{C}$ has all parametrised list objects, then the forgetful functor $\mathrm{Mon}(\cat{C})\to\cat{C}$ is monadic.
+In all of these settings, additional axioms on the underlying category are required to reconstruct traditional list operations, such as list append ($\App$), from these list objects. However, in the minimal setting of a monoidal category, this notion of a list object can be strengthened to that of a \textit{parametrised} list object which supports parametrised recursion. It is shown in~\cite{fioreListObjectsAlgebraic2017} that this yields a construction of free monoids (see also~\cite{kellyUnifiedTreatmentTransfinite1980}) in monoidal categories. We give a string diagrammatic proof of this result. As a consequence~\cite{fioreListObjectsAlgebraic2017}, if a monoidal category $\cat{C}$ has all parametrised list objects, then the forgetful functor $\mathrm{Mon}(\cat{C})\to\cat{C}$ is monadic.
 
-Finite multisets are another important data structure that are the commutative counterpart to lists; and in fact can be axiomatised with only a simple modification to these list objects. In this talk, we will study the notion of a \textit{symmetric} list object in a symmetric monoidal category. We will identify lists that differ by a transposition of the two frontmost elements using the symmetry of the underlying category. Using this, we show the analogous commutative results that symmetric list objects are free commutative monoids, and that having all symmetric list objects yields a similar monadic adjunction between $\mathrm{CMon}(\cat{C})$ and $\cat{C}$.
+Finite multisets are another important data structure that are the commutative counterpart to lists, and in fact can be axiomatised with only a simple modification to these list objects. In this paper, we study the notion of a \textit{symmetric} list object in a symmetric monoidal category. We identify lists that differ by a transposition of the two frontmost elements using the symmetry of the underlying category. Using this, we show the analogous commutative results that symmetric list objects are free commutative monoids, and that having all symmetric list objects yields a similar monadic adjunction between $\mathrm{CMon}(\cat{C})$ and $\cat{C}$.
 
-In type theory, finite multisets have been considered as setoids over lists, where the equivalence relation is bag equivalence~\cite{danielssonBagEquivalenceProofRelevant2012,altenkirchDefinableQuotientsType}, or as higher inductive types of lists with an additional swap constructor to permute the two head elements~\cite{choudhuryFreeCommutativeMonoids2023}. These constructions use function types, but our setting only requires a symmetric monoidal structure without closure.
+In type theory, finite multisets have been considered as setoids over lists, where the equivalence relation is bag equivalence~\cite{danielssonBagEquivalenceProofRelevant2012,altenkirchDefinableQuotientsType}, or as higher inductive types of lists with an additional swap constructor to permute the two head elements~\cite{choudhuryFreeCommutativeMonoids2023}. These constructions are carried out in type theories with function types, whereas our setting only requires a symmetric monoidal structure without closure.
 
 \section{List objects}
 \label{sec:list-objects}
 
-Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
+Let $(\cat{C},\otimes,1)$ be a strict monoidal category.
 
-\begin{definition}
+\begin{definition}\label{def:list-object}
   A (\textit{parametrised}) \textit{list object} (hereafter, just \textit{list object}) $L(A)$ on an object $A$ consists of a pair of maps $\nil:1\to L(A)$ and $\cons:A\otimes L(A)\to L(A)$
-  such that for every object $L$ equipped with maps $n:P\to L$ and $c:A\otimes L\to L$,
+  such that for all objects $P$ and $L$ equipped with maps $n:P\to L$ and $c:A\otimes L\to L$,
   there exists a unique \textit{mediating map} or \textit{iterator} $\iter(n,c):L(A)\otimes P\to L$
   satisfying computation rules (a) and (b):
 
@@ -192,7 +192,8 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \draw[blue] (op) -- (out) node[outputwire] {$L(A)$};
     \end{tikzpicture}
   \end{equation*}
-  We note that $\App$ computes on $\eta$ in the left argument as follows.
+
+  We note that $\App$ computes on $\eta$ in the left argument as shown in the following lemma.
   % \begin{equation*}
   %   \begin{tikzpicture}
   %     \begin{scope}
@@ -384,7 +385,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
 
 
 
-\begin{theoremrep}
+\begin{theoremrep}\label{thm:free-monoid}
   The list object $L(A)$ is the free monoid on $A$.
 \end{theoremrep}
 \begin{proof}
@@ -1820,16 +1821,14 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
   If $\cat{C}$ admits parametrised list objects for every $A$,
   then $\mathsf{Mon}(\cat{C})$ is monadic over $\cat{C}$ via the evident forgetful functor.
 \end{theorem}
+\begin{proof}[Proof sketch]
+  By Theorem~\ref{thm:free-monoid}, $A\mapsto L(A)$ is left adjoint to the forgetful functor, giving a monad $L$ with unit $\eta$, action on maps $L(f)=(\eta\circ f)^\sharp$, and multiplication $\mu_A=\id_{L(A)}^\sharp:LL(A)\to L(A)$. We show that the comparison functor $\mathsf{Mon}(\cat{C})\to L$-$\mathsf{Alg}$, sending $(B,e,m)$ to $\id_B^\sharp:L(B)\to B$, is an equivalence. The unit law holds by construction of the extension, as $\id_B^\sharp\circ\eta=\id_B$. Both $\id_B^\sharp\circ\mu_B$ and $\id_B^\sharp\circ L(\id_B^\sharp)$ are monoid homomorphisms $LL(B)\to B$ extending $\id_B^\sharp$, so the multiplication law holds by uniqueness of extensions.
 
-% \begin{proof}[Proof sketch]
-%   The equivalence $\mathsf{Mon}(\cat{C})\xrightarrow{\simeq}L$-$\mathsf{Alg}$ is given on objects by
-%   \begin{equation*}
-%     (A,\;L(A)\xrightarrow{\alpha_A}A)\quad\mapsto\quad(A,\;1\xrightarrow{\nil}L(A)\xrightarrow{\alpha_A}A,\;A\otimes A\xrightarrow{A\otimes\eta_A}A\otimes L(A)\xrightarrow{\cons}L(A)\xrightarrow{\alpha_A}A)
-%   \end{equation*}
-% \end{proof}
+  Conversely, given an algebra $\alpha:L(A)\to A$, let $e=\alpha\circ\nil$ and $m=\alpha\circ\cons\circ(A\otimes\eta)$, which by Lemma~\ref{lem:eta-app} is $\alpha\circ\App\circ(\eta\otimes\eta)$. Since $\App=\mu\circ\App\circ(\eta\otimes\eta)$, the algebra laws give $\alpha\circ\App=m\circ(\alpha\otimes\alpha)$, so $\alpha$ is a split epimorphism (split by $\eta$) that preserves the unit and multiplication, and the monoid laws for $(A,e,m)$ follow from those of $(L(A),\nil,\App)$. In particular, $\alpha\circ\cons=m\circ(A\otimes\alpha)$, so $\alpha$ satisfies the computation rules of $\iter(e,m)=\id_A^\sharp$, and $\alpha=\id_A^\sharp$ by uniqueness of the mediating map. Starting from a monoid, $\id_B^\sharp\circ\nil=e$ and $\id_B^\sharp\circ\cons\circ(B\otimes\eta)=m\circ(B\otimes\id_B^\sharp\circ\eta)=m$, so the two constructions are mutually inverse. Finally, a map is a monoid homomorphism if and only if it is an algebra homomorphism, again by uniqueness of extensions.
+\end{proof}
 
-\begin{theoremrep}\label{strong universal property}
-  If $(C,\times,1)$ is cartesian monoidal and $L(A)$ is a list object, then $L(A)$ satisfies the following stronger universal property: for every object $L$ equipped with maps $n:P\to L$ and $c:A\times L\times P\rightarrow L$, then there exists a \textit{doubly parametrised iterator} $\checkiter(n,c):L(A)\times P\rightarrow L$, such that the following two computation rules hold:
+\begin{theoremrep}\label{thm:strong-up}
+  If $(\cat{C},\times,1)$ is cartesian monoidal and $L(A)$ is a list object, then $L(A)$ satisfies the following stronger universal property: for all objects $P$ and $L$ equipped with maps $n:P\to L$ and $c:A\times L\times P\rightarrow L$, there exists a unique \textit{doubly parametrised iterator} $\checkiter(n,c):L(A)\times P\rightarrow L$, such that the following two computation rules hold:
   \begin{equation*}
     \begin{tikzpicture}[baseline=(it)]
       \begin{scope}
@@ -1874,7 +1873,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \end{scope}
 
       \node at (2,0) {$=$};
-      \node at (2,-2) {\textup{(a) }$\cons$-$\beta$};
+      \node at (2,-2) {\textup{(b) }$\cons$-$\beta$};
 
       \begin{scope}[xshift=6.2cm]
         \node[operator,fill=cbg] (c) at (0,0) {$c$};
@@ -1901,19 +1900,19 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
 
 
 \begin{proof}[Proof sketch]
-  Consider the list algebra structure on $K=L\times P$ given by $\check{n}:P\xrightarrow{\Delta_P}P\times P\xrightarrow{n\times P}L\times P$ and $\check{c}:A\times L\times P\xrightarrow{A\times L\times\Delta_P}A\times L\times P\times P\xrightarrow{c\times P}L\times P$. By the ordinary universal property, we have an iterator $\iter(\check{n},\check{c}):L(A)\times P\to L\times P$. Then, $\check{\iter}(n,c)$ is given by $\pi_1\circ\iter(\check{n},\check{c})$.
+  Consider the list algebra structure on $K=L\times P$ given by $\check{n}:P\xrightarrow{\Delta_P}P\times P\xrightarrow{n\times P}L\times P$ and $\check{c}:A\times L\times P\xrightarrow{A\times L\times\Delta_P}A\times L\times P\times P\xrightarrow{c\times P}L\times P$. By the ordinary universal property, we have an iterator $\iter(\check{n},\check{c}):L(A)\times P\to L\times P$. Then, $\checkiter(n,c)$ is given by $\pi_1\circ\iter(\check{n},\check{c})$. Its computation rules follow from those of $\iter(\check{n},\check{c})$, using that $\pi_2\circ\iter(\check{n},\check{c})=\pi_2$, which holds since both sides are the iterator $\iter(\id_P,\pi_2)$. For uniqueness, if $h$ satisfies the computation rules, then $\langle h,\pi_2\rangle$ satisfies those of $\iter(\check{n},\check{c})$, so $h=\pi_1\circ\iter(\check{n},\check{c})$.
 \end{proof}
 
 
 
 \begin{theoremrep}[Lemma~3.4.3~\cite{fioreListObjectsAlgebraic2017}]
-  If $(\cat{C},\times,1)$ is cartesian monoidal, then the induced monad is strong.
+  If $(\cat{C},\times,1)$ is cartesian monoidal and admits list objects for every $A$, then the induced monad $L:\cat{C}\to\cat{C}$ is strong.
 \end{theoremrep}
 
 \begin{proof}[Proof sketch]
-  Since the category is symmetric, we only need to define one of the strengths. A construction of the right strength $\tau_{A,B}:L(A)\times B\to L(A\times B)$ is as follows.
+  Since the category is symmetric monoidal, we need only define one of the strengths. A construction of the right strength $\tau_{A,B}:L(A)\times B\to L(A\times B)$ is as follows; the left strength $\sigma_{A,B}:A\times L(B)\to L(A\times B)$ is then obtained by conjugating $\tau_{B,A}$ with the symmetry.
 
-  We can equip $L(A\times B)$ with a doubly-parametrised list algebra structure with the maps $n:=B\xrightarrow{!}1\xrightarrow{\nil}L(A\times B)$ and $c:=A\times L(A\times B)\times B\xrightarrow{\cong} A\times B\times L(A\times B)\xrightarrow{\cons} L(A\times B)$, and from the strong universal property, we obtain a map $\check{\iter}(n,c):L(A)\times B\rightarrow L(A\times B)$. This iterator is the right strength map.
+  We can equip $L(A\times B)$ with a doubly-parametrised list algebra structure with the maps $n:=B\xrightarrow{!}1\xrightarrow{\nil}L(A\times B)$ and $c:=A\times L(A\times B)\times B\xrightarrow{\cong} A\times B\times L(A\times B)\xrightarrow{\cons} L(A\times B)$, and from the strong universal property (Theorem~\ref{thm:strong-up}), we obtain a map $\checkiter(n,c):L(A)\times B\rightarrow L(A\times B)$. This iterator is the right strength map.
 
   The required strength coherences then follow from the strong universal property.
 \end{proof}
@@ -1924,7 +1923,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
 Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoidal with a symmetric braiding.
 
 \begin{definition}
-  A (\textit{parametrised}) \textit{symmetric list object} or \textit{ilst} on $A$ is a list object $L(A)$ with the following additional axiom and the corresponding universal property.
+  A (\textit{parametrised}) \textit{symmetric list object} or \textit{ilst} $L(A)$ on an object $A$ consists of a pair of maps $\nil:1\to L(A)$ and $\cons:A\otimes L(A)\to L(A)$ satisfying the following \textit{ilst axiom}:
   \begin{equation*}
     \begin{tikzpicture}
       \begin{scope}
@@ -1963,13 +1962,16 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoida
       \end{scope}
     \end{tikzpicture}%
   \end{equation*}
+  such that for all objects $P$ and $L$ equipped with maps $n:P\to L$ and $c:A\otimes L\to L$, where $c$ also satisfies the ilst axiom (with $L$ in place of $L(A)$), there exists a unique iterator $\iter(n,c):L(A)\otimes P\to L$ satisfying the computation rules (a) and (b) of Definition~\ref{def:list-object}.
 \end{definition}
+
+Since the universal property only quantifies over list algebras satisfying the ilst axiom, a symmetric list object need not be a list object, but every list object satisfying the ilst axiom is a symmetric list object. For example, the list object $L(1)$, a natural numbers object, is a symmetric list object on $1$, since the symmetry on $1\otimes1$ is the identity.
 
 
 
 \begin{toappendix}
 
-  \begin{lemma}\label{lem:eta-app braided}
+  \begin{lemma}\label{lem:eta-app-braided}
     For any symmetric list object $L(A)$:
     \begin{equation*}
       \begin{tikzpicture}
@@ -1983,7 +1985,7 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoida
 
           \draw[blue] (in1) to[out=0,in=140] node[inputwire,pos=0.1] {$L(A)$} (app.140);
           \draw[magenta] (in2) -- node[inputwire,pos=0.1,below] {$A$} (eta);
-          \draw[blue] (eta) to[out=0,in=220] node[below] {$A$} (app.220);
+          \draw[blue] (eta) to[out=0,in=220] node[below] {$L(A)$} (app.220);
           \draw[blue] (app) -- node[outputwire] {$L(A)$} (out);
         \end{scope}
 
@@ -2390,7 +2392,7 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoida
     \end{tikzpicture}
   \end{equation*}
 
-  Let the two maps above be $f$ and $g$ respectively. By definition, $f=\App=\iter(\id,\cons)$, so we show that the braided version satisfies the same computation rules:
+  Let the two maps above be $f$ and $g$ respectively. By definition, $f=\App=\iter(\id,\cons)$, so we show that the braided version satisfies the same computation rules, using Lemma~\ref{lem:eta-app-braided}:
 
   $g$-$\nil$-$\beta$:
   \begin{equation*}
@@ -2701,7 +2703,7 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoida
 
 
 
-  $(2\Rightarrow1)$ $L(A)$ is a list object by assumption, so it suffices to show the ilst axiom only:
+  $(2\Rightarrow1)$ $L(A)$ is a list object by assumption, so it has iterators for all list algebras, in particular those satisfying the ilst axiom, and it suffices to show the ilst axiom only:
 
   \begin{equation*}
     \begin{tikzpicture}
@@ -3228,16 +3230,21 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoida
   \end{equation*}
 \end{proof}
 
+Note the proofs of $(1\Rightarrow2)$ and $(1\wedge2\Rightarrow3)$ do not use that $L(A)$ is a list object: for a symmetric list object, $\App=\iter(\id,\cons)$ and $\eta$ are defined as before, and Lemmas~\ref{lem:eta-app} and~\ref{lem:eta-app-braided} and the monoid laws in the proof of Theorem~\ref{thm:free-monoid} carry over unchanged, since every list algebra they iterate over satisfies the ilst axiom. Hence every symmetric list object is the free commutative monoid on $A$.
+
 \begin{theorem}
   If $\cat{C}$ admits parametrised symmetric list objects for every $A$,
   then $\mathsf{CMon}(\cat{C})$ is monadic over $\cat{C}$ via the evident forgetful functor.
 \end{theorem}
+\begin{proof}[Proof sketch]
+  By the above, $A\mapsto L(A)$ is left adjoint to the forgetful functor $\mathsf{CMon}(\cat{C})\to\cat{C}$, and the proof for $\mathsf{Mon}(\cat{C})$ carries over. The only additional step is that the monoid $(A,e,m)$ obtained from an algebra $\alpha:L(A)\to A$ is commutative, since $m=\alpha\circ\App\circ(\eta\otimes\eta)$ and $\App$ is commutative.
+\end{proof}
 
 \begin{theoremrep}
-  If $(\cat{C},\times,1)$ is cartesian monoidal, then the induced monad $T:\cat{C}\to\cat{C}$ is strong, and further, commutative.
+  If $(\cat{C},\times,1)$ is cartesian monoidal and admits symmetric list objects for every $A$, then the induced monad $L:\cat{C}\to\cat{C}$ is strong, and further, commutative.
 \end{theoremrep}
 \begin{proof}[Proof sketch]
-  The construction of the strength map(s) is the same as in the non-symmetric case, but in this case it satisfies the following additional commutativity coherence:
+  The strong universal property (Theorem~\ref{thm:strong-up}) holds for symmetric list objects when restricted to maps $c$ satisfying $c(a,c(b,x,p),p)=c(b,c(a,x,p),p)$, by the same proof, since then $\check{c}$ satisfies the ilst axiom, as does $\pi_2:A\times P\to P$. The map $c$ defining $\tau$ satisfies this condition by the ilst axiom for $L(A\times B)$, so the construction of the strength maps is the same as in the non-symmetric case, but in this case it satisfies the following additional commutativity coherence:
   % https://q.uiver.app/#q=WzAsNixbMSwwLCJMKEEpXFx0aW1lcyBMKEIpIl0sWzAsMSwiTFxcYmlnbChMKEEpXFx0aW1lcyBCXFxiaWdyKSJdLFsyLDEsIkxcXGJpZ2woQVxcdGltZXMgTChCKVxcYmlncikiXSxbMiwyLCJMTChBXFx0aW1lcyBCKSJdLFswLDIsIkxMKEFcXHRpbWVzIEIpIl0sWzEsMywiTChBXFx0aW1lcyBCKSJdLFswLDIsIlxcdGF1X3tBLEwoQil9Il0sWzAsMSwiXFxzaWdtYV97TChBKSxCfSIsMl0sWzIsMywiTChcXHNpZ21hX3tBLEJ9KSJdLFsxLDQsIkwoXFx0YXVfe0EsQn0pIiwyXSxbNCw1LCJcXG11X3tBXFx0aW1lcyBCfSIsMl0sWzMsNSwiXFxtdV97QVxcdGltZXMgQn0iXSxbMSw1LCJcXHRhdV97QSxCfV5cXHNoYXJwIl0sWzIsNSwiXFxzaWdtYV97QSxCfV5cXHNoYXJwIiwyXV0=
   \begin{equation*}
     \begin{tikzcd}[ampersand replacement=\&]
