@@ -192,7 +192,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \draw[blue] (op) -- (out) node[outputwire] {$L(A)$};
     \end{tikzpicture}
   \end{equation*}
-  % Note that $\App$ computes on $\eta$ in the left argument as:
+  We note that $\App$ computes on $\eta$ in the left argument as follows.
   % \begin{equation*}
   %   \begin{tikzpicture}
   %     \begin{scope}
@@ -413,6 +413,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \end{scope}
     \end{tikzpicture}%
   \end{equation*}
+
   For the right unit law, consider the following maps $f,g:L(A)\to L(A)$ below:
   \begin{equation*}
     \begin{tikzpicture}
@@ -434,6 +435,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \end{scope}
     \end{tikzpicture}
   \end{equation*}
+
   We claim that these maps are both the iterator $\iter(\nil,\cons)$. By the uniqueness of the mediating map, it suffices to show that the two maps satisfy the required computation rules.
 
   The identity map trivially satisfies both rules, so we have $g=\iter(\nil,\cons)$. We have $f$-$\nil$-$\beta$ by applying $\App$-$\nil$-$\beta$:
@@ -496,6 +498,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \end{scope}
     \end{tikzpicture}%
   \end{equation*}
+
   and similarly, $f$-$\cons$-$\beta$ follows from $\App$-$\cons$-$\beta$:
   \begin{equation*}
     \begin{tikzpicture}
@@ -584,6 +587,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \end{scope}
     \end{tikzpicture}
   \end{equation*}
+
   and hence $f=\iter(\nil,\cons)=g$.
 
   For associativity, let $f,g:L(A)\otimes L(A)\otimes L(A)\to L(A)$ be the two maps below:
@@ -624,6 +628,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \end{scope}
     \end{tikzpicture}
   \end{equation*}
+
   We claim that both maps are equal to $\iter(\App,\cons)$. We have $\nil$-$\beta$ for both since $\App$ computes on $\nil$ in the left argument. In detail, for $f$:
   \begin{equation*}
     \begin{tikzpicture}
@@ -706,6 +711,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \end{scope}
     \end{tikzpicture}
   \end{equation*}
+
   and for $g$:
   \begin{equation*}
     \begin{tikzpicture}
@@ -789,6 +795,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \end{scope}
     \end{tikzpicture}
   \end{equation*}
+
   Similarly, we have $\cons$-$\beta$ since $\App$ also computes on $\cons$. For $f$:
   \begin{equation*}
     \begin{tikzpicture}
@@ -892,6 +899,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \end{scope}
     \end{tikzpicture}
   \end{equation*}
+
   and for $g$, we push the $\cons$ through $\App$ with two computations:
   \begin{equation*}
     \begin{tikzpicture}
@@ -1032,9 +1040,13 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \end{scope}
     \end{tikzpicture}
   \end{equation*}
+
   Hence $f=\iter(\App,\cons)=g$.
 
-  It remains to show the unique extension property. Let $f:A\to B$ be a morphism, with $(B,e,m)$ a monoid object. We define the extension $f^\sharp:L(A)\to B$ as the mediating map $\iter(n,c)$, where $n:1\rightarrow B$ and $c:A\otimes B\rightarrow B$ are:
+  It remains to show the unique extension property.
+  Let $f:A\to B$ be a morphism, with $(B,e,m)$ a monoid object.
+  We define the extension $f^\sharp:L(A)\to B$ as the mediating map $\iter(n,c)$,
+  where $n:1\rightarrow B$ and $c:A\otimes B\rightarrow B$ are:
   \begin{equation*}
     \begin{tikzpicture}
       \begin{scope}
@@ -1056,6 +1068,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \end{scope}
     \end{tikzpicture}
   \end{equation*}
+
   We verify that $f^\sharp\circ\eta=f$:
   \begin{equation*}
     \begin{tikzpicture}
@@ -1193,6 +1206,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \end{scope}
     \end{tikzpicture}
   \end{equation*}
+
   Next, we check that $f^\sharp$ is a monoid homomorphism.
 
   Since $f^\sharp=\iter(e,\ldots)$, $f^\sharp$ computes on $\nil$ to $e$ and hence preserves the monoid identity. For the homomorphism property, let $g,h:L(A)\otimes L(A)\to B$ be the following maps:
@@ -1228,6 +1242,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \end{scope}
     \end{tikzpicture}
   \end{equation*}
+
   We show that these maps are both the iterator $\iter(f^\sharp,c)$, where $c$ is the same list algebra map as in the definition of $f^\sharp$ above. We have $g$-$\nil$-$\beta$ by $\App$-$\nil$-$\beta$, and $h$-$\nil$-$\beta$ by $f^\sharp$-$\nil$-$\beta$ and left unit for $B$:
   \begin{equation*}
     \begin{tikzpicture}[baseline=(g)]
@@ -1404,6 +1419,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \end{scope}
     \end{tikzpicture}
   \end{equation*}
+
   For $\cons$-$\beta$ we have the computations:
   \begin{equation*}
     \begin{tikzpicture}[baseline=(g),scale=0.8]
@@ -1678,6 +1694,7 @@ Let $\cat{C}(1, \otimes)$ be a strict monoidal category.
       \end{scope}
     \end{tikzpicture}
   \end{equation*}
+
   Finally, we show that the extension $f^\sharp$ is unique. Suppose there is another monoid homomorphism $g:L(A)\to B$ satisfying $g\circ\eta=f$. Then, $g$ satisfies the same computation rules as $f^\sharp$. Indeed, $\nil$-$\beta$ holds since $g$ preserves identities, and $\cons$-$\beta$ holds via the following computation:
   \begin{equation*}
     \begin{tikzpicture}
@@ -2372,6 +2389,7 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoida
       \end{scope}
     \end{tikzpicture}
   \end{equation*}
+
   Let the two maps above be $f$ and $g$ respectively. By definition, $f=\App=\iter(\id,\cons)$, so we show that the braided version satisfies the same computation rules:
 
   $g$-$\nil$-$\beta$:
@@ -2931,6 +2949,7 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoida
       \end{scope}
     \end{tikzpicture}
   \end{equation*}
+
   This establishes the equivalence of $(1)$ and $(2)$.
 
   $(3\Rightarrow 2)$ is clear, so it remains to prove the reverse implication.
@@ -2957,6 +2976,7 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoida
       \end{scope}
     \end{tikzpicture}
   \end{equation*}
+
   as in the non-commutative case, but we need to show that the list algebra structure on $B$ satisfies the ilst axiom to use the iterator:
 
   \begin{equation*}
@@ -3235,6 +3255,7 @@ Hereafter, we assume $\cat{C}$ is symmetric strict monoidal, i.e. strict monoida
       \arrow["{\mu_{A\times B}}", from=3-3, to=4-2]
     \end{tikzcd}
   \end{equation*}
+
   The lower pairs of edges compute to $\tau$ and $\sigma$ when precomposed with $\eta_{L(A)\times B}$ and $\eta_{A\times L(B)}$, respectively, and are thus extensions of the strength maps by the universal property of $(-)^\sharp$. The two sides of the remaining square can then be shown to be given by the same doubly parametrised iterator by verifying the computation rules.
 \end{proof}
 
